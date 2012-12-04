@@ -18,10 +18,18 @@ import de.imc.mirror.sdk.exceptions.SpaceManagementException;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.opengl.Visibility;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,7 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements LogInDialogFragment.LogInDialogListener {
 
 	ConnectionConfiguration connectionConfig;
 	Context context;
@@ -58,14 +66,35 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    public void TestMan(View view) {
-    	Toast.makeText(this, "shit", Toast.LENGTH_SHORT).show();
-    }
     public void LogIn(View view) {
-    	ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar1);
-    	bar.setVisibility(View.VISIBLE);
-    	 new ConnectTask().execute();
+    	showLogInDialog();
     }
+    public void getSpaces(View view) {
+    	new GetSpacesTask().execute();
+    }
+    
+
+	@SuppressLint("NewApi")
+	public void showLogInDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new LogInDialogFragment();
+        dialog.show(getFragmentManager(), "LogInDialogFragment");
+        //dialog.show(getSupportFragmentManager(), "LogInDialogFragment");
+    }
+	@SuppressLint("NewApi")
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar1);
+		bar.setVisibility(View.VISIBLE);
+		 new ConnectTask().execute();
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
     
     private class ConnectTask extends AsyncTask<String, Integer, String> {
 		@Override
@@ -84,10 +113,10 @@ public class MainActivity extends Activity {
 	        
 	        //Establish Connection
 	        String resource = "myapp-oivind"; // use an unique identifier for your application 
-	        EditText editTextUserName = (EditText) findViewById(R.id.editTextUserName);
+	        EditText editTextUserName = (EditText) findViewById(R.id.username);
 	        //String userName = editTextUserName.getText().toString();
 	        
-	        EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+	        //EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 	       // String userPass = editTextPassword.getText().toString();
 	        String userName = "oivind";
 	        String userPass ="mirror";
@@ -104,7 +133,7 @@ public class MainActivity extends Activity {
 		   	 String dbName = "sdkcache";
 			 spaceHandler = new de.imc.mirror.sdk.android.SpaceHandler(context,connection,userName,domain,dbName);
 			 spaceHandler.setConnected(true);
-			 spaces = spaceHandler.getAllSpaces();
+			 //spaces = spaceHandler.getAllSpaces();
 			 
 	      return result;   
 		}
@@ -114,37 +143,27 @@ public class MainActivity extends Activity {
 	     }
 
 	     private void setProgressPercent(Integer integer) {
-		 
 		 //pbar.setProgress(integer.intValue());
-	
 		}
 
 		protected void onPostExecute(String result) {
-			
 			ProgressBar bar  = (ProgressBar) findViewById(R.id.progressBar1);
 			bar.setVisibility(View.GONE);
 			Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-			
-			ListView listOfSpaces = (ListView) findViewById(R.id.listView1);
-			
-			List<String> spacess = new ArrayList<String> ();
-			for (de.imc.mirror.sdk.Space space : spaces) {
-				spacess.add(space.getName());
-			}
-			
-			ArrayAdapter<String> arrayAdapter =      
-			         new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, spacess);
-			         listOfSpaces.setAdapter(arrayAdapter); 
-			
-	     }
+    }
+		
     }
     
     
- private class ShowSpacesTask extends AsyncTask<String, Integer, String> {
-    	
+ private class GetSpacesTask extends AsyncTask<String, Integer, String> {
+	 List<String> spacesNames;
 		@Override
 		protected String doInBackground(String... params) {
-			List<de.imc.mirror.sdk.Space> spaces = spaceHandler.getAllSpaces();
+			spaces = spaceHandler.getAllSpaces();
+		    spacesNames = new ArrayList<String> ();
+			for (de.imc.mirror.sdk.Space space : spaces) {
+				spacesNames.add(space.getName());
+			}
 			
 			return "";
 		}
@@ -156,11 +175,18 @@ public class MainActivity extends Activity {
 		}
 
 		protected void onPostExecute(String result) {
-			
-		
-			Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+			ListView listOfSpaces = (ListView) findViewById(R.id.listView1);
+			ArrayAdapter<String> arrayAdapter =      
+			         new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, spacesNames);
+			         listOfSpaces.setAdapter(arrayAdapter);
+			         
+			         Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 	     }
-    }
+	     }
+    
+
+
+
     
     
    // private class YourTask extends AsyncTask<String, Integer, String> {
