@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:hint="@string/usernamehint" 
+         />
+ 
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextUserName"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="@string/passwordhint"
+        android:inputType="textPassword" />
+
+  
+
+    <Button
+        android:id="@+id/buttonLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/button2"
+        android:onClick="LogIn"
+        android:text="@string/buttonLogin" />
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonLogIn"
+        android:layout_centerHorizontal="true"
+        android:visibility ="invisible" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonLogIn"
+        android:layout_marginLeft="35dp"
+        android:layout_toRightOf="@+id/buttonLogIn" >
+    </ListView>
+
+</RelativeLayout>
