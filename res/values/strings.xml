@@ -17,6 +17,7 @@
     
     <string name="host">sandbox.idi.ntnu.no</string>
     <string name="domain">sandbox</string>
-   
+    <string name ="username"></string>
+   <string name ="password"></string>
 
 </resources>

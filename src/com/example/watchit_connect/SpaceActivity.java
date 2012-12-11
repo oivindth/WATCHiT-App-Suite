@@ -17,7 +17,7 @@ public class SpaceActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_space);
+        setContentView(R.layout.activity_space);
         
         Bundle b = this.getIntent().getExtras();
         
@@ -44,17 +44,10 @@ public class SpaceActivity extends Activity {
 		         new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, spaceObject);
         lw.setAdapter(arrayAdapter);
 		        
-
-        
-        
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
-    
-    
-	
 }
