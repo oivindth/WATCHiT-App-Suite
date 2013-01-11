@@ -61,7 +61,7 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
     	MainFragment fragmentMain = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain).commit();
-        
+      
       
     	
 		//userName = "oivind";
@@ -99,17 +99,12 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
         progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
         progressBar.setIndeterminate(true);
-        
         //ListView lw = (ListView) findViewById(R.id.listView1);
         ListView lw = (ListView)  findViewById(R.id.listViewMainFragment);
-        
         lw.setEmptyView(progressBar);
-
-        
         // Must add the progress bar to the root of the layout
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         root.addView(progressBar);
-		
 		
 		EditText editUserName = (EditText) dialog.getDialog().findViewById(R.id.username);
 		EditText editUserPass = (EditText) dialog.getDialog().findViewById(R.id.password);
@@ -198,15 +193,14 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 			    	    	   
 			    	    	   FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			    	    	   SpaceFragment sf = new SpaceFragment();
+			    	    	   
 			    	    	// Replace whatever is in the fragment_container view with this fragment,
 			    	    	// and add the transaction to the back stack so the user can navigate back
 			    	    	transaction.replace(R.id.fragment_container, sf);
-			    	    	transaction.addToBackStack(null);
+			    	    	transaction.addToBackStack("tag");
 			    	    	// Commit the transaction
 			    	    	transaction.commit();
-			    	    	   
-			    	  
-			    	    	   
+	
 			    	         String selectedFromList =(String) (listOfSpaces.getItemAtPosition(myItemInt));
 			    	         Toast.makeText(context, "select: " + selectedFromList, Toast.LENGTH_SHORT).show();
 			    	         
@@ -219,26 +213,11 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 			    	         b.putString("name", space.getName());
 			    	         b.putString("id", space.getId());
 			    	         
-			    	         System.out.println(b.getString("id"));
-			    	         
-			    	         List<String> spaceObject = new ArrayList<String>();
-			    	         spaceObject.add("Id: " +b.getString("id"));
-			    	         spaceObject.add("Name: " +b.getString("name"));
-			    	         spaceObject.add("Members: " + b.getInt("memberCount"));
-			    	         
-			    	      
-			    	        
-			    	    
-			    	        		
-			    	        		   ArrayAdapter<String> arrayAdapter2 =      
-						    			         new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, spaceObject);
-						    	       ListView  lw3 = (ListView) findViewById(R.id.listViewSpaceFragment);
-						    	        lw3.setAdapter(arrayAdapter2);
-			    	        		
-			    	         
+			    	         sf.setArguments(b);
+			    	         	        
 			    	       }                 
 			    	 });
-			         new GetData().execute();
+			         //new GetData().execute();
 	    	}
  	}
     

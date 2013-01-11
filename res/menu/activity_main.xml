@@ -3,6 +3,11 @@
         android:title="@string/menu_spaces"
         android:showAsAction="ifRoom|withText" />
     
+    <item android:id="@+id/menu_sync"
+        android:title="@string/menu_sync"
+        android:showAsAction="ifRoom|withText" />
+    
+    
     <item android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
         android:orderInCategory="100"
