@@ -1,11 +1,14 @@
 <resources>
 
     <string name="app_name">version 0</string>
-    <string name="title_activity_main">version 0</string>
+    <string name="title_activity_main">Main</string>
+     <string name="title_activity_login">Login</string>
     
     <string name="menu_settings">Settings</string>
     <string name="menu_spaces">Spaces</string>
     <string name="menu_sync">Synchronization</string>
+    <string name="menu_config">Configuration</string>
+    <string name="menu_home">Home</string>
     
     <string name ="buttonSharedSpaces">Shared Spaces</string>
     <string name ="buttonPrivateSpace">Private Space</string>
@@ -13,12 +16,12 @@
     
     <string name= "cancel">Cancel</string>
     
-    <string name="usernamehint">username</string>
-    <string name="passwordhint">password</string> 
     
     <string name="host">sandbox.idi.ntnu.no</string>
+    <string name="port">5222</string>
     <string name="domain">sandbox</string>
+    <string name="resource">watchIt_Connect</string>
     <string name ="username"></string>
-   <string name ="password"></string>
+    <string name ="password"></string>
 
 </resources>

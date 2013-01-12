@@ -19,7 +19,6 @@ public class SpaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-		
         return inflater.inflate(R.layout.space_fragment, container, false);
     }
 	
@@ -37,12 +36,8 @@ public class SpaceFragment extends Fragment {
 	        		   ArrayAdapter<String> arrayAdapter2 =      
 		    			         new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, spaceObject);
 
-	        		   
-	        		   ListView lw3 = (ListView)     this.getActivity().findViewById(R.id.listViewSpaceFragment);
-
-		    	        lw3.setAdapter(arrayAdapter2);
-		    	  
-		
+	        		   ListView lw = (ListView)     this.getActivity().findViewById(R.id.listViewSpaceFragment);
+		    	        lw.setAdapter(arrayAdapter2);
 	}
 	
 }

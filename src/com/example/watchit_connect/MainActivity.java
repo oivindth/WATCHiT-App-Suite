@@ -37,38 +37,27 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements LogInDialogFragment.LogInDialogListener {
+public class MainActivity extends FragmentActivity{
 
 	private ConnectionConfiguration connectionConfig;
 	private XMPPConnection connection;
 	private Context context;
-	private String domain, dbName = "sdkcache";;
-	private String host, userName, userPass;
-	private int port = 5222;
+	private String dbName = "sdkcache";
 	private SpaceHandler spaceHandler;
 	private List<de.imc.mirror.sdk.Space> spaces;
-	private String resource = "myapp-oivind"; // use an unique identifier for your application 
 	private ListView listOfSpaces;
+	
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this.getBaseContext();
-        domain = getString(R.string.domain);
-    	host = getString(R.string.host);
     	
     	MainFragment fragmentMain = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain).commit();
-      
-      
-    	
-		//userName = "oivind";
-		//userPass = "mirror";
-		
-		//new ConnectTask().execute();
-    	
     }
     
     @Override
@@ -77,9 +66,7 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
         return true;
     }
     
-    public void LogIn(View view) {
-    	showLogInDialog();
-    }
+ 
     public void getSpaces(View view) {
     	new GetSpacesTask().execute();
     }
@@ -87,85 +74,10 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
     	new GetData().execute();
     }
     
-	public void showLogInDialog() {
-        DialogFragment dialog = new LogInDialogFragment();
-        dialog.show(getSupportFragmentManager(), "LogInDialogFragment");
-    }
 
-	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
-		// Create a progress bar to display while the list loads
-        ProgressBar progressBar = new ProgressBar(this);
-        progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
-        progressBar.setIndeterminate(true);
-        //ListView lw = (ListView) findViewById(R.id.listView1);
-        ListView lw = (ListView)  findViewById(R.id.listViewMainFragment);
-        lw.setEmptyView(progressBar);
-        // Must add the progress bar to the root of the layout
-        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-        root.addView(progressBar);
-		
-		EditText editUserName = (EditText) dialog.getDialog().findViewById(R.id.username);
-		EditText editUserPass = (EditText) dialog.getDialog().findViewById(R.id.password);
-		userName = editUserName.getText().toString();
-		userPass = editUserPass.getText().toString();
-		
-		userName = "oivind";
-		userPass = "mirror";
-		
-		new ConnectTask().execute();
-	}
+
+
 	
-	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
-		Toast.makeText(context, "Y U NO LOG IN???", Toast.LENGTH_SHORT).show();
-	}
-    
-    private class ConnectTask extends AsyncTask<String, Integer, String> {
-		@Override
-		protected void onPreExecute(){
-		}
-		@Override
-		protected String doInBackground(String... params) {
-			//Before establishing a XMPP connection, a provider manager has to be initialized properly 
-	        //to receive data packages
-	        ProviderInitializer.initializeProviderManager();
-	        String result =" ";
-	        //prepare xmp connection
-		    ConnectionConfiguration connectionConfig = new ConnectionConfiguration(host, port); 
-	        connection = new XMPPConnection(connectionConfig);
-	        
-	        try {
-	        	connection.connect();
-	        	//if ( connection.getUser() != null);
-	        	connection.login(userName, userPass, resource);
-	        	System.out.println( connection.getUser());
-	        	result = "Login success";
-	      } catch (XMPPException e) {
-	    	  	result = "Login failed.";
-	    	  	e.printStackTrace();
-	      }
-	         // instantiate the implementation for Android
-			 spaceHandler = new de.imc.mirror.sdk.android.SpaceHandler(context,connection,userName,domain,dbName);
-			 spaceHandler.setConnected(true);
-			 
-	      return result;   
-		}
-		
-	    protected void onProgressUpdate(Integer... progress) {
-	    	 setProgressPercent(progress[0]);
-	     }
-	    private void setProgressPercent(Integer integer) {
-		 //pbar.setProgress(integer.intValue());
-		}
-		protected void onPostExecute(String result) {
-			//ProgressBar bar  = (ProgressBar) findViewById(R.id.progressBar1);
-			//bar.setVisibility(View.GONE);
-			Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-			new GetSpacesTask().execute();
-		}	
-    }
     
  private class GetSpacesTask extends AsyncTask<String, Integer, String> {
 	 List<String> spacesNames;
@@ -202,7 +114,6 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 			    	    	transaction.commit();
 	
 			    	         String selectedFromList =(String) (listOfSpaces.getItemAtPosition(myItemInt));
-			    	         Toast.makeText(context, "select: " + selectedFromList, Toast.LENGTH_SHORT).show();
 			    	         
 			    	         Space space = spaceHandler.getSpace(selectedFromList);
 			    	         System.out.println(space.getId());
@@ -212,9 +123,7 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 			    	         b.putInt("memberCount", members);
 			    	         b.putString("name", space.getName());
 			    	         b.putString("id", space.getId());
-			    	         
-			    	         sf.setArguments(b);
-			    	         	        
+			    	         sf.setArguments(b);        
 			    	       }                 
 			    	 });
 			         //new GetData().execute();
@@ -226,7 +135,7 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 		@Override
 		protected String doInBackground(String... params) {
 			DataHandler dataHandler =
-	    		    new de.imc.mirror.sdk.android.DataHandler(context, connection, userName,
+	    		    new de.imc.mirror.sdk.android.DataHandler(context, connection, "oivind",
 	    		        (de.imc.mirror.sdk.android.SpaceHandler) spaceHandler);
 			dataHandler.setConnected(true);
 			
@@ -283,10 +192,6 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 		protected void onPostExecute(String result) { 	                   
 	    	}
  	}
-
-
-
- 
 	    /* 
 		        Space myPrivateSpace = (Space) spaceHandler.getDefaultSpace();
 		        if (myPrivateSpace == null) {
@@ -301,9 +206,7 @@ public class MainActivity extends FragmentActivity implements LogInDialogFragmen
 		        } }
 		       System.out.println( myPrivateSpace.getMembers().get(0).getJID()); 
 		        //System.out.println(myPrivateSpace.getMembers()[0].getJID()); // JID of the current user
-		        
-		       
-		       
+
 				publishProgress(100); 
 		        
 	         return result;
