@@ -18,14 +18,20 @@ import de.imc.mirror.sdk.android.ProviderInitializer;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -39,15 +45,15 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity{
 
-	private ConnectionConfiguration connectionConfig;
 	private XMPPConnection connection;
 	private Context context;
 	private String dbName = "sdkcache";
 	private SpaceHandler spaceHandler;
 	private List<de.imc.mirror.sdk.Space> spaces;
 	private ListView listOfSpaces;
-	
-	
+	private String userName, password;
+	private View updateStatusView;
+	private View mainView;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,13 @@ public class MainActivity extends FragmentActivity{
         setContentView(R.layout.activity_main);
         context = this.getBaseContext();
     	
+        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        userName = settings.getString("username", "");
+        password = settings.getString("password", "");
+        
+        updateStatusView = findViewById(R.id.update_status);
+        mainView = findViewById(R.id.main_view);
+        
     	MainFragment fragmentMain = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain).commit();
@@ -66,38 +79,108 @@ public class MainActivity extends FragmentActivity{
         return true;
     }
     
- 
-    public void getSpaces(View view) {
-    	new GetSpacesTask().execute();
-    }
-    public void getTheData(View view) {
-    	new GetData().execute();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sync:
+            	showProgress(true);
+            	new GetSpacesTask().execute();
+                
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     
+  
+    /**
+	 * Shows the progress UI and hides the login form.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
 
+			updateStatusView.setVisibility(View.VISIBLE);
+			updateStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							updateStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
+						}
+					});
 
-
-	
+			mainView.setVisibility(View.VISIBLE);
+			mainView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mainView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			updateStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mainView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
     
- private class GetSpacesTask extends AsyncTask<String, Integer, String> {
+    
+    
+    
+    
+    
+ private class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 	 List<String> spacesNames;
 		@Override
-		protected String doInBackground(String... params) {
+		protected Boolean doInBackground(Void...params) {
+			//Before establishing a XMPP connection, a provider manager has to be initialized properly 
+	        //to receive data packages
+	        ProviderInitializer.initializeProviderManager();
+	        String result =" ";
+	        //prepare xmp connection
+	        
+		    ConnectionConfiguration connectionConfig = new ConnectionConfiguration(getString(R.string.host), Integer.parseInt( getString(R.string.port) ) ); 
+	        XMPPConnection connection = new XMPPConnection(connectionConfig);
+	        
+	        try {
+	        	connection.connect();
+	        	connection.login(userName, password, getString(R.string.resource));
+	      } catch (XMPPException e) {
+	    	  	return false;
+	      }
+			
+	        Context context = getApplicationContext();
+	        String domain = getString(R.string.domain);
+	        spaceHandler = new de.imc.mirror.sdk.android.SpaceHandler(context, connection, userName, domain, dbName);
+	        spaceHandler.setConnected(true);
 			spaces = spaceHandler.getAllSpaces();
 			
 		    spacesNames = new ArrayList<String> ();
 			for (de.imc.mirror.sdk.Space space : spaces) {
 				spacesNames.add(space.getId());
 			}
-			return "";
+			return true;
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(final Boolean success) {
+			showProgress(false);
+
+			if (success) {
+				// flytte fragment spesifikk kode ut av main activity plz. Instead of syncing specific list, a server sync should just
+				// sync everything, update local db then the db should update the specific fragments.
 			listOfSpaces = (ListView) findViewById(R.id.listViewMainFragment);
 			ArrayAdapter<String> arrayAdapter =      
 			         new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, spacesNames);
 			         listOfSpaces.setAdapter(arrayAdapter);
-			         Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 			         
 			         listOfSpaces.setOnItemClickListener(new OnItemClickListener() {
 			    	       public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
@@ -126,8 +209,12 @@ public class MainActivity extends FragmentActivity{
 			    	         sf.setArguments(b);        
 			    	       }                 
 			    	 });
-			         //new GetData().execute();
-	    	}
+			} else {
+				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
+			}
+			
+			}
+	    	
  	}
     
  private class GetData extends AsyncTask<String, Integer, String> {

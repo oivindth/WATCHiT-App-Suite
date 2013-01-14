@@ -38,11 +38,11 @@ public class LoginActivity extends Activity {
 	private UserLoginTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
-	private String mEmail;
+	private String mUserName;
 	private String mPassword;
 
 	// UI references.
-	private EditText mEmailView;
+	private EditText mUserNameView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
@@ -66,9 +66,9 @@ public class LoginActivity extends Activity {
 	      setContentView(R.layout.activity_login);
 	      
 	   // Set up the login form.
-			mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-			mEmailView = (EditText) findViewById(R.id.email);
-			mEmailView.setText(mEmail);
+			mUserName = getIntent().getStringExtra(EXTRA_EMAIL);
+			mUserNameView = (EditText) findViewById(R.id.username);
+			mUserNameView.setText(mUserName);
 
 			mPasswordView = (EditText) findViewById(R.id.password);
 			mPasswordView
@@ -114,11 +114,11 @@ public class LoginActivity extends Activity {
 			}
 
 			// Reset errors.
-			mEmailView.setError(null);
+			mUserNameView.setError(null);
 			mPasswordView.setError(null);
 
 			// Store values at the time of the login attempt.
-			mEmail = mEmailView.getText().toString();
+			mUserName = mUserNameView.getText().toString();
 			mPassword = mPasswordView.getText().toString();
 
 			boolean cancel = false;
@@ -136,13 +136,13 @@ public class LoginActivity extends Activity {
 			}
 
 			// Check for a valid email address.
-			if (TextUtils.isEmpty(mEmail)) {
-				mEmailView.setError(getString(R.string.error_field_required));
-				focusView = mEmailView;
+			if (TextUtils.isEmpty(mUserName)) {
+				mUserNameView.setError(getString(R.string.error_field_required));
+				focusView = mUserNameView;
 				cancel = true;
-			} else if (mEmail.contains("@")) {
-				mEmailView.setError(getString(R.string.error_invalid_email));
-				focusView = mEmailView;
+			} else if (mUserName.contains("@")) {
+				mUserNameView.setError(getString(R.string.error_invalid_email));
+				focusView = mUserNameView;
 				cancel = true;
 			}
 
@@ -220,8 +220,8 @@ public class LoginActivity extends Activity {
 		        
 		        try {
 		        	connection.connect();
-		        	connection.login(mEmail, mPassword, getString(R.string.resource));
-		        String name =	connection.getAccountManager().getAccountAttribute(mEmail);
+		        	connection.login(mUserName, mPassword, getString(R.string.resource));
+		        String name =	connection.getAccountManager().getAccountAttribute(mUserName);
 		      } catch (XMPPException e) {
 		    	  	return false;
 		      }
@@ -246,9 +246,8 @@ public class LoginActivity extends Activity {
 					mPasswordView
 							.setError(getString(R.string.error_incorrect_password));
 					mPasswordView.requestFocus();
-					mEmailView.setError(getString(R.string.error_incorrect_user));
-					mEmailView.requestFocus();
-					
+					mUserNameView.setError(getString(R.string.error_incorrect_user));
+					mUserNameView.requestFocus();
 				}
 			}
 			@Override
@@ -265,26 +264,16 @@ public class LoginActivity extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		//Set "hasLoggedIn" to true
 		editor.putBoolean("hasLoggedIn", true);
-		editor.putString("username", mEmail);
+		editor.putString("username", mUserName);
 		editor.putString("password", mPassword);
 		// Commit the edits!
 		editor.commit();
 	  }
-	  
 	  
 	  private void startMainActivity() {
 		  Intent intent = new Intent();
           intent.setClass(LoginActivity.this, MainActivity.class);
           startActivity(intent);
           finish();
-	  }
-	  
+	  }	  
 }
-
-
-
-
-
-
-
-
