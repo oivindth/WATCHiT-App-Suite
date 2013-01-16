@@ -22,10 +22,21 @@ public class SpaceFragment extends ListFragment {
         return inflater.inflate(R.layout.space_fragment, container, false);
     }
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (getArguments().size() != 0) {
+			UpdateSpaceInfo(getArguments().getString("name"), getArguments().getString("id"), getArguments().getInt("memberCount"));
+		}
+	}
 
 
-	public void UpdateSpaceInfo(String name, String id, String members) {
-		List
+	public void UpdateSpaceInfo(String name, String id, int members) {
+		List<String> space = new ArrayList<String>();
+		space.add(name);
+		space.add(id);
+		space.add(Integer.toString(members));
+		
 		
 		ArrayAdapter<String> arrayAdapter2 =      
 				   new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, space);

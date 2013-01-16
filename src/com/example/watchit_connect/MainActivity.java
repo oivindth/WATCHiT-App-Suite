@@ -73,8 +73,8 @@ public class MainActivity extends FragmentActivity implements OnSpaceItemSelecte
         mainView = findViewById(R.id.main_view);
         
     	MainFragment fragmentMain = new MainFragment();
-    	SpaceFragment spaceFragment = new SpaceFragment();
-    	getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, spaceFragment, "space").commit();
+    	//SpaceFragment spaceFragment = new SpaceFragment();
+    	//getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, spaceFragment, "space").commit();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain,"main").commit();
         
@@ -247,31 +247,11 @@ public class MainActivity extends FragmentActivity implements OnSpaceItemSelecte
 		protected void onPostExecute(String result) { 	                   
 	    	}
  	}
-	    /* 
-		        Space myPrivateSpace = (Space) spaceHandler.getDefaultSpace();
-		        if (myPrivateSpace == null) {
-		          try {
-		            myPrivateSpace = (Space) spaceHandler.createDefaultSpace();
-		          } catch (SpaceManagementException e) {
-		            // failed to create space
-		            // add proper exception handling
-		          } catch (ConnectionStatusException e) {
-		            // cannot create a space when offline
-		            // add proper exception handling
-		        } }
-		       System.out.println( myPrivateSpace.getMembers().get(0).getJID()); 
-		        //System.out.println(myPrivateSpace.getMembers()[0].getJID()); // JID of the current user
-
-				publishProgress(100); 
-		        
-	         return result;
-	     }*/
+	
 
  	@Override
 	public void onSpaceItemSelected(int position) {
- 	
- 		spaces = spaceHandler.getAllSpaces();
-		
+ 		
 	    Space space = spaces.get(position);
 	
  		SpaceFragment spaceFrag = (SpaceFragment)
@@ -281,7 +261,7 @@ public class MainActivity extends FragmentActivity implements OnSpaceItemSelecte
             // If article frag is available, we're in two-pane layout...
 
             // Call a method in the ArticleFragment to update its content
-            spaceFrag.UpdateSpaceInfo("name", "id", "members");
+            spaceFrag.UpdateSpaceInfo("name", "id", 12);
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags...
 
@@ -293,7 +273,7 @@ public class MainActivity extends FragmentActivity implements OnSpaceItemSelecte
             b.putString("name", space.getName());
             b.putString("id", space.getId());
             spaceFragment.setArguments(b);  
-          
+           
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             
             // Replace whatever is in the fragment_container view with this fragment,
