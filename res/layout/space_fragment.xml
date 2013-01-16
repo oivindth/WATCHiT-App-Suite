@@ -10,8 +10,11 @@
         android:layout_height="wrap_content"
         android:text="space fragment" />
 
+    
+    
+    
     <ListView
-        android:id="@+id/listViewSpaceFragment"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>

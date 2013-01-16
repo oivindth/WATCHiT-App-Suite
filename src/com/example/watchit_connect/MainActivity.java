@@ -10,6 +10,8 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
+import com.example.watchit_connect.MainFragment.OnSpaceItemSelectedListener;
+
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataHandler;
@@ -27,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -43,7 +46,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends FragmentActivity implements OnSpaceItemSelectedListener{
 
 	private XMPPConnection connection;
 	private Context context;
@@ -54,6 +57,7 @@ public class MainActivity extends FragmentActivity{
 	private String userName, password;
 	private View updateStatusView;
 	private View mainView;
+	private List<String> spacesNames;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,9 +73,14 @@ public class MainActivity extends FragmentActivity{
         mainView = findViewById(R.id.main_view);
         
     	MainFragment fragmentMain = new MainFragment();
+    	SpaceFragment spaceFragment = new SpaceFragment();
+    	getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, spaceFragment, "space").commit();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragmentMain).commit();
+                .add(R.id.fragment_container, fragmentMain,"main").commit();
+        
+        
     }
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,7 +100,6 @@ public class MainActivity extends FragmentActivity{
         }
     }
     
-  
     /**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -133,21 +141,16 @@ public class MainActivity extends FragmentActivity{
 		}
 	}
     
-    
-    
-    
-    
-    
+	
  private class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
-	 List<String> spacesNames;
+	 
 		@Override
 		protected Boolean doInBackground(Void...params) {
 			//Before establishing a XMPP connection, a provider manager has to be initialized properly 
 	        //to receive data packages
 	        ProviderInitializer.initializeProviderManager();
-	        String result =" ";
-	        //prepare xmp connection
-	        
+
+	        //prepare xmp connection	        
 		    ConnectionConfiguration connectionConfig = new ConnectionConfiguration(getString(R.string.host), Integer.parseInt( getString(R.string.port) ) ); 
 	        XMPPConnection connection = new XMPPConnection(connectionConfig);
 	        
@@ -173,48 +176,13 @@ public class MainActivity extends FragmentActivity{
 
 		protected void onPostExecute(final Boolean success) {
 			showProgress(false);
-
 			if (success) {
-				// flytte fragment spesifikk kode ut av main activity plz. Instead of syncing specific list, a server sync should just
-				// sync everything, update local db then the db should update the specific fragments.
-			listOfSpaces = (ListView) findViewById(R.id.listViewMainFragment);
-			ArrayAdapter<String> arrayAdapter =      
-			         new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, spacesNames);
-			         listOfSpaces.setAdapter(arrayAdapter);
-			         
-			         listOfSpaces.setOnItemClickListener(new OnItemClickListener() {
-			    	       public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-			    	    	   
-			    	    	   
-			    	    	   FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			    	    	   SpaceFragment sf = new SpaceFragment();
-			    	    	   
-			    	    	// Replace whatever is in the fragment_container view with this fragment,
-			    	    	// and add the transaction to the back stack so the user can navigate back
-			    	    	transaction.replace(R.id.fragment_container, sf);
-			    	    	transaction.addToBackStack("tag");
-			    	    	// Commit the transaction
-			    	    	transaction.commit();
-	
-			    	         String selectedFromList =(String) (listOfSpaces.getItemAtPosition(myItemInt));
-			    	         
-			    	         Space space = spaceHandler.getSpace(selectedFromList);
-			    	         System.out.println(space.getId());
-			    	         
-			    	         int members = space.getMembers().size();
-			    	         Bundle b = new Bundle();
-			    	         b.putInt("memberCount", members);
-			    	         b.putString("name", space.getName());
-			    	         b.putString("id", space.getId());
-			    	         sf.setArguments(b);        
-			    	       }                 
-			    	 });
+				MainFragment mainfragment = (MainFragment)  getSupportFragmentManager().findFragmentByTag("main");
+				mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
 			} else {
 				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
 			}
-			
-			}
-	    	
+		}
  	}
     
  private class GetData extends AsyncTask<String, Integer, String> {
@@ -298,5 +266,48 @@ public class MainActivity extends FragmentActivity{
 		        
 	         return result;
 	     }*/
+
+ 	@Override
+	public void onSpaceItemSelected(int position) {
+ 	
+ 		spaces = spaceHandler.getAllSpaces();
+		
+	    Space space = spaces.get(position);
+	
+ 		SpaceFragment spaceFrag = (SpaceFragment)
+                getSupportFragmentManager().findFragmentByTag("space");
+
+        if (spaceFrag != null) {
+            // If article frag is available, we're in two-pane layout...
+
+            // Call a method in the ArticleFragment to update its content
+            spaceFrag.UpdateSpaceInfo("name", "id", "members");
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+
+            // Create fragment and give it an argument for the selected article
+            SpaceFragment spaceFragment = new SpaceFragment();
+            int members = space.getMembers().size();
+            Bundle b = new Bundle();
+            b.putInt("memberCount", members);
+            b.putString("name", space.getName());
+            b.putString("id", space.getId());
+            spaceFragment.setArguments(b);  
+          
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, spaceFragment, "space");
+            transaction.addToBackStack("main");
+
+            // Commit the transaction
+            transaction.commit();
+        }
+ 		
+ 
+    	     
+	
+}
 	
 }

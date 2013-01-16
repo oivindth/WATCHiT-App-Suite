@@ -17,18 +17,16 @@ public final class R {
     public static final class id {
         public static final int fragment_container=0x7f07000a;
         public static final int listView2=0x7f07000c;
-        public static final int listViewMainFragment=0x7f070010;
-        public static final int listViewSpaceFragment=0x7f070011;
         public static final int login=0x7f070005;
         public static final int login_form=0x7f070002;
         public static final int login_status=0x7f070000;
         public static final int login_status_message=0x7f070001;
         public static final int main_view=0x7f070009;
-        public static final int menu_Home=0x7f070013;
-        public static final int menu_config=0x7f070014;
-        public static final int menu_forgot_password=0x7f070012;
-        public static final int menu_settings=0x7f070016;
-        public static final int menu_sync=0x7f070015;
+        public static final int menu_Home=0x7f070011;
+        public static final int menu_config=0x7f070012;
+        public static final int menu_forgot_password=0x7f070010;
+        public static final int menu_settings=0x7f070014;
+        public static final int menu_sync=0x7f070013;
         public static final int oldpassword=0x7f07000e;
         public static final int oldusername=0x7f07000d;
         public static final int password=0x7f070004;

@@ -13,7 +13,7 @@ import android.webkit.WebView.FindListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SpaceFragment extends Fragment {
+public class SpaceFragment extends ListFragment {
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,22 +22,15 @@ public class SpaceFragment extends Fragment {
         return inflater.inflate(R.layout.space_fragment, container, false);
     }
 	
-	@Override
-	public void onResume() {
-		super.onResume();
+
+
+	public void UpdateSpaceInfo(String name, String id, String members) {
+		List
 		
-		Bundle b = this.getArguments();
-
-	       List<String> spaceObject = new ArrayList<String>();
-	         spaceObject.add("Id: " +b.getString("id"));
-	         spaceObject.add("Name: " +b.getString("name"));
-	         spaceObject.add("Members: " + b.getInt("memberCount"));
-
-	        		   ArrayAdapter<String> arrayAdapter2 =      
-		    			         new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, spaceObject);
-
-	        		   ListView lw = (ListView)     this.getActivity().findViewById(R.id.listViewSpaceFragment);
-		    	        lw.setAdapter(arrayAdapter2);
+		ArrayAdapter<String> arrayAdapter2 =      
+				   new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, space);
+			       setListAdapter(arrayAdapter2);
+		
 	}
 	
 }
