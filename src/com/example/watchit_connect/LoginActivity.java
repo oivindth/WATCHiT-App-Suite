@@ -1,10 +1,11 @@
 package com.example.watchit_connect;
 
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 
+import de.imc.mirror.sdk.ConnectionConfiguration;
+import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
+import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.ProviderInitializer;
+import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -209,26 +210,17 @@ public class LoginActivity extends Activity {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 
-				//Before establishing a XMPP connection, a provider manager has to be initialized properly 
-		        //to receive data packages
-		        ProviderInitializer.initializeProviderManager();
-		        String result =" ";
-		        //prepare xmp connection
-		        
-			    ConnectionConfiguration connectionConfig = new ConnectionConfiguration(getString(R.string.host), Integer.parseInt( getString(R.string.port) ) ); 
-		        XMPPConnection connection = new XMPPConnection(connectionConfig);
-		        
-		        try {
-		        	connection.connect();
-		        	connection.login(mUserName, mPassword, getString(R.string.resource));
-		        String name =	connection.getAccountManager().getAccountAttribute(mUserName);
-		      } catch (XMPPException e) {
-		    	  	return false;
+		        //Configure connection
+		        ConnectionConfigurationBuilder connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.host), getString(R.string.application_id));
+		        ConnectionConfiguration connectionConfig = connectionConfigurationBuilder.build();
+		        ConnectionHandler connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
+		      try {
+		    	  connectionHandler.connect();
+		      } catch (ConnectionStatusException e) {
+		    	  e.printStackTrace();
+		    	  return false;
 		      }
-		         //instantiate the implementation for Android
-				 //spaceHandler = new de.imc.mirror.sdk.android.SpaceHandler(context,connection,userName,domain,dbName);
-				 //spaceHandler.setConnected(true);
-				
+
 				// TODO: register the new account here.
 				return true;
 			}
@@ -257,6 +249,11 @@ public class LoginActivity extends Activity {
 			}
 		}
 		
+		
+		/**
+		 * Update the username and password for this cell phone to the shared preferences.
+		 * Also sets that the user has logged in previously so he doesen't have to log in again.
+		 */
 	  public void updateSharedPreferences () {
 		//User has successfully logged in, save this information
 		// We need an Editor object to make preference changes.

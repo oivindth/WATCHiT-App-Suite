@@ -17,11 +17,11 @@
     <string name= "cancel">Cancel</string>
     
     
-    <string name="host">sandbox.idi.ntnu.no</string>
+    <string name="host">129.241.103.122</string>
     <string name="port">5222</string>
-    <string name="domain">sandbox</string>
-    <string name="resource">watchIt_Connect</string>
-    <string name ="username"></string>
+    <string name="domain">mirror-server-ntnu</string>
+    <string name="application_id">watchIt_Reflection_App</string>
+    <string name ="username">spacemanager</string>
     <string name ="password"></string>
 
 </resources>

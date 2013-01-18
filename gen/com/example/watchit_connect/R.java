@@ -53,6 +53,7 @@ public final class R {
         public static final int action_sign_in_register=0x7f040014;
         public static final int action_sign_in_short=0x7f040015;
         public static final int app_name=0x7f040000;
+        public static final int application_id=0x7f04000f;
         public static final int buttonPrivateSpace=0x7f040009;
         public static final int buttonSharedSpaces=0x7f040008;
         public static final int buttonSpaces=0x7f04000a;
@@ -77,7 +78,6 @@ public final class R {
          */
         public static final int prompt_email=0x7f040012;
         public static final int prompt_password=0x7f040013;
-        public static final int resource=0x7f04000f;
         public static final int title_activity_login=0x7f040002;
         public static final int title_activity_main=0x7f040001;
         public static final int username=0x7f040010;
