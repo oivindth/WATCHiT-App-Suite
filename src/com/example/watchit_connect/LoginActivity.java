@@ -1,6 +1,8 @@
 package com.example.watchit_connect;
 
 
+import com.example.watchit_connect.spaces.SpacesActivity;
+
 import de.imc.mirror.sdk.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
@@ -269,7 +271,7 @@ public class LoginActivity extends Activity {
 	  
 	  private void startMainActivity() {
 		  Intent intent = new Intent();
-          intent.setClass(LoginActivity.this, MainActivity.class);
+          intent.setClass(LoginActivity.this, SpacesActivity.class);
           startActivity(intent);
           finish();
 	  }	  
