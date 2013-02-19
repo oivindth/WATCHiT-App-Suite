@@ -1,7 +1,8 @@
-package com.example.watchit_connect.spaces;
+package com.example.watchit_connect.Spaces;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom2.Attribute;
 import org.jdom2.Content;
@@ -17,7 +18,8 @@ import com.example.watchit_connect.R.id;
 import com.example.watchit_connect.R.layout;
 import com.example.watchit_connect.R.menu;
 import com.example.watchit_connect.R.string;
-import com.example.watchit_connect.spaces.SpacesFragment.OnSpaceItemSelectedListener;
+import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
+import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataModel;
@@ -52,7 +54,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelectedListener{
+public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
 
 	private Context context;
 	private String dbName = "sdkcache";
@@ -65,6 +67,7 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 	private ConnectionConfigurationBuilder connectionConfigurationBuilder;
 	private ConnectionConfiguration connectionConfig;
 	private ConnectionHandler connectionHandler;
+	private Space space;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,10 +137,8 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 		for (de.imc.mirror.sdk.Space space : spaces) {
 			spacesNames.add(space.getId());
 		}
-		
 		SpacesFragment mainfragment = (SpacesFragment)  getSupportFragmentManager().findFragmentByTag("main");
 		mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
-		
 	}
 	
 	/**
@@ -224,23 +225,18 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 					de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
 				 String objectId = dataObject.getId();
 		    	 System.out.println("Received object " + objectId + " from space " + spaceId);
-				
 			}
 
-	
 	    	 };
 	    	 dataHandler.addDataObjectListener(myListener);
-	    	 
-	    	 
+	    	
 	    	// create the data object using the object builder
 	    	 DataObjectBuilder dataObjectBuilder =
 	    	 new DataObjectBuilder("trainingprocedure", "mirror:application:watchIt_Reflection_App:trainingprocedure");
 	    	 dataObjectBuilder.addElement("Time", "12", false);
-	    	 dataObjectBuilder.addElement("step1", "3", false);
+	    	 dataObjectBuilder.addElement("step1", "3", false).addElement("step2", "4", false);
+	    	 //dataObjectBuilder.addCDTCreationInfo(date, connectionHandler.getCurrentUser().getBareJID(), application);
 	    	 DataObject dataObject = dataObjectBuilder.build();
-
-	    	
-	    	 
 	    	 // publish the data
 	    	 try {
 	    	 dataHandler.publishDataObject(dataObject, "team#3");
@@ -260,34 +256,37 @@ System.out.println("now attempt to get data objects...... ");
 				List<de.imc.mirror.sdk.DataObject> dataobjects = dataHandler.retrieveDataObjects("team#3");
 				System.out.println("getting data objects...");
 				System.out.println("size of data: " + dataobjects.size());
+				
 				 for (de.imc.mirror.sdk.DataObject dobj : dataobjects) {
 					List<Attribute> attributes =  dobj.getElement().getAttributes();
-			
+					
 					Parser p = new Parser();
 					TrainingProcedure oddgeir = (TrainingProcedure) p.DeSerialize(dobj.toString());
-					p.Serialize(oddgeir, getBaseContext());
-					
-					
+					System.out.println(oddgeir.getId());
+					//p.Serialize(oddgeir, getBaseContext());
 					
 				   System.out.println("dataobject totring" + dobj.toString());
-				/*
+				   
+				   p.Serialize(oddgeir,  getBaseContext());
+				   
+				
 					for (Attribute attribute : attributes) {
 						System.out.println("attr name: " + attribute.getName());
 					}
-					  System.out.println("øl? " + dobj.getElement().getAttributeValue("Time")); 
 						System.out.println("name of data: " + dobj.getElement().getName()); 
 						System.out.println("content of the data:**************");
 						List<Content> contents = dobj.getElement().getContent();
 						for (Content content : contents) {
 							//content.getParent().getContent()
 							System.out.println(content.getValue()); 
+
 						 //Må nok kjøre Simple xml på dataobjekter for å PARSE. 
 						}
 						System.out.println("*************");
 						System.out.println("data value: "+  dobj.getElement().getValue()); 
 						System.out.println("data text: " +dobj.getElement().getText()); 
 						System.out.println("xml til streng: " + dobj.getElement().toString()); 
-					*/}
+					}
 			} catch (UnknownEntityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -339,26 +338,23 @@ System.out.println("now attempt to get data objects...... ");
     
  	@Override
 	public void onSpaceItemSelected(int position) {
- 		
-	    Space space = spaces.get(position);
+	    space = spaces.get(position);
  		SpaceFragment spaceFrag = (SpaceFragment)
                 getSupportFragmentManager().findFragmentByTag("space");
 
         if (spaceFrag != null) {
             // If article frag is available, we're in two-pane layout...
-
             // Call a method in the SpaceFragment to update its content
-            spaceFrag.UpdateSpaceInfo("name", "id", 12);
+            spaceFrag.UpdateSpaceInfo(space.getName(), space.getId(), space.getMembers().size());
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags...
-
             // Create fragment and give it an argument for the selected space
             SpaceFragment spaceFragment = new SpaceFragment();
-            int members = space.getMembers().size();
+            //int members = space.getMembers().size();
             Bundle b = new Bundle();
-            b.putInt("memberCount", members);
-            b.putString("name", space.getName());
-            b.putString("id", space.getId());
+            b.putInt("pos", position);
+            //b.putString("name", space.getName());
+            //b.putString("id", space.getId());
             spaceFragment.setArguments(b);  
            
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -395,6 +391,15 @@ System.out.println("now attempt to get data objects...... ");
  	    return myPrivateSpace;
  	}
  	
+ 	
+ 	
+ 	public Space getSpace (int pos) {
+ 		return spaces.get(pos);
+ 	}
+ 	public Set<de.imc.mirror.sdk.SpaceMember> getCurrentSpaceMembers() {
+ 		return space.getMembers();
+ 		
+ 	}
  	
  	
  	  /**
@@ -437,6 +442,38 @@ System.out.println("now attempt to get data objects...... ");
  				mainView.setVisibility(show ? View.GONE : View.VISIBLE);
  			}
  		}
+
+	@Override
+	public void onSpaceInfoSelected(int position) {
+	    
+	    //memberfragment here
+		SpaceMembersFragment spacemembersfragment = 
+				(SpaceMembersFragment) getSupportFragmentManager().findFragmentByTag("spacemembers");
+		
+
+        if (spacemembersfragment != null) {
+            // If article frag is available, we're in two-pane layout...
+            // Call a method in the SpaceFragment to update its content
+            //spaceFrag.UpdateSpaceInfo(space.getName(), space.getId(), space.getMembers().size());
+        	
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+            // Create fragment and give it an argument for the selected space
+            SpaceMembersFragment spaceMembersFragment = new SpaceMembersFragment();
+           
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, spaceMembersFragment, "spacemembers");
+            transaction.addToBackStack("space");
+
+            // Commit the transaction
+            transaction.commit();
+		
+	}
  
+	
+}
 	
 }

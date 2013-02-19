@@ -1,12 +1,12 @@
 package com.example.watchit_connect;
 
 
-import com.example.watchit_connect.spaces.SpacesActivity;
+
+import com.example.watchit_connect.Spaces.SpacesActivity;
 
 import de.imc.mirror.sdk.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
-import de.imc.mirror.sdk.android.ProviderInitializer;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,9 +31,9 @@ import android.widget.TextView;
  */
 public class LoginActivity extends Activity {
 	/**
-	 * The default email to populate the email field with.
+	 * The default username to populate the username field with.
 	 */
-	public static final String EXTRA_EMAIL = "example@mail.com";
+	public static final String EXTRA_USERNAME = "username";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -52,7 +52,7 @@ public class LoginActivity extends Activity {
 	private TextView mLoginStatusMessageView;
 	
 
-	// A special thanks to Telmo Marques from stackoverflow for how to dispolay login activity only once.
+	// A special thanks to Telmo Marques from stackoverflow for how to display login activity only once.
 	// source:  http://stackoverflow.com/questions/9964480/how-to-display-login-screen-only-one-time
 	
 	// We have a shared preference file for keeping track of the user has logged in before. 
@@ -69,7 +69,7 @@ public class LoginActivity extends Activity {
 	      setContentView(R.layout.activity_login);
 	      
 	   // Set up the login form.
-			mUserName = getIntent().getStringExtra(EXTRA_EMAIL);
+			mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
 			mUserNameView = (EditText) findViewById(R.id.username);
 			mUserNameView.setText(mUserName);
 

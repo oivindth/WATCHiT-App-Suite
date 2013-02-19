@@ -1,15 +1,11 @@
-package com.example.watchit_connect.spaces;
+package com.example.watchit_connect.Spaces;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.layout;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;

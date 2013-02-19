@@ -27,6 +27,7 @@ public class Parser {
 	public void Serialize (TrainingProcedure xml, Context context) {
 		String filePath =  context.getFilesDir().getPath().toString() + "/example.txt";
 		result = new File(filePath);
+		
 		//result = new File("example.xml");
 		try {
 			serializer.write(trainingProcedure, result);
@@ -36,12 +37,12 @@ public class Parser {
 		}
 		
 		trainingProcedure = DeSerialize(result);
-		System.out.println("XML after everything***:::   " + trainingProcedure.getId() + trainingProcedure.getTimeStamp() + trainingProcedure.getTime());
+		System.out.println("XML after everything***:::   " + trainingProcedure.toString());
 		
 	}
 	
 	/**
-	 * DeSerialize(read) the simplexml object.
+	 * DeSerialize(read) xml from a string and return a simpleXML object
 	 */
 	public TrainingProcedure DeSerialize (String xml) {
 		System.out.println("xml:  \n " + xml);
@@ -53,10 +54,9 @@ public class Parser {
 		return trainingProcedure;
 	}
 	/**
-	 * DeSerialize(read) the simplexml object.
+	 * DeSerialize(read) the simplexml and return object from file
 	 */
 	public TrainingProcedure DeSerialize (File file) {
-		
 		try {
 			trainingProcedure = serializer.read(TrainingProcedure.class, file);
 		} catch (Exception e) {
@@ -64,6 +64,4 @@ public class Parser {
 		}
 		return trainingProcedure;
 	}
-	
-	
 }

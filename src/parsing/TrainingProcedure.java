@@ -2,19 +2,19 @@ package parsing;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
 @Root(name = "trainingprocedure")
+@Namespace(reference="mirror:application:watchIt_Reflection_App:trainingprocedure")
 public class TrainingProcedure {
 	
 	
-	@Element(name = "Time")
+	@Element(name = "Time", required = false)
 	private String time;
-	@Element(name ="step1")
+	@Element(name ="step1", required = false)
 	private String step;
 	
-	@Attribute(name = "xmlns")
-	private String xmlns;
 	@Attribute(name = "id")
 	private String id;
 	@Attribute(name = "timestamp")
@@ -25,10 +25,10 @@ public class TrainingProcedure {
 	public TrainingProcedure () {
 	}
 	
-	public TrainingProcedure (String time, String step, String xmlns, String id, String timestamp) {
+	
+	public TrainingProcedure (String time, String step, String id, String timestamp) {
 		this.step = step;
 		this.time = time;
-		this.xmlns = xmlns;
 		this.id = id;
 		this.timestamp = timestamp;
 	}
@@ -40,14 +40,19 @@ public class TrainingProcedure {
 	public String getText () {
 		return step;
 	}
-	public String getXMLns () {
-		return xmlns;
-	}
+
 	public String getId () {
 		return id;
 	}
 	public String getTimeStamp () {
 		return timestamp;
+	}
+	
+	public String toString () {
+		
+		String s =  " id: " + id + " timestamp: " + timestamp + " Time: " + time + " step1 " + step;
+		return s;
+		
 	}
 	
 }

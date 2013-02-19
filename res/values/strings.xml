@@ -23,5 +23,7 @@
     <string name="application_id">watchIt_Reflection_App</string>
     <string name ="username">spacemanager</string>
     <string name ="password"></string>
+    
+    <string name = "trainingprocedureNameSpace">mirror:application:watchIt_Reflection_App:trainingprocedure</string>
 
 </resources>
