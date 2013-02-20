@@ -2,7 +2,9 @@
 
     <string name="app_name">version 0</string>
     <string name="title_activity_main">Main</string>
-     <string name="title_activity_login">Login</string>
+    <string name="title_activity_login">Login</string>
+    <string name ="title_activity_applications">Applications </string>
+    <string name ="title_activity_trainingprocedure">Training Procedure </string>
     
     <string name="menu_settings">Settings</string>
     <string name="menu_spaces">Spaces</string>
@@ -25,5 +27,11 @@
     <string name ="password"></string>
     
     <string name = "trainingprocedureNameSpace">mirror:application:watchIt_Reflection_App:trainingprocedure</string>
+    
+    
+    <string name = "app1">Training Procedure</string>
+    <string name = "app2">Mood App</string>
+    <string name = "app3">Flood Simulation </string>
+    
 
 </resources>

@@ -13,7 +13,10 @@ import parsing.TrainingProcedure;
 import parsing.XMLDataObject;
 
 import com.example.watchit_connect.LoginActivity;
+import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
+import com.example.watchit_connect.Applications.ApplicationsActivity;
+import com.example.watchit_connect.Applications.mood.MoodActivity;
 import com.example.watchit_connect.R.id;
 import com.example.watchit_connect.R.layout;
 import com.example.watchit_connect.R.menu;
@@ -42,10 +45,12 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Contacts.Settings;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -57,10 +62,8 @@ import android.widget.Toast;
 public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
 
 	private Context context;
-	private String dbName = "sdkcache";
 	private SpaceHandler spaceHandler;
 	private List<Space> spaces;
-	private String userName, password;
 	private View updateStatusView;
 	private View mainView;
 	private List<String> spacesNames;
@@ -74,8 +77,11 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spaces);
         context = this.getBaseContext();
-    	
+        MainApplication app =  (MainApplication) getApplication();
+        
+        //Do this in LoginActivity to update variables in mainapplication object.
         SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        app.userName = settings.getString("username", ""); 
         userName = settings.getString("username", "");
         password = settings.getString("password", "");
         
@@ -97,8 +103,6 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
     	super.onResume();
     	 ConfigureSpaces();
     	
-    	 
-    	
     }
     
     @Override
@@ -113,10 +117,17 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
             case R.id.menu_sync:
             	showProgress(true);
             	new GetSpacesTask().execute();
-            	
-            case R.id.menu_settings:
+            	return true;
+            case R.id.menu_config:
+            	showProgress(true);
             	 new PublishDataTask().execute();
-            	
+            	return true;	
+            case R.id.menu_Home:
+            	Intent intent = new Intent(this, ApplicationsActivity.class);
+                //intent.setClass(SpacesActivity.this, ApplicationsActivity.class);
+                startActivity(intent);
+                //finish();
+                return true;	
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -141,32 +152,7 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 		mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
 	}
 	
-	/**
-	 * @deprecated
-	 * Idea a dedicated task to connect. Not necesarry at the moment..
-	 *
-	 */
-	private class ConnectTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void...params) {
-	      try {
-	    	  if (connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-	    	  connectionHandler.connect();
-	    	  System.out.println(connectionHandler.getStatus());
-	      } catch (ConnectionStatusException e) {
-	    	  e.printStackTrace();
-	    	  return false;
-	      }
-			return true;
-		}
-		protected void onPostExecute(final Boolean success) {
-			showProgress(false);
-			if (success) 
-				spaceHandler.setMode(Mode.ONLINE); //Default is offline mode, but we have already established an xmmp connection so we want it to be online.
-			else
-				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
-		}
-	}
+	
 	
 	
 	
@@ -415,6 +401,7 @@ System.out.println("now attempt to get data objects...... ");
  						android.R.integer.config_shortAnimTime);
 
  				updateStatusView.setVisibility(View.VISIBLE);
+ 				
  				updateStatusView.animate().setDuration(shortAnimTime)
  						.alpha(show ? 1 : 0)
  						.setListener(new AnimatorListenerAdapter() {
@@ -445,12 +432,13 @@ System.out.println("now attempt to get data objects...... ");
 
 	@Override
 	public void onSpaceInfoSelected(int position) {
-	    
+	    // if position clicked is not the members field just return.
+		if (position != 2 ) return;
+		
 	    //memberfragment here
 		SpaceMembersFragment spacemembersfragment = 
 				(SpaceMembersFragment) getSupportFragmentManager().findFragmentByTag("spacemembers");
 		
-
         if (spacemembersfragment != null) {
             // If article frag is available, we're in two-pane layout...
             // Call a method in the SpaceFragment to update its content
@@ -462,7 +450,6 @@ System.out.println("now attempt to get data objects...... ");
             SpaceMembersFragment spaceMembersFragment = new SpaceMembersFragment();
            
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
             transaction.replace(R.id.fragment_container, spaceMembersFragment, "spacemembers");

@@ -43,6 +43,7 @@ public class SpaceFragment extends ListFragment {
 		
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+		
         // Send the event to the host activity
 		Toast.makeText(getActivity().getBaseContext(), "clicked on item at position " + position, Toast.LENGTH_SHORT).show();
         mListener.onSpaceInfoSelected(position);
