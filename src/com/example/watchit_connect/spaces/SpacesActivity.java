@@ -17,6 +17,7 @@ import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.Applications.ApplicationsActivity;
 import com.example.watchit_connect.Applications.mood.MoodActivity;
+import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.R.id;
 import com.example.watchit_connect.R.layout;
 import com.example.watchit_connect.R.menu;
@@ -59,34 +60,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
+public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
 
-	private Context context;
-	private SpaceHandler spaceHandler;
 	private List<Space> spaces;
-	private View updateStatusView;
-	private View mainView;
+	private View updateStatusView, mainView;
 	private List<String> spacesNames;
-	private ConnectionConfigurationBuilder connectionConfigurationBuilder;
-	private ConnectionConfiguration connectionConfig;
-	private ConnectionHandler connectionHandler;
 	private Space space;
+	private MainApplication app;
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spaces);
-        context = this.getBaseContext();
-        MainApplication app =  (MainApplication) getApplication();
-        
-        //Do this in LoginActivity to update variables in mainapplication object.
-        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-        app.userName = settings.getString("username", ""); 
-        userName = settings.getString("username", "");
-        password = settings.getString("password", "");
-        
-        userName = "admin";
-        password = "opf2013ntnu";
+        app =  (MainApplication) getApplication();
         
         updateStatusView = findViewById(R.id.update_status);
         mainView = findViewById(R.id.main_view);
@@ -101,68 +88,30 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
     @Override
     public void onResume() {
     	super.onResume();
-    	 ConfigureSpaces();
-    	
+    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.getConnectionHandler(), app.getDbName());
+    	spaceHandler.setMode(Mode.ONLINE);
+    	 app.setSpaceHandler(spaceHandler); 
+			
+    		spaces = spaceHandler.getAllSpaces();
+    	    spacesNames = new ArrayList<String> ();
+    		for (de.imc.mirror.sdk.Space space : spaces) {
+    			spacesNames.add(space.getId());
+    		}
+    		SpacesFragment mainfragment = (SpacesFragment)  getSupportFragmentManager().findFragmentByTag("main");
+    		mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
     }
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_sync:
-            	showProgress(true);
-            	new GetSpacesTask().execute();
-            	return true;
-            case R.id.menu_config:
-            	showProgress(true);
-            	 new PublishDataTask().execute();
-            	return true;	
-            case R.id.menu_Home:
-            	Intent intent = new Intent(this, ApplicationsActivity.class);
-                //intent.setClass(SpacesActivity.this, ApplicationsActivity.class);
-                startActivity(intent);
-                //finish();
-                return true;	
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-     
-    }
+
     
-	private void ConfigureSpaces() {
-		 //Configure connection
-        connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
-        connectionConfigurationBuilder.setHost(getString(R.string.host));
-        connectionConfig = connectionConfigurationBuilder.build();
-        connectionHandler = new ConnectionHandler(userName, password, connectionConfig);
-        
-        spaceHandler = new SpaceHandler(context, connectionHandler, dbName);
-        spaceHandler.setMode(Mode.ONLINE);
-		spaces = spaceHandler.getAllSpaces();
-	    spacesNames = new ArrayList<String> ();
-		for (de.imc.mirror.sdk.Space space : spaces) {
-			spacesNames.add(space.getId());
-		}
-		SpacesFragment mainfragment = (SpacesFragment)  getSupportFragmentManager().findFragmentByTag("main");
-		mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
-	}
-	
-	
-	
-	
 	
 	private class PublishDataTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void...params) {
 			
 		      try {
-		    	  if (connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-		    		  connectionHandler.connect();
+		    	  if (app.getConnectionHandler().getStatus() == ConnectionStatus.OFFLINE) 
+		    		  app.getConnectionHandler().connect();
 		    	  
 		      } catch (ConnectionStatusException e) {
 		    	  e.printStackTrace();
@@ -192,7 +141,7 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 	    	 // add proper exception handling
 	    	 }*/
 	    	 
-	    	 DataHandler dataHandler = new DataHandler(connectionHandler, spaceHandler);
+	    	 DataHandler dataHandler = new DataHandler(app.getConnectionHandler(), app.getSpaceHandler());
 	    	 dataHandler.setMode(Mode.ONLINE);
 	    	 
 	    	 
@@ -233,8 +182,6 @@ public class SpacesActivity extends FragmentActivity implements OnSpaceItemSelec
 	    	 // add proper exception handling
 	    		 System.out.println("space not exist or not accesible.");
 	    	 }
-	    	  
-	    
 	    	 
 System.out.println("now attempt to get data objects...... ");
 	    	 
@@ -296,14 +243,15 @@ System.out.println("now attempt to get data objects...... ");
 		@Override
 		protected Boolean doInBackground(Void...params) {
 	      try {
-	    	  if (connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-	    		  connectionHandler.connect();
+	    	  if (app.getConnectionHandler().getStatus() == ConnectionStatus.OFFLINE) 
+	    		  app.getConnectionHandler().connect();
 	    	  
 	      } catch (ConnectionStatusException e) {
 	    	  e.printStackTrace();
+	    	  Toast.makeText(getBaseContext(), "Could not make a connection. Is wifi or 3g turned on?", Toast.LENGTH_SHORT).show();
 	    	  return false;
 	      }
-			spaces = spaceHandler.getAllSpaces();
+			spaces = app.getSpaceHandler().getAllSpaces();
 		    spacesNames = new ArrayList<String> ();
 			for (Space space : spaces) {
 				spacesNames.add(space.getId());
@@ -356,14 +304,15 @@ System.out.println("now attempt to get data objects...... ");
  	}
  	
  	/**
- 	 * Create a private space if it doesen't exist and returns the space
- 	 * @return
+ 	 * Create a private space if it doesen't exist.
+ 	 * 
+ 	 * @return Space
  	 */
  	private Space createPrivateSpace() {
- 	    Space myPrivateSpace = spaceHandler.getDefaultSpace();
+ 	    Space myPrivateSpace = app.getSpaceHandler().getDefaultSpace();
  	    if (myPrivateSpace == null) {
  	      try {
- 	        myPrivateSpace = spaceHandler.createDefaultSpace();
+ 	        myPrivateSpace = app.getSpaceHandler().createDefaultSpace();
  	      } catch (SpaceManagementException e) {
  	    	  e.printStackTrace();
  	    	  Toast.makeText(getBaseContext(), "Failed to create space. ", Toast.LENGTH_SHORT).show();
@@ -378,13 +327,11 @@ System.out.println("now attempt to get data objects...... ");
  	}
  	
  	
- 	
  	public Space getSpace (int pos) {
  		return spaces.get(pos);
  	}
  	public Set<de.imc.mirror.sdk.SpaceMember> getCurrentSpaceMembers() {
  		return space.getMembers();
- 		
  	}
  	
  	

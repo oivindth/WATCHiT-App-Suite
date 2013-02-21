@@ -4,7 +4,7 @@ package com.example.watchit_connect;
 
 import com.example.watchit_connect.Spaces.SpacesActivity;
 
-import de.imc.mirror.sdk.ConnectionConfiguration;
+import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
@@ -50,6 +50,11 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	
+	
+	ConnectionConfigurationBuilder connectionConfigurationBuilder;
+	ConnectionConfiguration connectionConfig;
+	ConnectionHandler connectionHandler;
 	
 
 	// A special thanks to Telmo Marques from stackoverflow for how to display login activity only once.
@@ -213,9 +218,10 @@ public class LoginActivity extends Activity {
 			protected Boolean doInBackground(Void... params) {
 
 		        //Configure connection
-		        ConnectionConfigurationBuilder connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.host), getString(R.string.application_id));
-		        ConnectionConfiguration connectionConfig = connectionConfigurationBuilder.build();
-		        ConnectionHandler connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
+				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
+		        connectionConfigurationBuilder.setHost(getString(R.string.host));
+		        connectionConfig = connectionConfigurationBuilder.build();
+		        connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
 		      try {
 		    	  connectionHandler.connect();
 		      } catch (ConnectionStatusException e) {
@@ -223,7 +229,7 @@ public class LoginActivity extends Activity {
 		    	  return false;
 		      }
 
-				// TODO: register the new account here.
+				
 				return true;
 			}
 
@@ -234,8 +240,8 @@ public class LoginActivity extends Activity {
 
 				if (success) {
 					updateSharedPreferences();
+					updateGlobalConnectionVariables();
 					startMainActivity();
-					//finish();
 				} else {
 					mPasswordView
 							.setError(getString(R.string.error_incorrect_password));
@@ -269,9 +275,17 @@ public class LoginActivity extends Activity {
 		editor.commit();
 	  }
 	  
+	  public void updateGlobalConnectionVariables() {
+		  MainApplication app =  (MainApplication) getApplication();
+		  app.setConnectionConfigurationBuilder(connectionConfigurationBuilder);
+		  app.setConnectionConfig(connectionConfig);
+		  app.setConnectionHandler(connectionHandler);
+		  
+	  }
+	  
 	  private void startMainActivity() {
-		  Intent intent = new Intent();
-          intent.setClass(LoginActivity.this, SpacesActivity.class);
+		  Intent intent = new Intent(this, MainActivity.class);
+          //intent.setClass(LoginActivity.this, SpacesActivity.class);
           startActivity(intent);
           finish();
 	  }	  

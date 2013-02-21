@@ -1,5 +1,6 @@
 package com.example.watchit_connect.Applications;
 
+import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.LoginActivity;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
@@ -15,7 +16,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 
-public class ApplicationsActivity extends FragmentActivity implements OnApplicationChosenListener {
+public class ApplicationsActivity extends BaseActivity implements OnApplicationChosenListener {
 
 	Intent intent;
 	ApplicationsSettingsFragment appSettingsFragment;
@@ -38,11 +39,7 @@ public class ApplicationsActivity extends FragmentActivity implements OnApplicat
     	super.onResume();
     }
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+
 
     
     public void onRadioButtonClicked(View v){
