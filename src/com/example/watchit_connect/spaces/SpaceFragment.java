@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
+//import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.Space;
 

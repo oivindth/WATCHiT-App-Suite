@@ -29,28 +29,10 @@ public class ApplicationsSettingsFragment extends Fragment {
         return inflater.inflate(R.layout.applications_settings_fragment, container, false);
     }
 	
-	
 	//Container Activity must implement this interface
 		public interface OnApplicationChosenListener {
 			public void onApplicationChosen(int applicationID);
 	    	}
-	
-	public void onRadioButtonClicked(View view) {
-	    // Is the button now checked?
-		Toast.makeText(getActivity().getBaseContext(), "trykka", Toast.LENGTH_SHORT).show();
-	    boolean checked = ((RadioButton) view).isChecked();
-	    // Check which radio button was clicked
-	    switch(view.getId()) {
-	        case R.id.radio_app1:
-	            if (checked) mListener.onApplicationChosen(R.id.radio_app1);
-	            break;
-	        case R.id.radio_app2:
-	            if (checked) mListener.onApplicationChosen(R.id.radio_app2); 
-	            break;
-	    }
-	}
-	
-	
 	
 	
 	@Override
@@ -58,6 +40,7 @@ public class ApplicationsSettingsFragment extends Fragment {
 		super.onResume();
 	}
 	
+	/*
 	@Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -67,6 +50,6 @@ public class ApplicationsSettingsFragment extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement OnApplicationChosenListener");
         }
     }
-	
+	*/
 	
 }

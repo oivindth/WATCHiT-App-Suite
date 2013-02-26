@@ -14,6 +14,7 @@ import parsing.XMLDataObject;
 
 import com.example.watchit_connect.LoginActivity;
 import com.example.watchit_connect.MainApplication;
+import com.example.watchit_connect.MainFragment;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.Applications.ApplicationsActivity;
 import com.example.watchit_connect.Applications.mood.MoodActivity;
@@ -50,14 +51,19 @@ import android.provider.Contacts.Settings;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
@@ -67,6 +73,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 	private List<String> spacesNames;
 	private Space space;
 	private MainApplication app;
+
 	
 	
     @Override
@@ -83,6 +90,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     	//getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, spaceFragment, "space").commit();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain,"main").commit();
+        
+        
+        
     }
     
     @Override
@@ -102,9 +112,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     }
     
     
-
+    //private class CreateSpace
     
-	
+    
 	private class PublishDataTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void...params) {
@@ -183,7 +193,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 	    		 System.out.println("space not exist or not accesible.");
 	    	 }
 	    	 
-System.out.println("now attempt to get data objects...... ");
+	    	 System.out.println("now attempt to get data objects...... ");
 	    	 
 	    	 try {
 				List<de.imc.mirror.sdk.DataObject> dataobjects = dataHandler.retrieveDataObjects("team#3");
@@ -223,8 +233,7 @@ System.out.println("now attempt to get data objects...... ");
 			} catch (UnknownEntityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-	    	 
+			} 
    	 return true;
 		}
 
@@ -237,7 +246,6 @@ System.out.println("now attempt to get data objects...... ");
 			}
 		}
  	}	
-	
 	
  private class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
@@ -389,8 +397,6 @@ System.out.println("now attempt to get data objects...... ");
         if (spacemembersfragment != null) {
             // If article frag is available, we're in two-pane layout...
             // Call a method in the SpaceFragment to update its content
-            //spaceFrag.UpdateSpaceInfo(space.getName(), space.getId(), space.getMembers().size());
-        	
         } else {
             // Otherwise, we're in the one-pane layout and must swap frags...
             // Create fragment and give it an argument for the selected space

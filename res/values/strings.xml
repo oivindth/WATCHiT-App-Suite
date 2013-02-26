@@ -2,7 +2,7 @@
 
     <string name="app_name">version 0</string>
     <string name="title_activity_main">Main</string>
-    <string name="title_activity_login">Login</string>
+    <string name="title_activity_app">EmergencyReflect</string>
     <string name ="title_activity_applications">Applications </string>
     <string name ="title_activity_trainingprocedure">Training Procedure </string>
     

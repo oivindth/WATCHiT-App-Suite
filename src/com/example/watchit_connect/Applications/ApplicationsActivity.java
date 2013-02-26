@@ -16,6 +16,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 
+/**
+ * {@link Deprecated}
+ * @author oivindth
+ *
+ */
 public class ApplicationsActivity extends BaseActivity implements OnApplicationChosenListener {
 
 	Intent intent;
@@ -26,9 +31,7 @@ public class ApplicationsActivity extends BaseActivity implements OnApplicationC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_applications);
       
-        
         MainApplication app =  (MainApplication) getApplication();
-        
         
         appSettingsFragment = new ApplicationsSettingsFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, appSettingsFragment,"appSettings").commit();
@@ -39,11 +42,8 @@ public class ApplicationsActivity extends BaseActivity implements OnApplicationC
     	super.onResume();
     }
     
-
-
-    
     public void onRadioButtonClicked(View v){
-        appSettingsFragment.onRadioButtonClicked(v);
+        //appSettingsFragment.onRadioButtonClicked(v);
     }
     
 	@Override
