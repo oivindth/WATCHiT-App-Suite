@@ -1,21 +1,10 @@
 package com.example.watchit_connect;
 
-import java.util.ArrayList;
-
-import com.example.watchit_connect.Spaces.SpacesFragment;
-
-import de.imc.mirror.sdk.ConnectionStatus;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import android.app.Application;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class MainApplication extends Application {
 	

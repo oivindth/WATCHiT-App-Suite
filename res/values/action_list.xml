@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="action_list">
-        <item>Main</item>
+        <item>main</item>
         <item>Application</item>
         <item>Manage Groups</item>
     </string-array>

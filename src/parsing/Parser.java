@@ -1,18 +1,18 @@
 package parsing;
-
 import java.io.File;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import android.content.Context;
+
+
 
 public class Parser {
-
+	
+	
+	
 	private Serializer serializer;
-	private TrainingProcedure trainingProcedure;
 	private File result;
-	private XMLDataObject xmlObject;
 	
 	public Parser() {
 		serializer = new Persister();
@@ -24,44 +24,40 @@ public class Parser {
 	/**
 	 * Serialize(save) the simplexml object.
 	 */
-	public void Serialize (TrainingProcedure xml, Context context) {
-		String filePath =  context.getFilesDir().getPath().toString() + "/example.txt";
-		result = new File(filePath);
-		
-		//result = new File("example.xml");
+	public void Serialize (GenericSensorData xmlObject) {
+		File result = new File("example.xml");
 		try {
-			serializer.write(trainingProcedure, result);
+			serializer.write(xmlObject, result);
 			System.out.println("result written to : " + result.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		trainingProcedure = DeSerialize(result);
-		System.out.println("XML after everything***:::   " + trainingProcedure.toString());
-		
+		}	
 	}
 	
 	/**
 	 * DeSerialize(read) xml from a string and return a simpleXML object
 	 */
-	public TrainingProcedure DeSerialize (String xml) {
-		System.out.println("xml:  \n " + xml);
+	public GenericSensorData DeSerialize (String xml) {
+		GenericSensorData data = null;
 		try {
-			trainingProcedure = serializer.read(TrainingProcedure.class, xml);
+			data = serializer.read(GenericSensorData.class, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return trainingProcedure;
+		return data;
 	}
+	
+	
 	/**
 	 * DeSerialize(read) the simplexml and return object from file
 	 */
-	public TrainingProcedure DeSerialize (File file) {
+	public GenericSensorData DeSerialize (File file) {
+		GenericSensorData data = null;
 		try {
-			trainingProcedure = serializer.read(TrainingProcedure.class, file);
+			data = serializer.read(GenericSensorData.class, file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return trainingProcedure;
+		return data;
 	}
 }

@@ -52,6 +52,8 @@ public class LoginActivity extends Activity {
 	private TextView mLoginStatusMessageView;
 	
 	
+	
+	
 	ConnectionConfigurationBuilder connectionConfigurationBuilder;
 	ConnectionConfiguration connectionConfig;
 	ConnectionHandler connectionHandler;
@@ -76,9 +78,12 @@ public class LoginActivity extends Activity {
 	   // Set up the login form.
 			mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
 			mUserNameView = (EditText) findViewById(R.id.username);
-			mUserNameView.setText(mUserName);
+			mUserNameView.setText("admin");
 
+			//TODO: Only for debugging
 			mPasswordView = (EditText) findViewById(R.id.password);
+			mPasswordView.setText("mirror");
+			
 			mPasswordView
 					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 						@Override

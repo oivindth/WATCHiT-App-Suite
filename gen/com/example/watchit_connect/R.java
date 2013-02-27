@@ -20,8 +20,8 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int button1=0x7f08001a;
-        public static final int button2=0x7f080019;
+        public static final int button1=0x7f08001b;
+        public static final int button2=0x7f08001a;
         public static final int fragment_container=0x7f080000;
         public static final int imageView1=0x7f080015;
         public static final int listView2=0x7f08000c;
@@ -30,10 +30,10 @@ public final class R {
         public static final int login_status=0x7f080004;
         public static final int login_status_message=0x7f080005;
         public static final int main_view=0x7f08000f;
-        public static final int menu_forgot_password=0x7f08001b;
-        public static final int menu_settings=0x7f08001e;
-        public static final int menu_spaces=0x7f08001c;
-        public static final int menu_sync=0x7f08001d;
+        public static final int menu_forgot_password=0x7f08001c;
+        public static final int menu_settings=0x7f08001f;
+        public static final int menu_spaces=0x7f08001d;
+        public static final int menu_sync=0x7f08001e;
         public static final int oldpassword=0x7f080013;
         public static final int oldusername=0x7f080012;
         public static final int password=0x7f080008;
@@ -44,7 +44,8 @@ public final class R {
         public static final int tab2=0x7f080002;
         public static final int tab3=0x7f080003;
         public static final int textView1=0x7f080014;
-        public static final int textView2=0x7f080018;
+        public static final int textView2=0x7f080019;
+        public static final int textViewData=0x7f080018;
         public static final int textViewSpaceActivity=0x7f08000b;
         public static final int textViewUserName=0x7f080016;
         public static final int toggleButton1=0x7f080017;
@@ -73,43 +74,45 @@ public final class R {
         public static final int activity_main=0x7f070001;
     }
     public static final class string {
-        public static final int action_sign_in_register=0x7f05001a;
-        public static final int action_sign_in_short=0x7f05001b;
-        public static final int app1=0x7f050015;
-        public static final int app2=0x7f050016;
-        public static final int app3=0x7f050017;
+        public static final int action_sign_in_register=0x7f05001c;
+        public static final int action_sign_in_short=0x7f05001d;
+        public static final int app1=0x7f050017;
+        public static final int app2=0x7f050018;
+        public static final int app3=0x7f050019;
         public static final int app_name=0x7f050000;
-        public static final int application_id=0x7f050011;
-        public static final int buttonPrivateSpace=0x7f05000b;
-        public static final int buttonSharedSpaces=0x7f05000a;
-        public static final int buttonSpaces=0x7f05000c;
-        public static final int cancel=0x7f05000d;
-        public static final int domain=0x7f050010;
-        public static final int error_field_required=0x7f050022;
-        public static final int error_incorrect_password=0x7f050021;
-        public static final int error_incorrect_user=0x7f05001f;
-        public static final int error_invalid_email=0x7f05001e;
-        public static final int error_invalid_password=0x7f050020;
-        public static final int host=0x7f05000e;
-        public static final int login_progress_signing_in=0x7f05001d;
-        public static final int menu_config=0x7f050008;
-        public static final int menu_forgot_password=0x7f05001c;
-        public static final int menu_home=0x7f050009;
-        public static final int menu_settings=0x7f050005;
-        public static final int menu_spaces=0x7f050006;
-        public static final int menu_sync=0x7f050007;
-        public static final int password=0x7f050013;
-        public static final int port=0x7f05000f;
+        public static final int application_id=0x7f050013;
+        public static final int buttonPrivateSpace=0x7f05000d;
+        public static final int buttonSharedSpaces=0x7f05000c;
+        public static final int buttonSpaces=0x7f05000e;
+        public static final int cancel=0x7f05000f;
+        public static final int domain=0x7f050012;
+        public static final int error_field_required=0x7f050024;
+        public static final int error_incorrect_password=0x7f050023;
+        public static final int error_incorrect_user=0x7f050021;
+        public static final int error_invalid_email=0x7f050020;
+        public static final int error_invalid_password=0x7f050022;
+        public static final int host=0x7f050010;
+        public static final int local_service_started=0x7f050005;
+        public static final int local_service_stopped=0x7f050006;
+        public static final int login_progress_signing_in=0x7f05001f;
+        public static final int menu_config=0x7f05000a;
+        public static final int menu_forgot_password=0x7f05001e;
+        public static final int menu_home=0x7f05000b;
+        public static final int menu_settings=0x7f050007;
+        public static final int menu_spaces=0x7f050008;
+        public static final int menu_sync=0x7f050009;
+        public static final int password=0x7f050015;
+        public static final int port=0x7f050011;
+        public static final int prompt_password=0x7f05001b;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f050018;
-        public static final int prompt_password=0x7f050019;
+        public static final int prompt_username=0x7f05001a;
         public static final int title_activity_app=0x7f050002;
         public static final int title_activity_applications=0x7f050003;
         public static final int title_activity_main=0x7f050001;
         public static final int title_activity_trainingprocedure=0x7f050004;
-        public static final int trainingprocedureNameSpace=0x7f050014;
-        public static final int username=0x7f050012;
+        public static final int trainingprocedureNameSpace=0x7f050016;
+        public static final int username=0x7f050014;
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;

@@ -1,10 +1,9 @@
 package com.example.watchit_connect;
 
-import com.example.watchit_connect.Applications.ApplicationsActivity;
+import service.ServiceManager;
+
 import com.example.watchit_connect.Applications.ApplicationsSettingsFragment;
 import com.example.watchit_connect.Applications.trainingprocedure.TrainingProcedureActivity;
-import com.example.watchit_connect.Spaces.SpacesFragment;
-
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
@@ -18,31 +17,28 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends BaseActivity  {
 	
-	TextView textViewUserName;
+	TextView textViewUserName, textViewData;
 	View myTestView;
 	MainFragment fragmentMain;
 	private SpinnerAdapter mSpinnerAdapter;
 	private OnNavigationListener mOnNavigationListener;
 	private ActionBar actionBar;
 	Fragment fragment;
-	
+	private ServiceManager service;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +46,39 @@ public class MainActivity extends BaseActivity  {
         setContentView(R.layout.activity_main);
         
         MainApplication app = (MainApplication) getApplication();
+        
+       
+        
+     // Create a service 'SomeService1' (see below) and handle incoming messages
+        this.service = new ServiceManager(this, LocalService.class, new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            // Receive message from service
+            switch (msg.what) {
+              case LocalService.MSG_SET_STRING_VALUE:
+            	  
+                  textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
+                  Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
+                break;
+              default:
+                super.handleMessage(msg);
+            } 
+          }
+        });
+        
+     // Now you can control the service via .start(), .stop()
+        //service.start();
+        //service.stop();
+     
+        /*
+        // Or send messages to it
+        //service.send(Message.obtain(null, SomeService1.MSG_VALUE, 12345, 0));
+        Bundle b = new Bundle();
+        b.putString("watchitdata", "Hello WATCHiT");
+        Message message = Message.obtain(null, LocalService.MSG_SET_STRING_VALUE);
+        message.setData(b);
+        service.send(message);
+        */
         
         if (!app.getvaluesSet()) new UserLoginTask().execute();
         
@@ -77,9 +106,9 @@ public class MainActivity extends BaseActivity  {
       		FragmentTransaction ft;
       		  switch (position) {
 			case 0:
-				fragment = new MainFragment();
+				fragmentMain = new MainFragment();
 				ft = getSupportFragmentManager().beginTransaction();
-				ft.replace(R.id.fragment_container, fragment, strings[position]);
+				ft.replace(R.id.fragment_container, fragmentMain, strings[position]);
 				ft.commit();
 				break;
 			case 1:
@@ -94,9 +123,7 @@ public class MainActivity extends BaseActivity  {
 			default:
 				break;
 			}
-      		  
             return true;
-   
       	  }
       	};
       	actionBar.setListNavigationCallbacks(mSpinnerAdapter, mOnNavigationListener);	
@@ -106,16 +133,26 @@ public class MainActivity extends BaseActivity  {
     @Override
     public void onResume() {
     	super.onResume();
-    	textViewUserName = (TextView) fragmentMain.getView().findViewById(R.id.textViewUserName);
-        
-        
+    	
+    	MainFragment mainfragment = (MainFragment)  getSupportFragmentManager().findFragmentByTag("main");
+    	textViewUserName = (TextView) mainfragment.getView().findViewById(R.id.textViewUserName);
         SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
- 
         System.out.println("uname " +  settings.getString("username", ""));
-        textViewUserName.setText(settings.getString("username", ""));
+        textViewUserName.setText("homseskuleh");
         
- 
+        mainfragment.update("uname " +  settings.getString("username", ""));
+      
+        
     }
+    
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+   
+      try { service.unbind(); }
+      catch (Throwable t) { }
+    }
+    
     
 	public void onRadioButtonClicked(View view) {
 		Intent intent;
@@ -127,7 +164,7 @@ public class MainActivity extends BaseActivity  {
 	            if (checked) {
 	            	intent = new Intent(this, TrainingProcedureActivity.class);
 	            	startActivity(intent);
-	            	finish();
+	            	//finish();
 	            }
 	            break;
 	        case R.id.radio_app2:
@@ -136,19 +173,29 @@ public class MainActivity extends BaseActivity  {
 	    }
 	}
     
-    
     public void toggleWATCHiT(View view) {
         // Is the toggle on?
         boolean on = ((ToggleButton) view).isChecked();
         
         if (on) {
-            showToast("Waiting for WATCHiT sync......");
+            showToast("Start service with thread here and wait for watchit data.");
+            service.start();
+            MainFragment mainfragment = (MainFragment)  getSupportFragmentManager().findFragmentByTag("main");
+
+            SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+            System.out.println("uname " +  settings.getString("username", ""));
+          
+            textViewUserName = (TextView) mainfragment.getView().findViewById(R.id.textViewUserName);
+            mainfragment.update("uname fdfd");
+          
             
         } else {
-            showToast("WATCHiT no longer synced..");
+            showToast("Stopped sync with WATCHiT");
+            service.stop();
         }
     }
     
+    //TODO: Set app global values in LoginActivity, not here..
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -192,8 +239,10 @@ public class MainActivity extends BaseActivity  {
 				//dosomething else
 			}
 		}
+		
+		
     }
 
-
+    
     
 }

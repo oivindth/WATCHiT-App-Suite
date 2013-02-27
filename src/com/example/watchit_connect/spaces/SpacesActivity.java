@@ -4,42 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jdom2.Attribute;
-import org.jdom2.Content;
-import org.jdom2.Element;
-
-import parsing.Parser;
-import parsing.TrainingProcedure;
-import parsing.XMLDataObject;
-
-import com.example.watchit_connect.LoginActivity;
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.MainFragment;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.Applications.ApplicationsActivity;
-import com.example.watchit_connect.Applications.mood.MoodActivity;
 import com.example.watchit_connect.BaseActivity;
-import com.example.watchit_connect.R.id;
-import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.R.menu;
-import com.example.watchit_connect.R.string;
 import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
 import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.ConnectionStatus;
-import de.imc.mirror.sdk.DataModel;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.android.ConnectionConfiguration;
-import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
-import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
-import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.android.DataObjectBuilder;
-import de.imc.mirror.sdk.android.SpaceConfiguration;
-import de.imc.mirror.sdk.android.SpaceMember;
-
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import de.imc.mirror.sdk.exceptions.SpaceManagementException;
@@ -47,23 +22,11 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Contacts.Settings;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
@@ -74,8 +37,6 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 	private Space space;
 	private MainApplication app;
 
-	
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +51,6 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     	//getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, spaceFragment, "space").commit();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragmentMain,"main").commit();
-        
-        
-        
     }
     
     @Override
@@ -111,8 +69,29 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     		mainfragment.UpdateSpaces(spacesNames); // Do this with db to persist ze data?
     }
     
-    
-    //private class CreateSpace
+	/*
+	// create space configuration with the current user as space moderator
+	 Space.Type type = Space.Type.TEAM;
+	 String name = "Dream Team";
+	 String owner = connectionHandler.getCurrentUser().getBareJID();
+	 boolean isPersistent = false;
+	 SpaceConfiguration spaceConfig = new SpaceConfiguration(type, name, owner, isPersistent);
+
+	 // add the user bob as space member
+	 String bobsJID = "bob" + "@" + connectionHandler.getConfiguration().getDomain();
+	 spaceConfig.addMember(new SpaceMember(bobsJID, SpaceMember.Role.MEMBER));
+
+	 // create space with this configuration
+	 Space myNewTeamSpace = null;
+	 try {
+	 myNewTeamSpace = spaceHandler.createSpace(spaceConfig);
+	 } catch (SpaceManagementException e) {
+	 // failed to create space
+	 // add proper exception handling
+	 } catch (ConnectionStatusException e) {
+	 // cannot create a space when offline
+	 // add proper exception handling
+	 }*/
     
     
 	private class PublishDataTask extends AsyncTask<Void, Void, Boolean> {
@@ -127,33 +106,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 		    	  e.printStackTrace();
 		    	  return false;
 		      }
-			/*
-			// create space configuration with the current user as space moderator
-	    	 Space.Type type = Space.Type.TEAM;
-	    	 String name = "Dream Team";
-	    	 String owner = connectionHandler.getCurrentUser().getBareJID();
-	    	 boolean isPersistent = false;
-	    	 SpaceConfiguration spaceConfig = new SpaceConfiguration(type, name, owner, isPersistent);
-
-	    	 // add the user bob as space member
-	    	 String bobsJID = "bob" + "@" + connectionHandler.getConfiguration().getDomain();
-	    	 spaceConfig.addMember(new SpaceMember(bobsJID, SpaceMember.Role.MEMBER));
-
-	    	 // create space with this configuration
-	    	 Space myNewTeamSpace = null;
-	    	 try {
-	    	 myNewTeamSpace = spaceHandler.createSpace(spaceConfig);
-	    	 } catch (SpaceManagementException e) {
-	    	 // failed to create space
-	    	 // add proper exception handling
-	    	 } catch (ConnectionStatusException e) {
-	    	 // cannot create a space when offline
-	    	 // add proper exception handling
-	    	 }*/
-	    	 
+	
 	    	 DataHandler dataHandler = new DataHandler(app.getConnectionHandler(), app.getSpaceHandler());
 	    	 dataHandler.setMode(Mode.ONLINE);
-	    	 
 	    	 
 	    	 try {
 				dataHandler.registerSpace("team#3");
@@ -164,7 +119,6 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 	    	 DataObjectListener myListener = new DataObjectListener() {
 	    	 // implement this interface in a controller class of your application
 	   
-
 			@Override
 			public void handleDataObject(
 					de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
@@ -175,66 +129,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 	    	 };
 	    	 dataHandler.addDataObjectListener(myListener);
 	    	
-	    	// create the data object using the object builder
-	    	 DataObjectBuilder dataObjectBuilder =
-	    	 new DataObjectBuilder("trainingprocedure", "mirror:application:watchIt_Reflection_App:trainingprocedure");
-	    	 dataObjectBuilder.addElement("Time", "12", false);
-	    	 dataObjectBuilder.addElement("step1", "3", false).addElement("step2", "4", false);
-	    	 //dataObjectBuilder.addCDTCreationInfo(date, connectionHandler.getCurrentUser().getBareJID(), application);
-	    	 DataObject dataObject = dataObjectBuilder.build();
-	    	 // publish the data
-	    	 try {
-	    	 dataHandler.publishDataObject(dataObject, "team#3");
-	    	 DataObject dddd = (DataObject) dataHandler.retrieveDataObjects("team#3").get(0);
-	    	 System.out.println(dddd.getElement().getName());
-	    	 } catch (UnknownEntityException e) {
-	    	 // space doesn't exist or is not accessible.
-	    	 // add proper exception handling
-	    		 System.out.println("space not exist or not accesible.");
-	    	 }
-	    	 
 	    	 System.out.println("now attempt to get data objects...... ");
 	    	 
-	    	 try {
-				List<de.imc.mirror.sdk.DataObject> dataobjects = dataHandler.retrieveDataObjects("team#3");
-				System.out.println("getting data objects...");
-				System.out.println("size of data: " + dataobjects.size());
-				
-				 for (de.imc.mirror.sdk.DataObject dobj : dataobjects) {
-					List<Attribute> attributes =  dobj.getElement().getAttributes();
-					
-					Parser p = new Parser();
-					TrainingProcedure oddgeir = (TrainingProcedure) p.DeSerialize(dobj.toString());
-					System.out.println(oddgeir.getId());
-					//p.Serialize(oddgeir, getBaseContext());
-					
-				   System.out.println("dataobject totring" + dobj.toString());
-				   
-				   p.Serialize(oddgeir,  getBaseContext());
-				   
-				
-					for (Attribute attribute : attributes) {
-						System.out.println("attr name: " + attribute.getName());
-					}
-						System.out.println("name of data: " + dobj.getElement().getName()); 
-						System.out.println("content of the data:**************");
-						List<Content> contents = dobj.getElement().getContent();
-						for (Content content : contents) {
-							//content.getParent().getContent()
-							System.out.println(content.getValue()); 
-
-						 //Må nok kjøre Simple xml på dataobjekter for å PARSE. 
-						}
-						System.out.println("*************");
-						System.out.println("data value: "+  dobj.getElement().getValue()); 
-						System.out.println("data text: " +dobj.getElement().getText()); 
-						System.out.println("xml til streng: " + dobj.getElement().toString()); 
-					}
-			} catch (UnknownEntityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-   	 return true;
+	    	 return true;
 		}
 
 		protected void onPostExecute(final Boolean success) {
@@ -312,7 +209,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
  	}
  	
  	/**
- 	 * Create a private space if it doesen't exist.
+ 	 * Get private space. If private space doesen't exist yet, one is created.
  	 * 
  	 * @return Space
  	 */
@@ -323,7 +220,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
  	        myPrivateSpace = app.getSpaceHandler().createDefaultSpace();
  	      } catch (SpaceManagementException e) {
  	    	  e.printStackTrace();
- 	    	  Toast.makeText(getBaseContext(), "Failed to create space. ", Toast.LENGTH_SHORT).show();
+ 	    	  Toast.makeText(getBaseContext(), "Failed to create space... ", Toast.LENGTH_SHORT).show();
  	        return null;
  	      } catch (ConnectionStatusException e) {
  	         e.printStackTrace();
@@ -344,7 +241,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
  	
  	
  	  /**
- 		 * Shows the progress UI and hides the login form.
+ 		 * Shows the progress UI.
  		 */
  		@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
  		private void showProgress(final boolean show) {

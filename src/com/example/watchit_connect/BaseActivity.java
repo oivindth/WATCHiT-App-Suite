@@ -39,7 +39,8 @@ import android.widget.Toast;
  * @author oivindth
  *
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+
+
 public abstract class BaseActivity extends FragmentActivity {
 	
 	private ProgressDialog mProgressDialog;

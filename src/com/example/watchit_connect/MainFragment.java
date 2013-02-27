@@ -33,6 +33,12 @@ public class MainFragment extends Fragment {
 		super.onResume();
 	}
 	
+	
+	public void update(String msg) {
+		TextView view = (TextView) this.getView().findViewById(R.id.textViewData);
+		view.setText("text " + msg);
+	}
+	
 
 	
 }
