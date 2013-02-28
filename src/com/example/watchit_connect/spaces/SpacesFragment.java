@@ -1,8 +1,12 @@
 package com.example.watchit_connect.Spaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
+
+import de.imc.mirror.sdk.Space;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,16 +22,25 @@ public class SpacesFragment extends ListFragment {
 	
 	OnSpaceItemSelectedListener mListener;
 	
+	MainApplication app;
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+		app =  (MainApplication) getActivity().getApplication();
+
         return inflater.inflate(R.layout.spaces_fragment, container, false);
     }
 	
 	@Override
 	public void onResume() {
 		super.onResume();
+	    List<String> spacesNames = new ArrayList<String> ();
+		for (de.imc.mirror.sdk.Space space : app.spaces) {
+			spacesNames.add(space.getName());
+		}
+		UpdateSpaces(spacesNames); 
 	}
 	
 	//Update ze fragment

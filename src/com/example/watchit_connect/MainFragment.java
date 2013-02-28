@@ -1,6 +1,6 @@
 package com.example.watchit_connect;
 
-import com.example.watchit_connect.Applications.ApplicationsSettingsFragment.OnApplicationChosenListener;
+import com.example.watchit_connect.ApplicationsSettingsFragment.OnApplicationChosenListener;
 import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
 
 import android.app.Activity;
@@ -23,7 +23,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
   
-	    
         return inflater.inflate(R.layout.fragment_main , container, false);
     }
 	

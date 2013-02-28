@@ -60,6 +60,7 @@ public class SpaceFragment extends ListFragment {
 			
 		// correct way to get data from activity?
 		 space = ((SpacesActivity) getActivity()).getSpace(pos);
+		 
 		
 			//mySpace.
 		updateSpaceInfo(space);

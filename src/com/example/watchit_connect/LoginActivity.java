@@ -4,9 +4,11 @@ package com.example.watchit_connect;
 
 import com.example.watchit_connect.Spaces.SpacesActivity;
 
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
+import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -281,10 +283,16 @@ public class LoginActivity extends Activity {
 	  
 	  public void updateGlobalConnectionVariables() {
 		  MainApplication app =  (MainApplication) getApplication();
-		  app.setConnectionConfigurationBuilder(connectionConfigurationBuilder);
-		  app.setConnectionConfig(connectionConfig);
-		  app.setConnectionHandler(connectionHandler);
+		  MainApplication.connectionConfigurationBuilder = connectionConfigurationBuilder;
+		  MainApplication.connectionConfig = connectionConfig;
+		  MainApplication.connectionHandler = connectionHandler;
+		  MainApplication.dbName ="sdkcache";
+		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
+	    	spaceHandler.setMode(Mode.ONLINE);
+	    	MainApplication.spaceHandler = spaceHandler;
 		  
+	    	 app.setPassword(mPassword);
+			  app.setUserName(mUserName);
 	  }
 	  
 	  private void startMainActivity() {

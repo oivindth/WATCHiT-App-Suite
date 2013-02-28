@@ -18,6 +18,10 @@ public class Value {
 	private String text;
 	
 	
+	public Value() {
+		
+	}
+	
 	public Value(String type, String unit, String text) {
 		this.type = type;
 		this.unit = unit;

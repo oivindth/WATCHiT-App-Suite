@@ -1,6 +1,5 @@
 package com.example.watchit_connect;
 
-import com.example.watchit_connect.Applications.ApplicationsActivity;
 import com.example.watchit_connect.Spaces.SpacesActivity;
 import com.example.watchit_connect.Spaces.SpacesFragment;
 
@@ -39,8 +38,6 @@ import android.widget.Toast;
  * @author oivindth
  *
  */
-
-
 public abstract class BaseActivity extends FragmentActivity {
 	
 	private ProgressDialog mProgressDialog;
@@ -85,8 +82,8 @@ public abstract class BaseActivity extends FragmentActivity {
             	return true;	
             
             case R.id.menu_settings:
-            	intent = new Intent(this, ApplicationsActivity.class);
-            	startActivity(intent);
+            	//intent = new Intent(this, ApplicationsActivity.class);
+            	//startActivity(intent);
             	finish();
             	return true;
             	

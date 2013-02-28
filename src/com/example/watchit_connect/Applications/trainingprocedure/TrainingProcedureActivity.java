@@ -1,9 +1,9 @@
 package com.example.watchit_connect.Applications.trainingprocedure;
 
+import com.example.watchit_connect.ApplicationsSettingsFragment;
 import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainFragment;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.Applications.ApplicationsSettingsFragment;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;

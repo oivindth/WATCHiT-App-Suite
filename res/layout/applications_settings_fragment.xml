@@ -5,8 +5,49 @@
     android:orientation="vertical" >
 
     
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+          <TextView
+              android:id="@+id/textView1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="1dp"
+              android:text="Configure"
+              android:textAppearance="?android:attr/textAppearanceLarge" />
+          
+    </LinearLayout>
     
-    <RadioGroup
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp" >
+
+          <CheckBox
+              android:id="@+id/checkBox2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Location" />
+
+          <CheckBox
+              android:id="@+id/checkBox3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="WATCHiT Service" />
+
+          <CheckBox
+              android:id="@+id/checkBox1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="" />
+          
+    </LinearLayout>
+    
+    
+   <!--   <RadioGroup
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -20,6 +61,38 @@
         android:layout_height="wrap_content"
         android:text="@string/app2"
         android:onClick="onRadioButtonClicked"/>
-</RadioGroup>
+</RadioGroup> -->
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical" >
+
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="70dp" >
+
+              <Button
+                  android:id="@+id/button1"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                  android:layout_alignParentTop="true"
+                  android:layout_marginRight="64dp"
+                  android:text="Cancel" />
+
+              <Button
+                  android:id="@+id/button2"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentLeft="true"
+                  android:layout_alignParentTop="true"
+                  android:layout_marginLeft="34dp"
+                  android:text="Ok" />
+
+          </RelativeLayout>
+
+      </LinearLayout>
     
 </LinearLayout>

@@ -1,8 +1,7 @@
-package com.example.watchit_connect.Applications;
+package com.example.watchit_connect;
 
 import java.util.Set;
 
-import com.example.watchit_connect.LoginActivity;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.Spaces.SpacesActivity;
 import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;

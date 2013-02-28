@@ -12,6 +12,7 @@ import service.AbstractService;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -49,7 +50,8 @@ public class LocalService extends AbstractService {
   
     static final int MSG_SET_INT_VALUE = 9993;
     static final int MSG_SET_STRING_VALUE = 9994;
-    
+    static final int MSG_CONNECTION_ESTABLISHED = 9995;
+    static final int MSG_CONNECTION_LOST = 9996;
     
     @Override
     public void onStartService() {
@@ -78,6 +80,8 @@ public class LocalService extends AbstractService {
     					// Send data as an Integer
     	                //mClients.get(i).send(Message.obtain(null, MSG_SET_INT_VALUE, intvaluetosend, 0));
 
+    					
+    					
     	                //Send data as a String
     	                Bundle b = new Bundle();
     	                b.putString("watchitdata", sbprint);
@@ -120,7 +124,12 @@ public class LocalService extends AbstractService {
     	Log.d("TAG ","...Connecting...");
     	try {
     		btSocket.connect();
+    		send(Message.obtain(null, MSG_CONNECTION_ESTABLISHED));
     		Log.d("TAG", "....Connection ok...");
+    		
+    		
+
+    		
     	} catch (IOException e) {
     		try {
     			btSocket.close();
@@ -229,6 +238,9 @@ public class LocalService extends AbstractService {
 		        public void run() {
 		        	Looper.prepare();
 		        	
+		        	
+		     
+		        	
 		        	Log.d("THREAD", "inside run" );
 		            byte[] buffer = new byte[1024];  // buffer store for the stream
 		            int bytes; // bytes returned from read()
@@ -280,19 +292,19 @@ public class LocalService extends AbstractService {
         CharSequence text = getText(R.string.local_service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(0 , text,
-                System.currentTimeMillis());
+        //Notification notification = new Notification(0 , text,
+          //      System.currentTimeMillis());
 
-        // The PendingIntent to launch our activity if the user selects this notification
+        //The PendingIntent to launch our activity if the user selects this notification
         //PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-          //      new Intent(this, WatchitServiceActivities.Controller.class), 0);
+              //  new Intent(this, WatchitServiceActivities.Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         //notification.setLatestEventInfo(this, getText(R.string.local_service_label),
           //             text, contentIntent);
 
         // Send the notification.
-        mNM.notify(NOTIFICATION, notification);
+        //mNM.notify(NOTIFICATION, notification);
     }
 
 

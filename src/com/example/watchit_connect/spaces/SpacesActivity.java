@@ -56,9 +56,10 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     @Override
     public void onResume() {
     	super.onResume();
-    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.getConnectionHandler(), app.getDbName());
+    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
     	spaceHandler.setMode(Mode.ONLINE);
-    	 app.setSpaceHandler(spaceHandler); 
+    	MainApplication.spaceHandler = spaceHandler;
+  
 			
     		spaces = spaceHandler.getAllSpaces();
     	    spacesNames = new ArrayList<String> ();
@@ -99,23 +100,23 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 		protected Boolean doInBackground(Void...params) {
 			
 		      try {
-		    	  if (app.getConnectionHandler().getStatus() == ConnectionStatus.OFFLINE) 
-		    		  app.getConnectionHandler().connect();
+		    	  if (app.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
+		    		  app.connectionHandler.connect();
 		    	  
 		      } catch (ConnectionStatusException e) {
 		    	  e.printStackTrace();
 		    	  return false;
 		      }
 	
-	    	 DataHandler dataHandler = new DataHandler(app.getConnectionHandler(), app.getSpaceHandler());
-	    	 dataHandler.setMode(Mode.ONLINE);
+	    	 //DataHandler dataHandler = new DataHandler(app.getConnectionHandler(), app.getSpaceHandler());
+	    	 //dataHandler.setMode(Mode.ONLINE);
 	    	 
-	    	 try {
-				dataHandler.registerSpace("team#3");
-			} catch (UnknownEntityException e1) {
+	    	 //try {
+				//dataHandler.registerSpace("team#3");
+			//} catch (UnknownEntityException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			//	e1.printStackTrace();
+			//}
 	    	 DataObjectListener myListener = new DataObjectListener() {
 	    	 // implement this interface in a controller class of your application
 	   
@@ -127,7 +128,7 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 			}
 
 	    	 };
-	    	 dataHandler.addDataObjectListener(myListener);
+	    	// dataHandler.addDataObjectListener(myListener);
 	    	
 	    	 System.out.println("now attempt to get data objects...... ");
 	    	 
@@ -148,15 +149,15 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 		@Override
 		protected Boolean doInBackground(Void...params) {
 	      try {
-	    	  if (app.getConnectionHandler().getStatus() == ConnectionStatus.OFFLINE) 
-	    		  app.getConnectionHandler().connect();
+	    	  if (app.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
+	    		  app.connectionHandler.connect();
 	    	  
 	      } catch (ConnectionStatusException e) {
 	    	  e.printStackTrace();
 	    	  Toast.makeText(getBaseContext(), "Could not make a connection. Is wifi or 3g turned on?", Toast.LENGTH_SHORT).show();
 	    	  return false;
 	      }
-			spaces = app.getSpaceHandler().getAllSpaces();
+			spaces = app.spaceHandler.getAllSpaces();
 		    spacesNames = new ArrayList<String> ();
 			for (Space space : spaces) {
 				spacesNames.add(space.getId());
@@ -214,10 +215,10 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
  	 * @return Space
  	 */
  	private Space createPrivateSpace() {
- 	    Space myPrivateSpace = app.getSpaceHandler().getDefaultSpace();
+ 	    Space myPrivateSpace = app.spaceHandler.getDefaultSpace();
  	    if (myPrivateSpace == null) {
  	      try {
- 	        myPrivateSpace = app.getSpaceHandler().createDefaultSpace();
+ 	        myPrivateSpace = app.spaceHandler.createDefaultSpace();
  	      } catch (SpaceManagementException e) {
  	    	  e.printStackTrace();
  	    	  Toast.makeText(getBaseContext(), "Failed to create space... ", Toast.LENGTH_SHORT).show();

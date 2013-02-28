@@ -12,6 +12,10 @@ public class Location {
 	private String longitude;
 
 	
+	public Location() {
+		
+	}
+	
 	public Location(String latitude, String longitude) {
 		super();
 		this.latitude = latitude;

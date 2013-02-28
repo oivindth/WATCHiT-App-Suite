@@ -2,7 +2,7 @@
 <resources>
     <string-array name="action_list">
         <item>main</item>
-        <item>Application</item>
-        <item>Manage Groups</item>
+        <item>configuration</item>
+        <item>spaces</item>
     </string-array>
 </resources>
