@@ -7,6 +7,7 @@ import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
+import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import android.app.Application;
 
@@ -15,7 +16,7 @@ public class MainApplication extends Application {
 	private boolean valuesSet = false;
 	
 	
-	public List<Space> spaces; 
+	public static List<Space> spaces; 
 	
 	public boolean getvaluesSet() {
 		return valuesSet;
@@ -34,6 +35,9 @@ public class MainApplication extends Application {
 	
 	private String userName;
 	private String password;
+
+
+	public DataHandler dataHandler;
 
 	public String getUserName() {
 		return userName;

@@ -29,7 +29,6 @@ public class SpacesFragment extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 		app =  (MainApplication) getActivity().getApplication();
-
         return inflater.inflate(R.layout.spaces_fragment, container, false);
     }
 	

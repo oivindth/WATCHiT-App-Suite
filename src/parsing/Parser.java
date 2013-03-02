@@ -11,12 +11,15 @@ import android.util.Log;
 
 import com.example.watchit_connect.MainApplication;
 
+import de.imc.mirror.sdk.Space.Type;
 import de.imc.mirror.sdk.android.CDMData;
 import de.imc.mirror.sdk.android.CDMDataBuilder;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.DataObjectBuilder;
 import de.imc.mirror.sdk.android.xml.Model;
+import de.imc.mirror.sdk.android.xml.Models;
 import de.imc.mirror.sdk.cdm.CDMVersion;
+import enums.ValueType;
 
 public class Parser {
 	
@@ -49,20 +52,19 @@ public class Parser {
 	 * @return
 	 */
 	public static DataObject buildDataObjectFromSimpleXMl (GenericSensorData genericSensorData, String userJID) {
-	
-	
-		
 		DataObjectBuilder dataObjectBuilder =
 		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
 		//Date date = new Date();
 		//dataObjectBuilder.addCDTCreationInfo(date, user, "mirror:application:watchit:genericsensordata");
 		CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_1_0);
 		cdmDataBuilder.setPublisher(userJID);
-		cdmDataBuilder.setModelVersion("0.1");
+		cdmDataBuilder.setModelVersion("0.2");
 		//cdmDataBuilder.setTimestamp(date.toGMTString());
 		CDMData cdmData = cdmDataBuilder.build();
 		dataObjectBuilder.setCDMData(cdmData);
-		//dataObjectBuilder.setModelVersion("0.1");
+		
+		
+		
 		
 		 Map <String, String> attributes = new HashMap<String, String>();
    	 
@@ -78,7 +80,14 @@ public class Parser {
 	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 
+	   	
+	   	
+	   	if (genericSensorData.getValue().getType() == ValueType.MOOD.toString()) {
+	   		
+	   	}
+	   	
 	   	 DataObject dataObject = dataObjectBuilder.build();
+	   	 Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
 		
 	}

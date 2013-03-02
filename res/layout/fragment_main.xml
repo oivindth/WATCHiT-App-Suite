@@ -51,22 +51,30 @@
              android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ToggleButton
-            android:id="@+id/toggleButton1"
-            android:onClick="toggleWATCHiT"
+            android:id="@+id/toggleButtonWatchiT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="58dp"
-            android:layout_toRightOf="@+id/textView1"
-            android:text="OnToggleWATCHiT" />
+            android:layout_toRightOf="@+id/textView1" />
 
-        <TextView
-            android:id="@+id/textViewData"
+        <Button
+            android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/toggleButton1"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/toggleButton1"
-            android:hint="arduino data:" />
+            android:onClick="dataToWATCHiTOnClick"
+            android:text="Ok" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="Send to WATCHiT"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </RelativeLayout>
 

@@ -26,6 +26,7 @@ public class UtilityClass1 {
 		
 		ConnectivityManager connectivityManager= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+		
 	    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()
 	                    || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected())
 	            return true;

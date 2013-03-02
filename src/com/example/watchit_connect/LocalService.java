@@ -49,9 +49,10 @@ public class LocalService extends AbstractService {
     private int NOTIFICATION = R.string.local_service_started;
   
     static final int MSG_SET_INT_VALUE = 9993;
-    static final int MSG_SET_STRING_VALUE = 9994;
-    static final int MSG_CONNECTION_ESTABLISHED = 9995;
-    static final int MSG_CONNECTION_LOST = 9996;
+    static final int MSG_SET_STRING_VALUE =9994;
+    static final int MSG_SET_STRING_VALUE_TO_ACTIVITY = 9995;
+    static final int MSG_CONNECTION_ESTABLISHED = 9996;
+    static final int MSG_CONNECTION_LOST = 9997;
     
     @Override
     public void onStartService() {
@@ -63,7 +64,7 @@ public class LocalService extends AbstractService {
 
     	h = new Handler() {
     		public void handleMessage(android.os.Message msg) {
-
+    			Log.d("LocalService", "Message in handler: " + msg.what);
     			switch (msg.what) {
     			case RECIEVE_MESSAGE:                                                   // if receive massage
     				byte[] readBuf = (byte[]) msg.obj;
@@ -80,25 +81,27 @@ public class LocalService extends AbstractService {
     					// Send data as an Integer
     	                //mClients.get(i).send(Message.obtain(null, MSG_SET_INT_VALUE, intvaluetosend, 0));
 
-    					
-    					
     	                //Send data as a String
     	                Bundle b = new Bundle();
     	                b.putString("watchitdata", sbprint);
-    	                Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE);
+    	                Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
     	                messageToActivity.setData(b);
     	                send(messageToActivity);
 
     				}
     				Log.d("Recieved from arduino: ", "...String:"+ sb.toString() +  "  Byte:" + msg.arg1 + "...");
     				break;
+    			case MSG_CONNECTION_ESTABLISHED:
+    				Log.d("LOCALService", "message sendt receieved in wrong handler...?");
+    				break;
     			}
     		};
     	};
+    	
+    	
+    	
     	btAdapter = BluetoothAdapter.getDefaultAdapter();
     	checkBTState();
-
-
 
     	Log.d("TAG", "...onResume - try connect...");
 
@@ -124,11 +127,8 @@ public class LocalService extends AbstractService {
     	Log.d("TAG ","...Connecting...");
     	try {
     		btSocket.connect();
-    		send(Message.obtain(null, MSG_CONNECTION_ESTABLISHED));
+    		
     		Log.d("TAG", "....Connection ok...");
-    		
-    		
-
     		
     	} catch (IOException e) {
     		try {
@@ -140,32 +140,28 @@ public class LocalService extends AbstractService {
 
     	// Create a data stream so we can talk to server.
     	Log.d("TAG", "...Create Socket...");
-
+    	//send(Message.obtain(null, MSG_SET_INT_VALUE));
     	mConnectedThread = new ConnectedThread(btSocket);
     	mConnectedThread.start();
-
-
     }
 
     
 	@Override
 	public void onStopService() {
-		
 		Log.d("TAG", "...In onPause()...");
-		   
 	    try     {
 	      btSocket.close();
 	    } catch (IOException e2) {
 	      //errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
-	    }
-		
+	    }	
 	}
 
 	@Override
 	public void onReceiveMessage(Message msg) {
+		Log.d("onreceievemessage in localservice", "correct place");
 		if (msg.what == MSG_SET_STRING_VALUE) {
 		      mConnectedThread.write(msg.getData().getString("watchitdata"));
-;		    }
+		    }
 	}
         
 	private void errorExit(String title, String message){
@@ -223,7 +219,6 @@ public class LocalService extends AbstractService {
 		            mmSocket = socket;
 		            InputStream tmpIn = null;
 		            OutputStream tmpOut = null;
-		            
 		            // Get the input and output streams, using temp objects because
 		            // member streams are final
 		            try {

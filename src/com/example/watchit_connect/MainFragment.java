@@ -1,12 +1,15 @@
 package com.example.watchit_connect;
 
-import com.example.watchit_connect.ApplicationsSettingsFragment.OnApplicationChosenListener;
-import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
 
+import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
+import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
+
+import Utilities.UtilityClass1;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,24 +21,57 @@ import android.widget.ToggleButton;
 
 public class MainFragment extends Fragment {
 	
-
+	ToggleButton toggleButton;
+	
+	private MainFragmentListener mMainFragmentListener;
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-  
+
+		
         return inflater.inflate(R.layout.fragment_main , container, false);
     }
 	
+	//Container Activity must implement this interface
+		public interface MainFragmentListener {
+			public void onWATCHiTButtonClicked(boolean on);	
+	    	}
+	
 	@Override
 	public void onResume() {
-	 
+	 //TODO: Bruk en Listener og send til aktiviteten?
+		toggleButton = (ToggleButton) getView().findViewById(R.id.toggleButtonWatchiT);
+		//toggleButton.setChecked(on);
+
+		toggleButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                    mMainFragmentListener.onWATCHiTButtonClicked(toggleButton.isChecked());
+           
+            }
+        });
+		
+	
 		super.onResume();
 	}
 	
 	
+	@Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mMainFragmentListener = (MainFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnSpaceItemSelectedListener");
+        }
+    }
+
+
+	
+	
 	public void update(String msg) {
-		TextView view = (TextView) this.getView().findViewById(R.id.textViewData);
-		view.setText("text " + msg);
+		TextView view = (TextView) this.getView().findViewById(R.id.textViewUserName);
+		view.setText(msg);
 	}
 	
 

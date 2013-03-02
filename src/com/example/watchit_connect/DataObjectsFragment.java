@@ -52,7 +52,7 @@ OnSpaceItemSelectedListener mListener;
 			simplexmlobjects.add( Parser.buildSimpleXMLObject((DataObject) data));
 		}
 	    for (GenericSensorData genericSensorData : simplexmlobjects) {
-			dataAdapter.add(" publisher:  " +genericSensorData.getPublisher()   + "\n Value:  " +   genericSensorData.getValue().getText());
+			dataAdapter.add(genericSensorData.getValue().getText());
 		}
 	    
 	    
