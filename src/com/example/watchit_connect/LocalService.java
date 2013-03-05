@@ -3,6 +3,7 @@ package com.example.watchit_connect;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class LocalService extends AbstractService {
 	private ConnectedThread mConnectedThread;
 	private Handler h;
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
+	private String deviceAdress;
 	
 
 	// Unique Identification Number for the Notification.
@@ -53,6 +55,7 @@ public class LocalService extends AbstractService {
     static final int MSG_SET_STRING_VALUE_TO_ACTIVITY = 9995;
     static final int MSG_CONNECTION_ESTABLISHED = 9996;
     static final int MSG_CONNECTION_LOST = 9997;
+    static final int MSG_DEVICE_NAME = 9998;
     
     @Override
     public void onStartService() {
@@ -99,10 +102,9 @@ public class LocalService extends AbstractService {
     	};
     	
     	
-    	
+    	/*
     	btAdapter = BluetoothAdapter.getDefaultAdapter();
-    	checkBTState();
-
+    	//checkBTState();
     	Log.d("TAG", "...onResume - try connect...");
 
     	// Set up a pointer to the remote node using it's address.
@@ -143,6 +145,7 @@ public class LocalService extends AbstractService {
     	//send(Message.obtain(null, MSG_SET_INT_VALUE));
     	mConnectedThread = new ConnectedThread(btSocket);
     	mConnectedThread.start();
+    	*/
     }
 
     
@@ -151,8 +154,9 @@ public class LocalService extends AbstractService {
 		Log.d("TAG", "...In onPause()...");
 	    try     {
 	      btSocket.close();
-	    } catch (IOException e2) {
+	    } catch (Exception e2) {
 	      //errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
+	    	e2.printStackTrace();
 	    }	
 	}
 
@@ -162,6 +166,57 @@ public class LocalService extends AbstractService {
 		if (msg.what == MSG_SET_STRING_VALUE) {
 		      mConnectedThread.write(msg.getData().getString("watchitdata"));
 		    }
+		if (msg.what == MSG_DEVICE_NAME) {
+			deviceAdress = msg.getData().getString("btDevice");
+			int pos = msg.getData().getInt("btdevicepos");
+			btAdapter = BluetoothAdapter.getDefaultAdapter();
+	    	//checkBTState();
+	    	Log.d("TAG", "...onResume - try connect...");
+
+	    	BluetoothDevice device = MainApplication.bluetoothDevices.get(pos);
+	    	
+	
+	    	// Two things are needed to make a connection:
+	    	//   A MAC address, which we got above.
+	    	//   A Service ID or UUID.  In this case we are using the
+	    	//     UUID for SPP.
+	    	try {
+
+	    		btSocket = device.createRfcommSocketToServiceRecord(uuid);
+	    	} catch (IOException e) {
+	    		//errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
+	    		e.printStackTrace();
+	    	}
+
+	    	// Discovery is resource intensive.  Make sure it isn't going on
+	    	// when you attempt to connect and pass your message.
+	    	btAdapter.cancelDiscovery();
+
+	    	// Establish the connection.  This will block until it connects.
+	    	Log.d("TAG ","...Connecting...");
+	    	try {
+	    		btSocket.connect();
+	    		
+	    		Log.d("TAG", "....Connection ok...");
+	    		
+	    		send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED));
+	    	} catch (IOException e) {
+	    		e.printStackTrace();
+	    		try {
+	    			btSocket.close();
+	    		} catch (IOException e2) {
+	    			//errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
+	    			e2.printStackTrace();
+	    		}
+	    	}
+
+	    	// Create a data stream so we can talk to server.
+	    	Log.d("TAG", "...Create Socket...");
+	    	//send(Message.obtain(null, MSG_SET_INT_VALUE));
+	    	mConnectedThread = new ConnectedThread(btSocket);
+	    	mConnectedThread.start();
+			
+		}
 	}
         
 	private void errorExit(String title, String message){
@@ -179,22 +234,24 @@ public class LocalService extends AbstractService {
 		      } else {
 		        //Prompt user to turn on Bluetooth
 		    	  //BroadcastReceiver?
-		        //Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
-		        //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		        //Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				   //startActivityForResult(enableBluetooth, 0);
+		        Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
+		        startActivity(enableBtIntent);
 		      }
 		    }
 		  }
 	  
-	  private BluetoothDevice getDevice(String deviceName) {
+	  
+
+	  
+	  
+	  private BluetoothDevice getDevice(String deviceAdress) {
 	       	BluetoothDevice mDevice = null;
 	   		Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 	   		if(pairedDevices.size() > 0)
 	           {
 	               for(BluetoothDevice device : pairedDevices)
 	               {
-	                   if(device.getName().equals(deviceName)) mDevice = device;
+	                   if(device.getAddress().equals(deviceAdress)) mDevice = device;
 	               }
 	           }
 	   		return mDevice;
@@ -233,9 +290,7 @@ public class LocalService extends AbstractService {
 		        public void run() {
 		        	Looper.prepare();
 		        	
-		        	
-		     
-		        	
+		   
 		        	Log.d("THREAD", "inside run" );
 		            byte[] buffer = new byte[1024];  // buffer store for the stream
 		            int bytes; // bytes returned from read()
@@ -247,13 +302,11 @@ public class LocalService extends AbstractService {
 		                try {
 		                    // Read from the InputStream
 		                    bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-		                    Toast.makeText(getBaseContext(), "ARDUINO", Toast.LENGTH_SHORT).show();
 		                    h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
 		                    Log.d("recieve", "b " + bytes);
 		                } catch (Exception e) {
 		                	e.printStackTrace();
 		                	Log.d("thread RUN", "error:  " + e);
-		                	
 		                    break;
 		                }
 		            }
@@ -270,7 +323,8 @@ public class LocalService extends AbstractService {
 		              }
 		        }
 		        
-		        /* Call this from the main activity to shutdown the connection */
+		        
+		        /* Call this from the main activity to shutdown the thread connection */
 		        public void cancel() {
 		            try {
 		                mmSocket.close();
@@ -287,19 +341,19 @@ public class LocalService extends AbstractService {
         CharSequence text = getText(R.string.local_service_started);
 
         // Set the icon, scrolling text and timestamp
-        //Notification notification = new Notification(0 , text,
-          //      System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.androidavatar , text,
+               System.currentTimeMillis());
 
         //The PendingIntent to launch our activity if the user selects this notification
-        //PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-              //  new Intent(this, WatchitServiceActivities.Controller.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        //notification.setLatestEventInfo(this, getText(R.string.local_service_label),
-          //             text, contentIntent);
+        notification.setLatestEventInfo(this, "label ls",
+                       text, contentIntent);
 
         // Send the notification.
-        //mNM.notify(NOTIFICATION, notification);
+        mNM.notify(NOTIFICATION, notification);
     }
 
 

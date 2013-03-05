@@ -253,7 +253,7 @@ public class LoginActivity extends Activity {
 							.setError(getString(R.string.error_incorrect_password));
 					mPasswordView.requestFocus();
 					mUserNameView.setError(getString(R.string.error_incorrect_user));
-					mUserNameView.requestFocus();
+					//mUserNameView.requestFocus();
 				}
 			}
 			@Override

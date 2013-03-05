@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
-import android.widget.Toast;
 
 public class ApplicationsSettingsFragment extends Fragment {
 
@@ -29,13 +28,9 @@ public class ApplicationsSettingsFragment extends Fragment {
 		switch1 = (Switch) myFragmentView.findViewById(R.id.switchOnline);
 		switch2 = (Switch) myFragmentView.findViewById(R.id.switchLocation);
 		switch3 = (Switch) myFragmentView.findViewById(R.id.switchWATCHiT);
-	
-		
-		
+
         return myFragmentView;
     }
-	
-
 	
 	//Container Activity must implement this interface
 		public interface ApplicationsSettingsFfragmentListener {
@@ -91,10 +86,13 @@ public class ApplicationsSettingsFragment extends Fragment {
         }
     }
 
-	public void updateView(boolean s1, boolean s2, boolean s3) {
-		switch1.setChecked(s1);
-		switch2.setChecked(s2);
-		switch3.setChecked(s3);
+	public void updateView(boolean online, boolean location, boolean watchit) {
+		switch1.setChecked(online);
+		switch2.setChecked(location);
+		switch3.setChecked(watchit);
+	}
+	public void updateView(boolean watchitSwitch) {
+		switch3.setChecked(watchitSwitch);
 	}
 	
 }

@@ -1,52 +1,29 @@
 package com.example.watchit_connect;
 
-import parsing.GenericSensorData;
-import parsing.Parser;
 import service.ServiceManager;
 
 import com.example.watchit_connect.Spaces.SpacesActivity;
-import com.example.watchit_connect.Spaces.SpacesFragment;
-
-import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.ConnectionConfiguration;
-import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
-import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.android.SpaceConfiguration;
-import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.android.SpaceMember;
-import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
-import de.imc.mirror.sdk.exceptions.SpaceManagementException;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 /**
@@ -61,7 +38,10 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected ServiceManager service;
 	String latitude = "123.334.11"; //TODO: Get real data instead of mock.
 	String longitude = "32342343.2"; //TODO: Get real data from ze phone instead of ze mock.
-	
+	protected BluetoothAdapter btAdapter;
+	protected String bluetoothDeviceName;
+	protected BluetoothDevice device;
+	protected BluetoothSocket btSocket;
 	
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +73,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	                  //dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
 	                  //new CreateSpaceTask().execute();
 	                  //new PublishDataTask().execute(dataObject);
+	              	Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
 	                  break;
 	              default:
 	                super.handleMessage(msg);
@@ -105,9 +86,12 @@ public abstract class BaseActivity extends FragmentActivity {
 	    }
 		
 		
+		
+		
 		protected void enableSettings (String settingId) {
 		    Intent settingsIntent = new Intent(settingId);
 		    startActivity(settingsIntent);
+		    
 		}
 		
     @Override
@@ -128,13 +112,22 @@ public abstract class BaseActivity extends FragmentActivity {
                 finish();
                 return true;
     	
+    		case R.id.menu_map:
+    			intent = new Intent(this, MapActivity.class);
+    			startActivity(intent);
+    			//finish();
+    			return true;
+                
             case R.id.menu_sync:
+            	if (MainApplication.onlineMode) {
+            		// Sync from internet
+            	}
             	//showProgress("...");
             	return true;
             case R.id.menu_spaces:
             	intent = new Intent(this, SpacesActivity.class);
             	startActivity(intent);
-            	finish();
+            	//finish();
             	return true;	
             
             case R.id.menu_settings:
@@ -148,8 +141,6 @@ public abstract class BaseActivity extends FragmentActivity {
         }
 	
     }
-    
-
     
 	/**
 	 * Send message to Service. Return false if it fails to send.
@@ -167,14 +158,9 @@ public abstract class BaseActivity extends FragmentActivity {
 		
 	}
     
-    
-    
-    protected void showToast(String msg ) {
+    public void showToast(String msg ) {
     	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-    
-    
-    
     
     
     protected void showAlert(String msg) {
@@ -191,10 +177,10 @@ public abstract class BaseActivity extends FragmentActivity {
     	                }).create().show();
     	    }
     
-    protected void showProgress(String msg) {
+    protected void showProgress(String title, String msg) {
     	if (mProgressDialog != null && mProgressDialog.isShowing())
     		            dismissProgress();
-    		        mProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), msg);
+    		        mProgressDialog = ProgressDialog.show(this, title, msg);
     		    }
     protected void dismissProgress() {
         if (mProgressDialog != null) {
@@ -206,85 +192,10 @@ public abstract class BaseActivity extends FragmentActivity {
     
     
     
-    protected class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void...params) {
-	      try {
-	    	  if (MainApplication.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-	    		  MainApplication.connectionHandler.connect();
-	    	  
-	      } catch (ConnectionStatusException e) {
-	    	  e.printStackTrace();
-	    	  Toast.makeText(getBaseContext(), "Could not make a connection. Is wifi or 3g turned on?", Toast.LENGTH_SHORT).show();
-	    	  return false;
-	      }
-	     
-	      SpaceHandler sHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
-			sHandler.setMode(Mode.ONLINE);
-			app.spaces = sHandler.getAllSpaces();
-		  Log.d("getspacestask", "size of spaces " + app.spaces.size());
-			return true;
-		}
-
-		protected void onPostExecute(final Boolean success) {
-			if (success) {
-			} else {
-				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
-			}
-		}
-    }
     
-    protected class CreateSpaceTask extends AsyncTask<Void, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			
-			// create space configuration with the current user as space moderator
-			 Space.Type type = Space.Type.TEAM;
-			 String name = "Test team";
-			 String owner = MainApplication.connectionHandler.getCurrentUser().getBareJID();
-			 boolean isPersistent = true;
-			 SpaceConfiguration spaceConfig = new SpaceConfiguration(type, name, owner, isPersistent);
-			 SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
-		    	spaceHandler.setMode(Mode.ONLINE);
-		    	MainApplication.spaceHandler = spaceHandler;
-		    
-		    	
-
-			 // add the user bob as space member
-			 String bobsJID = "bob" + "@" + MainApplication.connectionHandler.getConfiguration().getDomain();
-			 spaceConfig.addMember(new SpaceMember(bobsJID, SpaceMember.Role.MEMBER));
-			 
-			 // create space with this configuration
-			 Space myNewTeamSpace = null;
-			 try {
-				 if (MainApplication.spaceHandler.getSpace(spaceConfig.getName()) == null)
-			 myNewTeamSpace = MainApplication.spaceHandler.createSpace(spaceConfig);
-				 else return false;
-			
-			 } catch (SpaceManagementException e) {
-			  showToast("Fauled to create space....");
-			  return false;
-			 } catch (ConnectionStatusException e) {
-				 showToast("Cannot create space when offline..");
-				 // add exception handling
-				 return false;
-			 }
-			return true;
-		}
-		
-		protected void onPostExecute(final Boolean success) {
-			dismissProgress();
-			if (success) {
-				Toast.makeText(getBaseContext(), "Space created", Toast.LENGTH_SHORT).show();
-				
-			} else {
-				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
-			}
-		}
-    }
     
-
+  
+    //TODO: Move to own class
     private class GetDataFromSpacesTask extends AsyncTask<Void, Void, Boolean> {
     	@Override
 		protected Boolean doInBackground(Void... params) {
@@ -311,7 +222,7 @@ public abstract class BaseActivity extends FragmentActivity {
 			}
 		}	
     }
-    
+    //TODO: Move to own class.
     protected class GetDataFromSpaceTask extends AsyncTask<String, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(String... params) {

@@ -3,7 +3,10 @@ package com.example.watchit_connect;
 import parsing.Parser;
 import parsing.GenericSensorData;
 import com.example.watchit_connect.MainFragment.MainFragmentListener;
+import com.example.watchit_connect.Spaces.SpacesActivity;
 import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
@@ -11,16 +14,20 @@ import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import Utilities.UtilityClass1;
+import Utilities.UtilityClass;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import asynctasks.CreateSpaceTask;
 
 
 public class MainActivity extends BaseActivity implements OnSpaceItemSelectedListener, MainFragmentListener  {
@@ -38,8 +45,7 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-
+        getActionBar().setDisplayHomeAsUpEnabled(false);
    	    myListener = new DataObjectListener() {
     	 // implement this interface in a controller class of your application
    
@@ -74,6 +80,15 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
     public void onResume() {
     	super.onResume();
     	
+    	//int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+    	//if (statusCode == ConnectionResult.SUCCESS) {
+    		//continue
+    	//} else {
+    		//Intent intent = new Intent();
+    		//GooglePlayServicesUtil.get
+    		//GooglePlayServicesUtil.getErrorDialog(statusCode, this, );
+    	//}
+    	
     	MainFragment mainfragment = (MainFragment)  getSupportFragmentManager().findFragmentByTag("main");
     	textViewUserName = (TextView) mainfragment.getView().findViewById(R.id.textViewUserName);
         SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
@@ -82,10 +97,51 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
         
         mainfragment.update(settings.getString("username", ""));   
     }
-       
-
     
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+    	switch (item.getItemId()) {
+    	
+    		case android.R.id.home:
+    			// iff up instead of back:
+                //intent = new Intent(this, MainActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //startActivity(intent);
+                //finish();
+                return true;
+    	
+    		case R.id.menu_map:
+    			intent = new Intent(this, MapActivity.class);
+    			startActivity(intent);
+    			//finish();
+    			return true;
+                
+            case R.id.menu_sync:
+            	if (MainApplication.onlineMode) {
+            		// Sync from internet
+            	}
+            	//showProgress("...");
+            	return true;
+            case R.id.menu_spaces:
+            	intent = new Intent(this, SpacesActivity.class);
+            	startActivity(intent);
+            	//finish();
+            	return true;	
+            
+            case R.id.menu_settings:
+            	intent = new Intent(this, SettingsActivity.class);
+            	startActivity(intent);
+            	//finish();
+            	return true;
+            	
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+	
+    }
+       
 	@Override
 	public void onSpaceItemSelected(int position) {
 		
@@ -115,18 +171,4 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
 	    sendMessageToService(message);
 	}
 
-	@Override
-	public void onWATCHiTButtonClicked(boolean on) {
-		//ToggleButton button;
-        if (on) {
-        	if (UtilityClass1.isBluetoothConnected()) service.start();
-        	else 
-        		showToast("Please turn on bluetooth and pair it with WATCHiT");
-        	
-            //showProgress("Waiting for ack from WATCHiT");
-        } else {
-            showToast("Stopped sync with WATCHiT");
-            service.stop();
-        }	
-	}    
 }

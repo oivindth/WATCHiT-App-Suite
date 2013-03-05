@@ -4,7 +4,9 @@ package com.example.watchit_connect;
 import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
 import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
-import Utilities.UtilityClass1;
+import de.imc.mirror.sdk.Space;
+
+import Utilities.UtilityClass;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,38 +20,34 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import asynctasks.CreateSpaceTask;
 
 public class MainFragment extends Fragment {
 	
-	ToggleButton toggleButton;
+	
 	
 	private MainFragmentListener mMainFragmentListener;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+		
+		
 		
         return inflater.inflate(R.layout.fragment_main , container, false);
     }
 	
 	//Container Activity must implement this interface
 		public interface MainFragmentListener {
-			public void onWATCHiTButtonClicked(boolean on);	
+			
 	    	}
 	
 	@Override
 	public void onResume() {
 	 //TODO: Bruk en Listener og send til aktiviteten?
-		toggleButton = (ToggleButton) getView().findViewById(R.id.toggleButtonWatchiT);
 		//toggleButton.setChecked(on);
 
-		toggleButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                    mMainFragmentListener.onWATCHiTButtonClicked(toggleButton.isChecked());
-           
-            }
-        });
+		
 		
 	
 		super.onResume();

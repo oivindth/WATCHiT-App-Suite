@@ -5,6 +5,11 @@
         android:icon="@android:drawable/ic_menu_manage"
         android:showAsAction="never" />
     
+    <item android:id="@+id/menu_map"
+        android:title = "Map"
+        android:icon = "@android:drawable/ic_menu_my_calendar"
+        android:showAsAction="ifRoom|withText" />
+    
     <item android:id="@+id/menu_sync"
         android:title="@string/menu_sync"
         android:icon="@android:drawable/ic_popup_sync"

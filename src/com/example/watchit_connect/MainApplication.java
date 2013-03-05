@@ -10,10 +10,19 @@ import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 
 public class MainApplication extends Application {
 	
 	private boolean valuesSet = false;
+	
+	
+	public static boolean settingsSwitchOnline, settingsSwitchLocation,settingsSwitchWATChiT = false;
+	
+	public static boolean onlineMode = false;
+	
+	
+	public static List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 	
 	
 	public static List<Space> spaces; 
@@ -27,9 +36,9 @@ public class MainApplication extends Application {
 	}
 	
 	public static ConnectionConfigurationBuilder connectionConfigurationBuilder; 
-	public static ConnectionConfiguration connectionConfig; //set in login activity
-	public static ConnectionHandler connectionHandler; // set in login activity
-	public static SpaceHandler spaceHandler; //set in SpacesActivity
+	public static ConnectionConfiguration connectionConfig; 
+	public static ConnectionHandler connectionHandler; 
+	public static SpaceHandler spaceHandler; 
 	public static String dbName = "sdkcache";
 	 public static List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 	
