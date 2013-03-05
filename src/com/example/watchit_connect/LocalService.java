@@ -3,7 +3,6 @@ package com.example.watchit_connect;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +13,6 @@ import service.AbstractService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -27,7 +25,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class LocalService extends AbstractService {
@@ -181,7 +178,6 @@ public class LocalService extends AbstractService {
 	    	//   A Service ID or UUID.  In this case we are using the
 	    	//     UUID for SPP.
 	    	try {
-
 	    		btSocket = device.createRfcommSocketToServiceRecord(uuid);
 	    	} catch (IOException e) {
 	    		//errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
@@ -219,31 +215,6 @@ public class LocalService extends AbstractService {
 		}
 	}
         
-	private void errorExit(String title, String message){
-	    Toast.makeText(getBaseContext(), title + " - " + message, Toast.LENGTH_LONG).show();
-	  }
-	
-	  private void checkBTState() {
-		    // Check for Bluetooth support and then check to make sure it is turned on
-		    // Emulator doesn't support Bluetooth and will return null
-		    if(btAdapter==null) { 
-		      //errorExit("Fatal Error", "Bluetooth not support");
-		    } else {
-		      if (btAdapter.isEnabled()) {
-		        Log.d(" tag", "...Bluetooth ON...");
-		      } else {
-		        //Prompt user to turn on Bluetooth
-		    	  //BroadcastReceiver?
-		        Intent enableBtIntent = new Intent(btAdapter.ACTION_REQUEST_ENABLE);
-		        startActivity(enableBtIntent);
-		      }
-		    }
-		  }
-	  
-	  
-
-	  
-	  
 	  private BluetoothDevice getDevice(String deviceAdress) {
 	       	BluetoothDevice mDevice = null;
 	   		Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
@@ -272,7 +243,7 @@ public class LocalService extends AbstractService {
 		        private final OutputStream mmOutStream;
 		      
 		        public ConnectedThread(BluetoothSocket socket) {
-		        	Log.d("THREAD", "constructor");
+		        	Log.d("ConnectTHREAD", "In thread");
 		            mmSocket = socket;
 		            InputStream tmpIn = null;
 		            OutputStream tmpOut = null;

@@ -3,31 +3,23 @@ package com.example.watchit_connect;
 import parsing.Parser;
 import parsing.GenericSensorData;
 import com.example.watchit_connect.MainFragment.MainFragmentListener;
-import com.example.watchit_connect.Spaces.SpacesActivity;
-import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
+import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import Utilities.UtilityClass;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import asynctasks.CreateSpaceTask;
 
 
 public class MainActivity extends BaseActivity implements OnSpaceItemSelectedListener, MainFragmentListener  {
@@ -46,6 +38,8 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getActionBar().setDisplayHomeAsUpEnabled(false);
+        
+        //TODO: Where to put this listener.
    	    myListener = new DataObjectListener() {
     	 // implement this interface in a controller class of your application
    

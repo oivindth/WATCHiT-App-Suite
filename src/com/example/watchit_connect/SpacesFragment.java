@@ -1,9 +1,8 @@
-package com.example.watchit_connect.Spaces;
+package com.example.watchit_connect;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 
 import de.imc.mirror.sdk.Space;

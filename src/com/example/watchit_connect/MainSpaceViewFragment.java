@@ -1,4 +1,4 @@
-package com.example.watchit_connect.Spaces;
+package com.example.watchit_connect;
 
 import com.example.watchit_connect.R;
 

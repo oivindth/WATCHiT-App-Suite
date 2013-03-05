@@ -3,11 +3,11 @@ package com.example.watchit_connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
+
 import parsing.GenericSensorData;
 import parsing.Parser;
 
-import com.example.watchit_connect.Spaces.SpacesActivity;
-import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;

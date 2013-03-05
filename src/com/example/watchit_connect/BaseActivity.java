@@ -2,7 +2,6 @@ package com.example.watchit_connect;
 
 import service.ServiceManager;
 
-import com.example.watchit_connect.Spaces.SpacesActivity;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
@@ -60,9 +59,9 @@ public abstract class BaseActivity extends FragmentActivity {
 	          public void handleMessage(Message msg) {
 	            // Receive message from service
 	            switch (msg.what) {
-	            case LocalService.MSG_SET_INT_VALUE: //TODO: Not receiving this from the service when checking the bluetooth...
+	            case LocalService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
 	          	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
-	          	  dismissProgress();
+	          	  //dismissProgress();
 	              break;
 	              case LocalService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
 	            	  String data = msg.getData().getString("watchitdata");

@@ -2,8 +2,6 @@ package com.example.watchit_connect;
 
 
 
-import com.example.watchit_connect.Spaces.SpacesActivity;
-
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;

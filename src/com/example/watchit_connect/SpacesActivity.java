@@ -1,24 +1,20 @@
-package com.example.watchit_connect.Spaces;
+package com.example.watchit_connect;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.BaseActivity;
-import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
-import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
+import com.example.watchit_connect.SpaceFragment.OnSpaceInfoSelectedListener;
+import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import de.imc.mirror.sdk.exceptions.SpaceManagementException;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;

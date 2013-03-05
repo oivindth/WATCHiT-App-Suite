@@ -1,6 +1,5 @@
 package com.example.watchit_connect;
 
-import com.example.watchit_connect.Spaces.SpacesActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 

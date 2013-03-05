@@ -1,9 +1,6 @@
 package com.example.watchit_connect;
 
 
-import com.example.watchit_connect.Spaces.SpaceFragment.OnSpaceInfoSelectedListener;
-import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
-
 import de.imc.mirror.sdk.Space;
 
 import Utilities.UtilityClass;

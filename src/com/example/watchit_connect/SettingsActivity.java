@@ -24,7 +24,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
-//TODO: stop using the fracking editor and put values inn mainapplication as global variables?
 public class SettingsActivity extends BaseActivity implements ApplicationsSettingsFfragmentListener {
 
 
@@ -72,7 +71,8 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     	registerReceiver(mReceiver, filter4); // Don't forget to unregister during onDestroy
     	 
     }
-	//
+	
+    
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 	    public void onReceive(Context context, Intent intent) {
 	        String action = intent.getAction();
@@ -88,12 +88,12 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 	            devices.add(device);
 	            }
 	            	
-	            //Toast.makeText(getBaseContext(), "Device found!", Toast.LENGTH_SHORT).show();
 	        }
 	        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 	        	int i = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0 );
 	        	if (i == BluetoothAdapter.STATE_ON) {
 	        		Log.d("BLUETOOTH", "bluetooth on");	
+	        		showToast("Bluetooth is now enabled. You can now sync with WATCHiT");
 	        	}
 	        }
 	        if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
