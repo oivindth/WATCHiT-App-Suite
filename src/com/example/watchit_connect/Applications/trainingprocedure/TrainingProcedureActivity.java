@@ -41,40 +41,7 @@ public class TrainingProcedureActivity extends BaseActivity {
     			android.R.layout.simple_spinner_dropdown_item);
    
         
-        mOnNavigationListener = new OnNavigationListener() {
-      	  // Get the same strings provided for the drop-down's ArrayAdapter
-      	  String[] strings = getResources().getStringArray(R.array.action_list_tp_app);
-      	 
-        	
-      	
-      	  @Override
-      	  public boolean onNavigationItemSelected(int position, long itemId) {
-      		
-      		
-      		FragmentTransaction ft;
-      		  switch (position) {
-			case 0:
-				fragment = new TrainingprocedureMainFragment();
-				ft = getSupportFragmentManager().beginTransaction();
-				ft.replace(R.id.fragment_container, fragment, strings[position]);
-				ft.commit();
-				break;
-			case 1:
-				fragment = new TrainingProcedureResultListFragment();
-				ft = getSupportFragmentManager().beginTransaction();
-				ft.replace(R.id.fragment_container, fragment, strings[position]);
-				ft.commit();
-				break;
-				
-			default:
-				break;
-			}
-      		  
-            return true;
-   
-      	  }
-      	};
-      	actionBar.setListNavigationCallbacks(mSpinnerAdapter, mOnNavigationListener);	
+    
         
         
         

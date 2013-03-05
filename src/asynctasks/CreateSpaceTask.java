@@ -3,16 +3,11 @@ package asynctasks;
 import java.util.List;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
-
 import com.example.watchit_connect.BaseActivity;
-import com.example.watchit_connect.MainActivity;
 import com.example.watchit_connect.MainApplication;
 
 import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.SpaceConfiguration;
-import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.android.SpaceMember;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import de.imc.mirror.sdk.exceptions.SpaceManagementException;

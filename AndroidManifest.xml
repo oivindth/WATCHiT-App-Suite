@@ -52,7 +52,7 @@
         
         <activity
             android:name="com.example.watchit_connect.SettingsActivity"
-            android:label="@string/title_activity_applications" >
+            android:label="Settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -60,14 +60,7 @@
             
         </activity>
         
-        <activity
-            android:name="com.example.watchit_connect.Applications.trainingprocedure.TrainingProcedureActivity"
-            android:label="@string/title_activity_trainingprocedure" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+
         
         <activity
             android:name="com.example.watchit_connect.MapActivity"
@@ -83,7 +76,7 @@
         
          <activity
             android:name="com.example.watchit_connect.LoginActivity"
-            android:label="@string/title_activity_app" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

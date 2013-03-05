@@ -53,9 +53,9 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     	
     	fragment = (ApplicationsSettingsFragment) getSupportFragmentManager().findFragmentByTag("settings");
     	boolean s1,s2,s3;
-    	s1 = MainApplication.settingsSwitchOnline;
-    	s2 = MainApplication.settingsSwitchLocation;
-    	s3 = MainApplication.settingsSwitchWATChiT;
+    	s1 = MainApplication.OnlineMode;
+    	s2 = MainApplication.isLocationOn;
+    	s3 = MainApplication.isWATChiTOn;
     	fragment.updateView(s1, s2,s3 );
     	
     	super.onResume();
@@ -140,7 +140,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 				//Set "hasLoggedIn" to true
 				
 				//TODO: Change handlers to online mode man.
-				MainApplication.settingsSwitchOnline = true;
+				MainApplication.OnlineMode = true;
 				
 			} else {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -152,7 +152,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               MainApplication.settingsSwitchOnline = false;
+		    	               MainApplication.OnlineMode = false;
 		    	             
 		    	           }
 		    	       });
@@ -167,10 +167,10 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		
 		} else {
 			//TODO: Change handlers to offline mode maaaan.
-			MainApplication.settingsSwitchOnline = false;
+			MainApplication.OnlineMode = false;
 			
 		}
-		fragment.updateView(MainApplication.settingsSwitchOnline, MainApplication.settingsSwitchLocation, MainApplication.settingsSwitchWATChiT);
+		fragment.updateView(MainApplication.OnlineMode, MainApplication.isLocationOn, MainApplication.isWATChiTOn);
 	}
 
 	@Override
@@ -180,11 +180,11 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 			if (!btAdapter.isEnabled()) {
 			    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			    startActivity(enableBtIntent);
-				MainApplication.settingsSwitchWATChiT = false;
+				MainApplication.isWATChiTOn = false;
 				return;
 			} else {
 				service.start();
-				MainApplication.settingsSwitchWATChiT = true;
+				MainApplication.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
     			// If there are paired devices
     			if (pairedDevices.size() > 0) {
@@ -230,7 +230,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               MainApplication.settingsSwitchWATChiT = false;
+		    	               MainApplication.isWATChiTOn = false;
 		    	               fragment.updateView(false);
 		    	               devices.clear();
 		    	               MainApplication.bluetoothDevices.clear();
@@ -246,10 +246,10 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		if (!on) {
 			if (service.isRunning()) service.stop();
 			showToast("Stopped WATCHiT sync...");
-			MainApplication.settingsSwitchWATChiT = false;
+			MainApplication.isWATChiTOn= false;
 		}
 		
-		 fragment.updateView(MainApplication.settingsSwitchOnline, MainApplication.settingsSwitchLocation, MainApplication.settingsSwitchWATChiT);
+		 fragment.updateView(MainApplication.OnlineMode, MainApplication.isLocationOn, MainApplication.isWATChiTOn);
 		
 	}
 
@@ -274,7 +274,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               MainApplication.settingsSwitchLocation = false;
+		    	               MainApplication.isLocationOn = false;
 		    	           }
 		    	       });
 		    	
@@ -288,15 +288,15 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    } else {
 		    	//gps er på..:
 		        //TODO: Now use latitude and longitude in dataobjects.
-		    	MainApplication.settingsSwitchLocation = true;
+		    	MainApplication.isLocationOn = true;
 		    }
 	    	
 	    } else {
 	    	//TODO: Do not want to use location. Stop adding location to dataobject or just add mocked location data?
-	    	MainApplication.settingsSwitchLocation = false;
+	    	MainApplication.isLocationOn = false;
 	    	
 	    }
-	    fragment.updateView(MainApplication.settingsSwitchOnline, MainApplication.settingsSwitchLocation, MainApplication.settingsSwitchWATChiT);
+	    fragment.updateView(MainApplication.OnlineMode, MainApplication.isLocationOn, MainApplication.isWATChiTOn);
 	
 	}
 

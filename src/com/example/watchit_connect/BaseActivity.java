@@ -1,7 +1,10 @@
 package com.example.watchit_connect;
 
+import parsing.GenericSensorData;
+import parsing.Parser;
 import service.ServiceManager;
 
+import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
@@ -24,6 +27,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import asynctasks.GetDataFromSpaceTask;
+import asynctasks.PublishDataTask;
 
 /**
  * Base class for our activities to avoid duplicate code.
@@ -41,6 +46,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected String bluetoothDeviceName;
 	protected BluetoothDevice device;
 	protected BluetoothSocket btSocket;
+	DataObjectListener myListener;
 	
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,27 @@ public abstract class BaseActivity extends FragmentActivity {
 	        super.onCreate(savedInstanceState); 
 	        
 	        app = (MainApplication) getApplication();
+	        
+	      
+	        
+	   	    myListener = new DataObjectListener() {
+	       	 // implement this interface in a controller class of your application
+	      
+	   		@Override
+	   		public void handleDataObject(
+	   				de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
+	   				showToast("New object receieved in space");
+	   			 String objectId = dataObject.getId();
+	   			 //Log.d("HandleDataObjet", dataObject.getCDMData().)
+	   			 
+	   			 Log.d("HandleDataObject", dataObject.toString());
+	   			 GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+	   			 Toast.makeText(getBaseContext(), "Receieved dataobject from space: " + objectId, Toast.LENGTH_SHORT).show();
+	   	    	 System.out.println("Received object " + objectId + " from space " + spaceId);
+	   	
+	   		}
+	       	 };
+	        
 	        
 	        // Create a service and handle incoming messages
 	        this.service = new ServiceManager(this, LocalService.class, new Handler() {
@@ -118,20 +145,27 @@ public abstract class BaseActivity extends FragmentActivity {
     			return true;
                 
             case R.id.menu_sync:
-            	if (MainApplication.onlineMode) {
+            	if (MainApplication.isWATChiTOn) {
             		// Sync from internet
             	}
-            	//showProgress("...");
+            	new GetDataFromSpaceTask(this ,"team#34").execute();
+            	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
+            			("Hello World", "1212121", "323232"), "admin" + "@" + MainApplication.connectionHandler.getConfiguration().getDomain());
+            	Log.d("BASEACTIVITY", dob.toString());
+            	new PublishDataTask(this, dob).execute();
+            	  
+            	//showProgress("...", "zz");
             	return true;
-            case R.id.menu_spaces:
-            	intent = new Intent(this, SpacesActivity.class);
-            	startActivity(intent);
-            	//finish();
-            	return true;	
+      
             
-            case R.id.menu_settings:
+            case R.id.menu_config:
             	intent = new Intent(this, SettingsActivity.class);
             	startActivity(intent);
+            	return true;
+            	
+            case R.id.menu_settings:
+            	//intent = new Intent(this, SettingsActivity.class);
+            	//startActivity(intent);
             	//finish();
             	return true;
             	
@@ -176,12 +210,12 @@ public abstract class BaseActivity extends FragmentActivity {
     	                }).create().show();
     	    }
     
-    protected void showProgress(String title, String msg) {
+   public void showProgress(String title, String msg) {
     	if (mProgressDialog != null && mProgressDialog.isShowing())
     		            dismissProgress();
     		        mProgressDialog = ProgressDialog.show(this, title, msg);
     		    }
-    protected void dismissProgress() {
+    public void dismissProgress() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
             mProgressDialog = null;
@@ -221,76 +255,7 @@ public abstract class BaseActivity extends FragmentActivity {
 			}
 		}	
     }
-    //TODO: Move to own class.
-    protected class GetDataFromSpaceTask extends AsyncTask<String, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(String... params) {
-			String spaceId = params[0];
-			try {
-				app.dataHandler.registerSpace(spaceId);
-				//app.dataHandler.addDataObjectListener(myListener);
-				//MainApplication.dataObjects
-				app.dataObjects = app.dataHandler.retrieveDataObjects(spaceId);
-
-			} catch (UnknownEntityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-				
-			}
-			return true;
-		}
-		
-		protected void onPostExecute(final Boolean success) {
-			//dismissProgress();
-			if (success) {
-				Toast.makeText(getBaseContext(), "Data receieved", Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
-			}
-		}
-    }
     
-    
-    protected class PublishDataTask extends AsyncTask<DataObject, Void, Boolean> {
-  
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        }
-        
-		@Override
-		protected Boolean doInBackground(DataObject ...params) {
-			DataObject dob = params[0];
-	
-		      //app.dataHandler.addDataObjectListener(myListener);
-	    	 try {
-				app.dataHandler.registerSpace("team#33");
-			} catch (UnknownEntityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	    
-	    	 try {
-				app.dataHandler.publishDataObject(dob, "team#33");
-			} catch (UnknownEntityException e) {
-				//showToast("Failed to publish dataobject to space:  " + space.getId());
-				e.printStackTrace();
-				return false;
-			}
-	    	 
-	    	 return true;
-		}
-
-		protected void onPostExecute(final Boolean success) {
-			
-			if (success) {
-				Toast.makeText(getBaseContext(), "Data published", Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(getBaseContext(), "Something went wrong. Do you have a connection?", Toast.LENGTH_SHORT).show();
-			}
-		}
- 	}
     
     @Override
     protected void onDestroy() {

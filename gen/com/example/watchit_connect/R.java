@@ -10,7 +10,6 @@ package com.example.watchit_connect;
 public final class R {
     public static final class array {
         public static final int action_list=0x7f060000;
-        public static final int action_list_tp_app=0x7f060001;
     }
     public static final class attr {
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
@@ -135,7 +134,10 @@ containing a value of this type.
     public static final class drawable {
         public static final int androidavatar=0x7f020000;
         public static final int ic_action_search=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
+        public static final int ic_action_settings=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int ic_location_map=0x7f020004;
+        public static final int ic_navigation_refresh=0x7f020005;
     }
     public static final class id {
         public static final int button1=0x7f04001d;
@@ -153,11 +155,11 @@ containing a value of this type.
         public static final int login_status_message=0x7f040006;
         public static final int main_view=0x7f040011;
         public static final int map=0x7f040020;
+        public static final int menu_config=0x7f040026;
         public static final int menu_forgot_password=0x7f040023;
-        public static final int menu_map=0x7f040025;
+        public static final int menu_map=0x7f040024;
         public static final int menu_settings=0x7f040027;
-        public static final int menu_spaces=0x7f040024;
-        public static final int menu_sync=0x7f040026;
+        public static final int menu_sync=0x7f040025;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int oldpassword=0x7f040017;
@@ -205,11 +207,8 @@ containing a value of this type.
         public static final int activity_map=0x7f080002;
     }
     public static final class string {
-        public static final int action_sign_in_register=0x7f05002d;
-        public static final int action_sign_in_short=0x7f05002e;
-        public static final int app1=0x7f050028;
-        public static final int app2=0x7f050029;
-        public static final int app3=0x7f05002a;
+        public static final int action_sign_in_register=0x7f050027;
+        public static final int action_sign_in_short=0x7f050028;
         public static final int app_name=0x7f050011;
         public static final int application_id=0x7f050024;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
@@ -279,33 +278,30 @@ containing a value of this type.
          */
         public static final int common_signin_button_text_long=0x7f05000d;
         public static final int domain=0x7f050023;
-        public static final int error_field_required=0x7f050035;
-        public static final int error_incorrect_password=0x7f050034;
-        public static final int error_incorrect_user=0x7f050032;
-        public static final int error_invalid_email=0x7f050031;
-        public static final int error_invalid_password=0x7f050033;
+        public static final int error_field_required=0x7f05002f;
+        public static final int error_incorrect_password=0x7f05002e;
+        public static final int error_incorrect_user=0x7f05002c;
+        public static final int error_invalid_email=0x7f05002b;
+        public static final int error_invalid_password=0x7f05002d;
         public static final int host=0x7f050021;
-        public static final int local_service_started=0x7f050016;
-        public static final int local_service_stopped=0x7f050017;
-        public static final int login_progress_signing_in=0x7f050030;
-        public static final int menu_config=0x7f05001b;
-        public static final int menu_forgot_password=0x7f05002f;
-        public static final int menu_home=0x7f05001c;
-        public static final int menu_settings=0x7f050018;
-        public static final int menu_spaces=0x7f050019;
-        public static final int menu_sync=0x7f05001a;
-        public static final int password=0x7f050026;
+        public static final int local_service_started=0x7f050014;
+        public static final int local_service_stopped=0x7f050015;
+        public static final int login_progress_signing_in=0x7f05002a;
+        public static final int menu_config=0x7f050019;
+        public static final int menu_dashboard=0x7f05001c;
+        public static final int menu_forgot_password=0x7f050029;
+        public static final int menu_home=0x7f05001a;
+        public static final int menu_map=0x7f05001b;
+        public static final int menu_settings=0x7f050016;
+        public static final int menu_spaces=0x7f050017;
+        public static final int menu_sync=0x7f050018;
         public static final int port=0x7f050022;
-        public static final int prompt_password=0x7f05002c;
+        public static final int prompt_password=0x7f050026;
         /**  Strings related to login 
          */
-        public static final int prompt_username=0x7f05002b;
-        public static final int title_activity_app=0x7f050013;
-        public static final int title_activity_applications=0x7f050014;
+        public static final int prompt_username=0x7f050025;
         public static final int title_activity_main=0x7f050012;
-        public static final int title_activity_trainingprocedure=0x7f050015;
-        public static final int trainingprocedureNameSpace=0x7f050027;
-        public static final int username=0x7f050025;
+        public static final int title_activity_trainingprocedure=0x7f050013;
     }
     public static final class style {
         public static final int AppTheme=0x7f070000;

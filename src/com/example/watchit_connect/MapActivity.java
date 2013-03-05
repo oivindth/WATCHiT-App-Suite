@@ -57,16 +57,12 @@ public class MapActivity extends BaseActivity {
     			return true;
                 
             case R.id.menu_sync:
-            	if (MainApplication.onlineMode) {
+            	if (MainApplication.OnlineMode) {
             		// Sync from internet
             	}
             	//showProgress("...");
             	return true;
-            case R.id.menu_spaces:
-            	intent = new Intent(this, SpacesActivity.class);
-            	startActivity(intent);
-            	//finish();
-            	return true;	
+        
             
             case R.id.menu_settings:
             	intent = new Intent(this, SettingsActivity.class);

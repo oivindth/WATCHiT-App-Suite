@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import asynctasks.GetDataFromSpaceTask;
 
 
 public class MainActivity extends BaseActivity implements OnSpaceItemSelectedListener, MainFragmentListener  {
@@ -27,12 +28,10 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
 	TextView textViewUserName, textViewData;
 	View myTestView;
 	MainFragment fragmentMain;
-
 	DataObjectListener myListener;
 	SpaceHandler spaceHandler;
 	 DataHandler dataHandler;
 	
-
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +91,9 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
         mainfragment.update(settings.getString("username", ""));   
     }
     
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
+    	super.onOptionsItemSelected(item);
     	switch (item.getItemId()) {
     	
     		case android.R.id.home:
@@ -106,42 +104,18 @@ public class MainActivity extends BaseActivity implements OnSpaceItemSelectedLis
                 //finish();
                 return true;
     	
-    		case R.id.menu_map:
-    			intent = new Intent(this, MapActivity.class);
-    			startActivity(intent);
-    			//finish();
-    			return true;
-                
-            case R.id.menu_sync:
-            	if (MainApplication.onlineMode) {
-            		// Sync from internet
-            	}
-            	//showProgress("...");
-            	return true;
-            case R.id.menu_spaces:
-            	intent = new Intent(this, SpacesActivity.class);
-            	startActivity(intent);
-            	//finish();
-            	return true;	
-            
-            case R.id.menu_settings:
-            	intent = new Intent(this, SettingsActivity.class);
-            	startActivity(intent);
-            	//finish();
-            	return true;
+    		
             	
             default:
                 return super.onOptionsItemSelected(item);
         }
-	
     }
        
 	@Override
 	public void onSpaceItemSelected(int position) {
 		
-		
 		Space space = app.spaces.get(position);
-		new GetDataFromSpaceTask().execute(space.getId());
+		new GetDataFromSpaceTask(this, space.getId()).execute();
         DataObjectsFragment dataObjectsFragment = new DataObjectsFragment();
         //int members = space.getMembers().size();
         Bundle b = new Bundle();

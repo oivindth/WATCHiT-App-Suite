@@ -1,9 +1,7 @@
 <resources>
 
-    <string name="app_name">version 0</string>
-    <string name="title_activity_main">Main</string>
-    <string name="title_activity_app">EmergencyReflect</string>
-    <string name ="title_activity_applications">Applications </string>
+    <string name="app_name">WATCHiT Reflection App</string>
+    <string name="title_activity_main">DashBoard</string>
     <string name ="title_activity_trainingprocedure">Training Procedure </string>
     
    <string name="local_service_started"> Service started. Now waiting for data from WATCHiT </string>
@@ -14,6 +12,8 @@
     <string name="menu_sync">Synchronization</string>
     <string name="menu_config">Configuration</string>
     <string name="menu_home">Home</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_dashboard">Dashboard</string>
     
     <string name ="buttonSharedSpaces">Shared Spaces</string>
     <string name ="buttonPrivateSpace">Private Space</string>
@@ -26,15 +26,9 @@
     <string name="port">5222</string>
     <string name="domain">mirror-server-ntnu</string>
     <string name="application_id">watchIt_Reflection_App</string>
-    <string name ="username">spacemanager</string>
-    <string name ="password"></string>
     
-    <string name = "trainingprocedureNameSpace">mirror:application:watchIt_Reflection_App:trainingprocedure</string>
-    
-    
-    <string name = "app1">Training Procedure</string>
-    <string name = "app2">Mood App</string>
-    <string name = "app3">Flood Simulation </string>
+
+
     
 
 </resources>

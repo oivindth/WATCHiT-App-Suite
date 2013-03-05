@@ -12,14 +12,18 @@ import de.imc.mirror.sdk.android.SpaceHandler;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 
+/**
+ * Application object. Used as a pool for global variables and dataobjects to simplify passing them between activities and services.
+ * @author oivindth
+ *
+ */
 public class MainApplication extends Application {
 	
 	private boolean valuesSet = false;
 	
 	
-	public static boolean settingsSwitchOnline, settingsSwitchLocation,settingsSwitchWATChiT = false;
+	public static boolean OnlineMode, isLocationOn, isWATChiTOn = false;
 	
-	public static boolean onlineMode = false;
 	
 	
 	public static List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
@@ -46,7 +50,7 @@ public class MainApplication extends Application {
 	private String password;
 
 
-	public DataHandler dataHandler;
+	public static DataHandler dataHandler;
 
 	public String getUserName() {
 		return userName;

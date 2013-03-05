@@ -63,9 +63,6 @@ public class Parser {
 		CDMData cdmData = cdmDataBuilder.build();
 		dataObjectBuilder.setCDMData(cdmData);
 		
-		
-		
-		
 		 Map <String, String> attributes = new HashMap<String, String>();
    	 
 	   	 attributes.put("latitude", genericSensorData.getLocation().getLatitude());
