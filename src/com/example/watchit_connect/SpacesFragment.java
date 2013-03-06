@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.example.watchit_connect.R;
 
-import de.imc.mirror.sdk.Space;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -27,7 +25,7 @@ public class SpacesFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-		app =  (MainApplication) getActivity().getApplication();
+		app =  MainApplication.getInstance();
         return inflater.inflate(R.layout.spaces_fragment, container, false);
     }
 	
@@ -35,7 +33,7 @@ public class SpacesFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 	    List<String> spacesNames = new ArrayList<String> ();
-		for (de.imc.mirror.sdk.Space space : app.spaces) {
+		for (de.imc.mirror.sdk.Space space : app.spacesInHandler) {
 			spacesNames.add(space.getName());
 		}
 		UpdateSpaces(spacesNames); 
@@ -56,7 +54,6 @@ public class SpacesFragment extends ListFragment {
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Send the event to the host activity
-		Toast.makeText(getActivity().getBaseContext(), "clicked on item at position " + position, Toast.LENGTH_SHORT).show();
         mListener.onSpaceItemSelected(position);
     }
 	

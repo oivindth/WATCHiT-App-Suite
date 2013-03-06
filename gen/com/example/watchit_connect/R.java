@@ -135,76 +135,88 @@ containing a value of this type.
         public static final int androidavatar=0x7f020000;
         public static final int ic_action_search=0x7f020001;
         public static final int ic_action_settings=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int ic_location_map=0x7f020004;
-        public static final int ic_navigation_refresh=0x7f020005;
+        public static final int ic_collaboration=0x7f020003;
+        public static final int ic_hardware_gamepad=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int ic_location_map=0x7f020006;
+        public static final int ic_navigation_refresh=0x7f020007;
+        public static final int ic_social_group=0x7f020008;
+        public static final int ic_social_person=0x7f020009;
+        public static final int ic_social_share=0x7f02000a;
     }
     public static final class id {
-        public static final int button1=0x7f04001d;
-        public static final int button2=0x7f040022;
-        public static final int buttonCreateSpace=0x7f040021;
+        public static final int btn_event=0x7f04001b;
+        public static final int btn_map=0x7f04001d;
+        public static final int btn_profile=0x7f040020;
+        public static final int btn_setup=0x7f04001c;
+        public static final int btn_share=0x7f04001f;
+        public static final int btn_tp=0x7f04001e;
+        public static final int button1=0x7f040025;
+        public static final int button2=0x7f040024;
         public static final int edit_name=0x7f040018;
+        public static final int footerTextView=0x7f040017;
         public static final int fragment_container=0x7f04000c;
+        public static final int home_root=0x7f040014;
         public static final int hybrid=0x7f040004;
-        public static final int imageView1=0x7f04001b;
         public static final int lbl_your_name=0x7f040019;
-        public static final int listView2=0x7f04000e;
         public static final int login=0x7f04000a;
         public static final int login_form=0x7f040007;
         public static final int login_status=0x7f040005;
         public static final int login_status_message=0x7f040006;
-        public static final int main_view=0x7f040011;
-        public static final int map=0x7f040020;
-        public static final int menu_config=0x7f040026;
-        public static final int menu_forgot_password=0x7f040023;
-        public static final int menu_map=0x7f040024;
-        public static final int menu_settings=0x7f040027;
-        public static final int menu_sync=0x7f040025;
+        public static final int main_view=0x7f04000f;
+        public static final int map=0x7f040021;
+        public static final int menu_help=0x7f040026;
+        public static final int menu_map=0x7f040028;
+        public static final int menu_settings=0x7f040029;
+        public static final int menu_sync=0x7f040027;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
-        public static final int oldpassword=0x7f040017;
-        public static final int oldusername=0x7f040016;
+        public static final int oldpassword=0x7f040016;
+        public static final int oldusername=0x7f040015;
         public static final int password=0x7f040009;
         public static final int satellite=0x7f040002;
         public static final int sign_in_button=0x7f04000b;
-        public static final int switchLocation=0x7f040014;
-        public static final int switchOnline=0x7f040013;
-        public static final int switchWATCHiT=0x7f040015;
+        public static final int switchLocation=0x7f040012;
+        public static final int switchOnline=0x7f040011;
+        public static final int switchWATCHiT=0x7f040013;
         public static final int terrain=0x7f040003;
-        public static final int textView1=0x7f040012;
-        public static final int textView2=0x7f04001f;
-        public static final int textViewSpaceActivity=0x7f04000d;
-        public static final int textViewUserName=0x7f04001c;
-        public static final int toggleButton1=0x7f04001e;
+        public static final int textView1=0x7f040010;
+        public static final int textView2=0x7f040023;
+        public static final int toggleButton1=0x7f040022;
         public static final int txt_your_name=0x7f04001a;
-        public static final int update_status=0x7f04000f;
-        public static final int update_status_message=0x7f040010;
+        public static final int update_status=0x7f04000d;
+        public static final int update_status_message=0x7f04000e;
         public static final int username=0x7f040008;
     }
     public static final class layout {
-        public static final int activity_login=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int activity_settings=0x7f030002;
-        public static final int activity_space=0x7f030003;
+        public static final int action_bar_layout=0x7f030000;
+        public static final int activity_login=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int activity_settings=0x7f030003;
         public static final int activity_spaces=0x7f030004;
         public static final int activity_training_procedure=0x7f030005;
         public static final int applications_settings_fragment=0x7f030006;
-        public static final int data_objects_fragment=0x7f030007;
-        public static final int dialog_login=0x7f030008;
-        public static final int fragment_create_space=0x7f030009;
-        public static final int fragment_main=0x7f03000a;
-        public static final int map_activity=0x7f03000b;
-        public static final int space_fragment=0x7f03000c;
-        public static final int space_members=0x7f03000d;
-        public static final int spacemain_fragment=0x7f03000e;
-        public static final int spaces_fragment=0x7f03000f;
-        public static final int training_procedure_resultlistfragment=0x7f030010;
-        public static final int trainingprocedure_main_fragment=0x7f030011;
+        public static final int dashboardlayout=0x7f030007;
+        public static final int data_objects_fragment=0x7f030008;
+        public static final int dialog_login=0x7f030009;
+        public static final int footer_layout=0x7f03000a;
+        public static final int fragment_create_space=0x7f03000b;
+        public static final int fragment_layout=0x7f03000c;
+        public static final int fragment_main=0x7f03000d;
+        public static final int map_activity=0x7f03000e;
+        public static final int space_fragment=0x7f03000f;
+        public static final int space_members=0x7f030010;
+        public static final int spacemain_fragment=0x7f030011;
+        public static final int spaces_fragment=0x7f030012;
+        public static final int training_procedure_resultlistfragment=0x7f030013;
+        public static final int trainingprocedure_main_fragment=0x7f030014;
     }
     public static final class menu {
         public static final int activity_login=0x7f080000;
         public static final int activity_main=0x7f080001;
         public static final int activity_map=0x7f080002;
+        public static final int activity_settings=0x7f080003;
+        public static final int activity_space=0x7f080004;
     }
     public static final class string {
         public static final int action_sign_in_register=0x7f050027;
@@ -304,7 +316,10 @@ containing a value of this type.
         public static final int title_activity_trainingprocedure=0x7f050013;
     }
     public static final class style {
+        public static final int ActionBarCompat=0x7f070002;
         public static final int AppTheme=0x7f070000;
+        public static final int DashboardButton=0x7f070003;
+        public static final int FooterBar=0x7f070004;
         public static final int LoginFormContainer=0x7f070001;
     }
     public static final class styleable {

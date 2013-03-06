@@ -57,7 +57,7 @@ public class MapActivity extends BaseActivity {
     			return true;
                 
             case R.id.menu_sync:
-            	if (MainApplication.OnlineMode) {
+            	if (app.OnlineMode) {
             		// Sync from internet
             	}
             	//showProgress("...");

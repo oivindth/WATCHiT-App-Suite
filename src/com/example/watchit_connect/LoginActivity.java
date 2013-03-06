@@ -39,6 +39,8 @@ public class LoginActivity extends Activity {
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
+	
+	private MainApplication app;
 
 	// Values for email and password at the time of the login attempt.
 	private String mUserName;
@@ -68,6 +70,7 @@ public class LoginActivity extends Activity {
 	  @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
+	        app = MainApplication.getInstance();
 	        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
 	      //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
 	      boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
@@ -280,14 +283,13 @@ public class LoginActivity extends Activity {
 	  }
 	  
 	  public void updateGlobalConnectionVariables() {
-		  MainApplication app =  (MainApplication) getApplication();
-		  MainApplication.connectionConfigurationBuilder = connectionConfigurationBuilder;
-		  MainApplication.connectionConfig = connectionConfig;
-		  MainApplication.connectionHandler = connectionHandler;
-		  MainApplication.dbName ="sdkcache";
-		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
+		  app.connectionConfigurationBuilder = connectionConfigurationBuilder;
+		  app.connectionConfig = connectionConfig;
+		  app.connectionHandler = connectionHandler;
+		  app.dbName ="sdkcache";
+		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
 	    	spaceHandler.setMode(Mode.ONLINE);
-	    	MainApplication.spaceHandler = spaceHandler;
+	    	app.spaceHandler = spaceHandler;
 		  
 	    	 app.setPassword(mPassword);
 			  app.setUserName(mUserName);

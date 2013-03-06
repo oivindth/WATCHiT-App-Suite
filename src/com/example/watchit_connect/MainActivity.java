@@ -1,5 +1,8 @@
 package com.example.watchit_connect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import parsing.Parser;
 import parsing.GenericSensorData;
 import com.example.watchit_connect.MainFragment.MainFragmentListener;
@@ -10,133 +13,197 @@ import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
+import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import asynctasks.GetDataFromSpaceTask;
+import asynctasks.GetSpacesTask;
+import asynctasks.PublishDataTask;
 
 
-public class MainActivity extends BaseActivity implements OnSpaceItemSelectedListener, MainFragmentListener  {
-	
-	TextView textViewUserName, textViewData;
-	View myTestView;
-	MainFragment fragmentMain;
-	DataObjectListener myListener;
-	SpaceHandler spaceHandler;
-	 DataHandler dataHandler;
+public class MainActivity extends BaseActivity  {
+
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.dashboardlayout);
         getActionBar().setDisplayHomeAsUpEnabled(false);
+        // new GetSpacesTask().execute();
+        /**
+         * Creating all buttons instances
+         * */
+        // Dashboard News feed button
+        Button buttonEvent = (Button) findViewById(R.id.btn_event);
+ 
+        // Dashboard Friends button
+        Button buttonSetUp = (Button) findViewById(R.id.btn_setup);
+ 
+        // Dashboard Messages button
+        Button buttonMap = (Button) findViewById(R.id.btn_map);
+ 
+        // Dashboard Places button
+        Button buttonTP = (Button) findViewById(R.id.btn_tp);
+ 
+        // Dashboard Events button
+        Button buttonShare = (Button) findViewById(R.id.btn_share);
+ 
+        // Dashboard Photos button
+        Button buttonProfile = (Button) findViewById(R.id.btn_profile);
         
-        //TODO: Where to put this listener.
-   	    myListener = new DataObjectListener() {
-    	 // implement this interface in a controller class of your application
-   
-		@Override
-		public void handleDataObject(
-				de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
-				showToast("New object receieved in space");
-			 String objectId = dataObject.getId();
-			 //Log.d("HandleDataObjet", dataObject.getCDMData().)
-			 
-			 showAlert("new data published");
-			 Log.d("HandleDataObject", dataObject.toString());
-			 GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
-			 Toast.makeText(getBaseContext(), "Receieved dataobject from space: " + objectId, Toast.LENGTH_SHORT).show();
-	    	 System.out.println("Received object " + objectId + " from space " + spaceId);
-	    	 Toast.makeText(getBaseContext(), "Data: Location:  + longitude" + data.getLocation().getLongitude() + " latitude: " + data.getLocation().getLatitude()+ 
-	    			 "Type: " + data.getValue().getType() + " unit: " + data.getValue().getUnit() + " value: " + data.getValue(), Toast.LENGTH_LONG).show();
-		}
-    	 };
-
-        dataHandler = new DataHandler(MainApplication.connectionHandler, MainApplication.spaceHandler);
-        dataHandler.setMode(Mode.ONLINE);
-   	 	dataHandler.addDataObjectListener(myListener);
-
-    	fragmentMain = new MainFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragmentMain,"main").commit(); 
-
+        //DashBoard mirror text view
+        TextView textview = (TextView) findViewById(R.id.footerTextView);
+        
+        textview.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showToast("Open webview to view web page here...?");
+				
+			}
+		});
+        
+ 
+        /**
+         * Handling all button click events
+         * */
+        buttonEvent.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), SpaceActivity.class);
+                startActivity(i);
+            }
+        });
+ 
+        buttonSetUp.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+ 
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+                Intent i = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(i);
+            }
+        });
+ 
+        buttonTP.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+            	showToast("Not yet implemented.");
+                // Launching News Feed Screen
+                //Intent i = new Intent(getApplicationContext(), );
+                //startActivity(i);
+            }
+        });
+ 
+        // Listening to Events button click
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+            	showToast("Placeholder for somethting else");
+                // Launching News Feed Screen
+                //Intent i = new Intent(getApplicationContext(), EventsActivity.class);
+                //startActivity(i);
+            }
+        });
+ 
+        // Listening to Photos button click
+        buttonProfile.setOnClickListener(new View.OnClickListener() {
+ 
+            @Override
+            public void onClick(View view) {
+                // Launching News Feed Screen
+            	showToast("Profile with badges?");
+                //Intent i = new Intent(getApplicationContext(), PhotosActivity.class);
+                //startActivity(i);
+            }
+        });
     }
+        
+        
+        
+    
+    
+	
+	
     
     @Override
     public void onResume() {
     	super.onResume();
-    	
-    	//int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-    	//if (statusCode == ConnectionResult.SUCCESS) {
-    		//continue
-    	//} else {
-    		//Intent intent = new Intent();
-    		//GooglePlayServicesUtil.get
-    		//GooglePlayServicesUtil.getErrorDialog(statusCode, this, );
-    	//}
-    	
-    	MainFragment mainfragment = (MainFragment)  getSupportFragmentManager().findFragmentByTag("main");
-    	textViewUserName = (TextView) mainfragment.getView().findViewById(R.id.textViewUserName);
-        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-        System.out.println("uname " +  settings.getString("username", ""));
-        textViewUserName.setText(settings.getString("username", ""));
-        
-        mainfragment.update(settings.getString("username", ""));   
     }
     
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	super.onOptionsItemSelected(item);
+        Intent intent;
     	switch (item.getItemId()) {
     	
     		case android.R.id.home:
     			// iff up instead of back:
-                //intent = new Intent(this, MainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //startActivity(intent);
-                //finish();
+              //  intent = new Intent(this, MainActivity.class);
+               // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               // startActivity(intent);
+    			
+    			//just back use only finish():
+               // finish();
                 return true;
     	
-    		
+            case R.id.menu_sync:
+            	new GetSpacesTask(this).execute();
+            	app.dataHandler.setMode(Mode.ONLINE);
+            	app.dataHandler.addDataObjectListener(myListener);
+            	new GetDataFromSpaceTask(this ,"team#38").execute();
+            	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
+            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + app.connectionHandler.getConfiguration().getDomain());
+            	Log.d("BASEACTIVITY", dob.toString());
+            	new PublishDataTask(this, dob, "team#38").execute();
+            	  
+            	//showProgress("...", "zz");
+            	return true;
+      
+            
+         
+
             	
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-       
-	@Override
-	public void onSpaceItemSelected(int position) {
-		
-		Space space = app.spaces.get(position);
-		new GetDataFromSpaceTask(this, space.getId()).execute();
-        DataObjectsFragment dataObjectsFragment = new DataObjectsFragment();
-        //int members = space.getMembers().size();
-        Bundle b = new Bundle();
-        b.putInt("pos", position);
-        dataObjectsFragment.setArguments(b);  
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, dataObjectsFragment, "dataobjects");
-        transaction.addToBackStack("main");
-        transaction.commit();
-	}
 	
+    }
+
+       
 
 	
-	public void dataToWATCHiTOnClick(View view) {
-		//Send data as a String
-	    Bundle b = new Bundle();
-	    GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) MainApplication.dataObjects.get(MainApplication.dataObjects.size()-1));
-	    b.putString("watchitdata", data.getValue().getText());
-	    Message message = Message.obtain(null, LocalService.MSG_SET_STRING_VALUE);
-	    message.setData(b);
-	    sendMessageToService(message);
-	}
+
+
 
 }

@@ -5,10 +5,6 @@ import com.example.watchit_connect.MainApplication;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import android.os.AsyncTask;
 
-/**
- * Represents an asynchronous login task used to authenticate
- * the user.
- */
 public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 
 	
@@ -32,7 +28,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
         connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
         */
       try {
-    	  MainApplication.connectionHandler.connect();
+    	  MainApplication.getInstance().connectionHandler.connect();
       } catch (ConnectionStatusException e) {
     	  e.printStackTrace();
     	  return false;

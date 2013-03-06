@@ -9,15 +9,10 @@ import org.simpleframework.xml.core.Persister;
 
 import android.util.Log;
 
-import com.example.watchit_connect.MainApplication;
-
-import de.imc.mirror.sdk.Space.Type;
 import de.imc.mirror.sdk.android.CDMData;
 import de.imc.mirror.sdk.android.CDMDataBuilder;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.DataObjectBuilder;
-import de.imc.mirror.sdk.android.xml.Model;
-import de.imc.mirror.sdk.android.xml.Models;
 import de.imc.mirror.sdk.cdm.CDMVersion;
 import enums.ValueType;
 
@@ -35,12 +30,21 @@ public class Parser {
 		return DeSerialize(xml);
 	}
 	
+	/**
+	 * Build a simplexml object with data receieved from watchit and location from phone
+	 * @param watchitData
+	 * @param latitude
+	 * @param longitude
+	 * @return
+	 */
 	public static GenericSensorData buildSimpleXMLObject(String watchitData, String latitude, String longitude ) {
 		
 		//TODO: parse watchit string
 		
 		GenericSensorData genericSensorData = new GenericSensorData(new Location(latitude, longitude), 
-				new Value("text:", "unit", watchitData));
+				new Value("note", "", watchitData));
+		
+		Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		
 		return genericSensorData;
 	}

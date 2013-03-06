@@ -170,7 +170,7 @@ public class LocalService extends AbstractService {
 	    	//checkBTState();
 	    	Log.d("TAG", "...onResume - try connect...");
 
-	    	BluetoothDevice device = MainApplication.bluetoothDevices.get(pos);
+	    	BluetoothDevice device = MainApplication.getInstance().bluetoothDevices.get(pos);
 	    	
 	
 	    	// Two things are needed to make a connection:

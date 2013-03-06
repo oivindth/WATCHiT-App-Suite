@@ -15,8 +15,7 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 		}
 		protected Boolean doInBackground(Void...params) {
 			try {
-					MainApplication.spaces = MainApplication.spaceHandler.getAllSpaces();
-		  Log.d("getspacestask", "size of spaces " + MainApplication.spaces.size());
+					MainApplication.getInstance().spacesInHandler = MainApplication.getInstance().spaceHandler.getAllSpaces();
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -26,8 +25,9 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 
 		protected void onPostExecute(final Boolean success) {
 			if (success) {
+				Log.d("GETSPACESTASK", "successfully fetched spaces");
 			} else {
-				mActivity.showToast("Somethying went wrong when trying to fetch spaces..");
+				Log.d("GETSPACESTASK", "Something went terribly wrong when trying to get spaces." );
 			}
 		}
     

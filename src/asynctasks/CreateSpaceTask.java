@@ -41,12 +41,12 @@ public class CreateSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				 //String bobsJID = "bob" + "@" + MainApplication.connectionHandler.getConfiguration().getDomain();
 				 //spaceConfig.addMember(new SpaceMember(bobsJID, SpaceMember.Role.MEMBER));
 				 for (String name : mUserNames) {
-					 String JID = name + "@" + MainApplication.connectionHandler.getConfiguration().getDomain();
+					 String JID = name + "@" + MainApplication.getInstance().connectionHandler.getConfiguration().getDomain();
 					 spaceConfig.addMember(new SpaceMember(JID, SpaceMember.Role.MEMBER));
 				}
 
 				 try {
-				 MainApplication.spaceHandler.createSpace(spaceConfig);
+				 MainApplication.getInstance().spaceHandler.createSpace(spaceConfig);
 				 } catch (SpaceManagementException e) {
 					 e.printStackTrace();
 				  return false;

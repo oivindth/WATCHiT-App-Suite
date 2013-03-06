@@ -65,8 +65,8 @@ public class MainFragment extends Fragment {
 	
 	
 	public void update(String msg) {
-		TextView view = (TextView) this.getView().findViewById(R.id.textViewUserName);
-		view.setText(msg);
+		//TextView view = (TextView) this.getView().findViewById(R.id.textViewUserName);
+		//view.setText(msg);
 	}
 	
 

@@ -25,19 +25,23 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
+/**
+ * 
+ * Deprecated. Use SpaceActivity instead.
+ * @author oivindth
+ *
+ */
 public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedListener, OnSpaceInfoSelectedListener{
 
 	private List<Space> spaces;
 	private View updateStatusView, mainView;
 	private List<String> spacesNames;
 	private Space space;
-	private MainApplication app;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spaces);
-        app =  (MainApplication) getApplication();
         
         updateStatusView = findViewById(R.id.update_status);
         mainView = findViewById(R.id.main_view);
@@ -52,9 +56,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     @Override
     public void onResume() {
     	super.onResume();
-    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), MainApplication.connectionHandler, MainApplication.dbName);
+    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
     	spaceHandler.setMode(Mode.ONLINE);
-    	MainApplication.spaceHandler = spaceHandler;
+    	app.spaceHandler = spaceHandler;
   
 			
     		spaces = spaceHandler.getAllSpaces();

@@ -35,7 +35,7 @@ OnSpaceItemSelectedListener mListener;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-		app =  (MainApplication) getActivity().getApplication();
+		app = MainApplication.getInstance();
         return inflater.inflate(R.layout.data_objects_fragment, container, false);
     }
 	
@@ -43,12 +43,12 @@ OnSpaceItemSelectedListener mListener;
 	public void onResume() {
 		super.onResume();
 
-		Log.d("Fragment dataobjects", "sice of data: " + MainApplication.dataObjects.size());
+		Log.d("Fragment dataobjects", "sice of data: " + MainApplication.getInstance().dataObjects.size());
 	    List<String> dataAdapter = new ArrayList<String> ();
 		
 	    List<GenericSensorData> simplexmlobjects = new ArrayList<GenericSensorData>();
 	    
-	    for (de.imc.mirror.sdk.DataObject data : MainApplication.dataObjects) { //TODO: do in activity and add pbjects to app globals.
+	    for (de.imc.mirror.sdk.DataObject data : MainApplication.getInstance().dataObjects) { //TODO: do in activity and add pbjects to app globals.
 			simplexmlobjects.add( Parser.buildSimpleXMLObject((DataObject) data));
 		}
 	    for (GenericSensorData genericSensorData : simplexmlobjects) {

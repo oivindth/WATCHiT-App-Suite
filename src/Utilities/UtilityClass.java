@@ -6,7 +6,6 @@ import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 
 public class UtilityClass {

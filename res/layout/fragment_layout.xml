@@ -1,0 +1,50 @@
+<!-- Your package folder -->
+<com.example.watchit_connect.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:background="@android:color/background_dark" >
+    <!--  News Feed Button -->
+    <Button
+        android:id="@+id/btn_event"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_social_group"
+        android:text="Event" />
+ 
+    <!--  Friends Button -->
+    <Button
+        android:id="@+id/btn_setup"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_action_settings"
+        android:text="Set up" />
+ 
+    <!--  Messages Button -->
+    <Button
+        android:id="@+id/btn_map"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_location_map"
+        android:text="Map" />
+ 
+    <!--  Places Button -->
+    <Button
+        android:id="@+id/btn_tp"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_hardware_gamepad"
+        android:text="T.P." />
+ 
+    <!--  Events Button -->
+    <Button
+        android:id="@+id/btn_share"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_social_share"
+        android:text="Share" />
+ 
+    <!--  Photos Button -->
+    <Button
+        android:id="@+id/btn_profile"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/ic_social_person"
+        android:text="Profile" />
+ 
+</com.example.watchit_connect.DashboardLayout>
