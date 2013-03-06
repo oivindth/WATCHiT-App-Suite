@@ -5,6 +5,8 @@ import java.util.List;
 
 import parsing.Parser;
 import parsing.GenericSensorData;
+import service.ServiceManager;
+
 import com.example.watchit_connect.MainFragment.MainFragmentListener;
 import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
 import de.imc.mirror.sdk.DataObjectListener;
@@ -14,10 +16,18 @@ import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
+import Utilities.UtilityClass;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
@@ -33,13 +43,47 @@ import asynctasks.PublishDataTask;
 
 public class MainActivity extends BaseActivity  {
 
-
+    private View mDashboardFormView;
+	private View mDashboardStatusView;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboardlayout);
         getActionBar().setDisplayHomeAsUpEnabled(false);
+        
+        // Create a service and handle incoming messages
+        app.service = new ServiceManager(this, LocalService.class, new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            // Receive message from service
+            switch (msg.what) {
+            case LocalService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
+          	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
+          	  dismissProgress();
+              break;
+              case LocalService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
+            	  String data = msg.getData().getString("watchitdata");
+                  //textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
+                  Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
+                  //GenericSensorData gsd = Parser.buildSimpleXMLObject(data, latitude, longitude);
+              	String jid = app.getUserName() + "@" + app.connectionHandler.getConfiguration().getDomain(); 
+                  //dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
+                  //new CreateSpaceTask().execute();
+                  //new PublishDataTask().execute(dataObject);
+              	Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
+                  break;
+              default:
+                super.handleMessage(msg);
+            } 
+          }
+        });
+        
+        
+    
+        mDashboardFormView = findViewById(R.id.dashboard_main);
+		mDashboardStatusView = findViewById(R.id.dashboard_status);
+        
         // new GetSpacesTask().execute();
         /**
          * Creating all buttons instances
@@ -146,14 +190,13 @@ public class MainActivity extends BaseActivity  {
         
         
         
-    
-    
-	
-	
-    
     @Override
     public void onResume() {
     	super.onResume();
+    	
+    
+    	
+	
     }
     
     
@@ -178,6 +221,11 @@ public class MainActivity extends BaseActivity  {
                 return true;
     	
             case R.id.menu_sync:
+            	//showProgress(true);
+            	if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
+            		app.spaceHandler.setMode(Mode.ONLINE);
+            		app.dataHandler.setMode(Mode.ONLINE);
+            	}
             	new GetSpacesTask(this).execute();
             	app.dataHandler.setMode(Mode.ONLINE);
             	app.dataHandler.addDataObjectListener(myListener);
@@ -186,8 +234,14 @@ public class MainActivity extends BaseActivity  {
             			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + app.connectionHandler.getConfiguration().getDomain());
             	Log.d("BASEACTIVITY", dob.toString());
             	new PublishDataTask(this, dob, "team#38").execute();
-            	  
-            	//showProgress("...", "zz");
+            	
+            	PublishDataTask dataTask = new PublishDataTask(this, dob, "team#38");
+            	dataTask.execute();
+            	
+            	
+            	
+            	
+            	//showProgress(false);
             	return true;
       
             
@@ -201,7 +255,50 @@ public class MainActivity extends BaseActivity  {
     }
 
        
+    /**
+	 * Shows the progress UI and hides the login form.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
 
+			mDashboardStatusView.setVisibility(View.VISIBLE);
+			mDashboardStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mDashboardStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
+						}
+					});
+
+			mDashboardFormView.setVisibility(View.VISIBLE);
+			mDashboardFormView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mDashboardFormView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mDashboardStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mDashboardFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
+	}
+	
+
+	
+	
 	
 
 

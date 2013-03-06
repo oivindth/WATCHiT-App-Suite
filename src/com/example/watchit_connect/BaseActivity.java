@@ -11,13 +11,19 @@ import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
+import Utilities.UtilityClass;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +34,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
@@ -42,7 +49,7 @@ public abstract class BaseActivity extends FragmentActivity {
 	
 	private ProgressDialog mProgressDialog;
 	protected MainApplication app;
-	protected ServiceManager service;
+	
 	String latitude = "123.33411"; //TODO: Get real data instead of mock.
 	String longitude = "32342343.2"; //TODO: Get real data from ze phone instead of ze mock.
 	protected BluetoothAdapter btAdapter;
@@ -83,35 +90,49 @@ public abstract class BaseActivity extends FragmentActivity {
 	       	 };
 	        
 	       	app.dataHandler.addDataObjectListener(myListener);
-	       	app.dataHandler.setMode(Mode.ONLINE);
-	        // Create a service and handle incoming messages
-	        this.service = new ServiceManager(this, LocalService.class, new Handler() {
-	          @Override
-	          public void handleMessage(Message msg) {
-	            // Receive message from service
-	            switch (msg.what) {
-	            case LocalService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
-	          	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
-	          	  //dismissProgress();
-	              break;
-	              case LocalService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
-	            	  String data = msg.getData().getString("watchitdata");
-	                  //textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
-	                  Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
-	                  //GenericSensorData gsd = Parser.buildSimpleXMLObject(data, latitude, longitude);
-	              	String jid = app.getUserName() + "@" + app.connectionHandler.getConfiguration().getDomain(); 
-	                  //dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
-	                  //new CreateSpaceTask().execute();
-	                  //new PublishDataTask().execute(dataObject);
-	              	Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
-	                  break;
-	              default:
-	                super.handleMessage(msg);
-	            } 
-	          }
-	        });
+	       	
+	
+	       
+
 	   
 	    }
+		
+		@Override
+		public void onResume () {
+			super.onResume();
+
+			
+			// Register the BroadcastReceiver
+	    	IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+	    	//mReceiver.
+		}
+		//TODO: I MAin istedenforher . 
+		
+		/**
+		 * Global Broadcast receiever. Listen for change in internet connectivity status.
+		 */
+		private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		    public void onReceive(Context context, Intent intent) {
+		        String action = intent.getAction();
+		        // When discovery finds a device
+		        if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
+		        	
+		        	boolean noConnectivity = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+		            String reason = intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
+		            boolean isFailover = intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
+		            showToast("reason" + reason);
+		            if (noConnectivity) Log.d("BREC.", "no connectivity");
+		            if (isFailover) Log.d("REC", "FAILOVER");
+		            
+		            NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+		            NetworkInfo otherNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO);
+		                       
+		            // do application-specific task(s) based on the current network state, such 
+		            // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
+		        }
+		    };
+		
+		};
 		
 		protected void enableSettings (String settingId) {
 		    Intent settingsIntent = new Intent(settingId);
@@ -120,21 +141,7 @@ public abstract class BaseActivity extends FragmentActivity {
 		
    
     
-	/**
-	 * Send message to Service. Return false if it fails to send.
-	 * @param message
-	 * @return
-	 */
-	protected boolean sendMessageToService(Message message) {
-        try {
-			service.send(message);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			return false;
-		}
-        return true;
-		
-	}
+
     
     public void showToast(String msg ) {
     	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -170,12 +177,12 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
       super.onDestroy();
-   
-      try { service.unbind(); }
-      catch (Throwable t) {
-    	  t.printStackTrace();
-      }
+
+  		
+  		//unregisterReceiver(mReceiver);
     }
+      
+
     
     
 	

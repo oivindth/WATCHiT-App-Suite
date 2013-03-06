@@ -3,6 +3,8 @@ package com.example.watchit_connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import service.ServiceManager;
+
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
@@ -13,6 +15,8 @@ import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
+import android.os.Message;
+import android.os.RemoteException;
 
 /**
  * Application object. Used as a pool for global variables and dataobjects to simplify passing them between activities and services.
@@ -29,6 +33,12 @@ public class MainApplication extends Application {
     public static MainApplication getInstance() {
       return sInstance;
     }
+    
+    
+    public ServiceManager service;
+    
+    
+    
     @Override
     public void onCreate() {
       super.onCreate();  
@@ -120,7 +130,34 @@ public class MainApplication extends Application {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	/**
+	 * Send message to Service. Return false if it fails to send.
+	 * @param message
+	 * @return
+	 */
+	public boolean sendMessageToService(Message message) {
+        try {
+			service.send(message);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return false;
+		}
+        return true;
+		
+	}
 	
+	
+	/*
+	   @Override
+	    protected void onDestroy() {
+	      super.onDestroy();
+	  		      
+	      try { service.unbind(); }
+	      catch (Throwable t) {
+	    	  t.printStackTrace();
+	      }
+	    }
+	*/
 	
 
 

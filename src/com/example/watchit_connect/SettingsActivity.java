@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -168,7 +169,12 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 						b.putString("btDevice", deviceAdress);
 						b.putInt("btdevicepos", which);
 						message.setData(b);
-						sendMessageToService(message);
+						try {
+							app.service.send(message);
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
 					}
 				});
 				// Create the AlertDialog
@@ -229,7 +235,8 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 				app.isWATChiTOn = false;
 				return;
 			} else {
-				service.start();
+				app.service.start();
+				//service.start();
 				app.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
     			// If there are paired devices
@@ -252,7 +259,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
         		   builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
    					@Override
    					public void onClick(DialogInterface dialog, int which) {
-   						
+   						//showProgress("WATCHiT", "waiting for ack from WATCHiT");
    						deviceAdress = devices.get(which).getAddress();
    						Log.d("shiiiiit", devices.get(which).getAddress());
    						Message message = Message.obtain(null, LocalService.MSG_DEVICE_NAME);
@@ -260,7 +267,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
    						b.putString("btDevice", deviceAdress);
    						b.putInt("btdevicepos", which);
    						message.setData(b);
-   						sendMessageToService(message);
+   						app.sendMessageToService(message);
    					}
    				});
         		
@@ -290,7 +297,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		}
 			
 		if (!on) {
-			if (service.isRunning()) service.stop();
+			if (app.service.isRunning()) app.service.stop();
 			showToast("Stopped WATCHiT sync...");
 			app.isWATChiTOn= false;
 		}

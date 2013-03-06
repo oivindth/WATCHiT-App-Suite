@@ -259,7 +259,7 @@ public class LocalService extends AbstractService {
 		        }
 		      
 		        public void run() {
-		        	Looper.prepare();
+		        	//Looper.prepare();
 		        	
 		   
 		        	Log.d("THREAD", "inside run" );

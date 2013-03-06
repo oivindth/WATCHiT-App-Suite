@@ -8,6 +8,7 @@ import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
+import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -74,7 +75,21 @@ public class LoginActivity extends Activity {
 	        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
 	      //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
 	      boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
-	      //if(hasLoggedIn) startMainActivity();
+	      if(hasLoggedIn) {
+	    	  
+	    	  String username = settings.getString("username", "");
+	    	  String password = settings.getString("password", "");
+	    	  //Configure connection
+				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
+		        connectionConfigurationBuilder.setHost(getString(R.string.host));
+		        connectionConfig = connectionConfigurationBuilder.build();
+		        connectionHandler = new ConnectionHandler(username, password, connectionConfig);
+			
+		        updateGlobalConnectionVariables();
+	    	  startMainActivity();
+	      }
+	    	  
+	    	 
 	  
 	      setContentView(R.layout.activity_login);
 	      
@@ -288,7 +303,14 @@ public class LoginActivity extends Activity {
 		  app.connectionHandler = connectionHandler;
 		  app.dbName ="sdkcache";
 		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
-	    	spaceHandler.setMode(Mode.ONLINE);
+		  if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
+			  spaceHandler.setMode(Mode.ONLINE);
+		  } else {
+			  spaceHandler.setMode(Mode.OFFLINE);
+		  }
+		  
+
+	    	
 	    	app.spaceHandler = spaceHandler;
 		  
 	    	 app.setPassword(mPassword);

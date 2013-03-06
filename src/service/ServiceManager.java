@@ -89,6 +89,13 @@ public class ServiceManager {
     }
     
     /**
+     * Use with caution??
+     */
+    public void bind() {
+    	if (!mIsBound) doBindService();
+    }
+    
+    /**
      * Use with caution (only in Activity.onDestroy())! 
      */
     public void unbind() {
