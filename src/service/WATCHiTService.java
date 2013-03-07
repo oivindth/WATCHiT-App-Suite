@@ -42,9 +42,9 @@ public class WATCHiTService extends AbstractService {
 
 	final int RECIEVE_MESSAGE = 1;        // Status  for Handler
 	private BluetoothAdapter btAdapter = null;
-	private StringBuilder sb = new StringBuilder();
+
+	StringBuilder sb = new StringBuilder();
 	private ConnectedThread mConnectedThread;
-	private Handler h;
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
 	private String deviceAdress;
 
@@ -64,46 +64,9 @@ public class WATCHiTService extends AbstractService {
 	public void onStartService() {
 		Log.i("WATCHiTService", "We are now in service");
 		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
 		// Display a notification about us starting.  We put an icon in the status bar.
 		showNotification();
-
-		
-		
-		//TODO: Possible solution to missing bytes bug is that the handler is leaking?
-		h = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-				Log.d("LocalService", "Message in handler: " + msg.what);
-				switch (msg.what) {
-				case RECIEVE_MESSAGE:                                                   // if receive massage
-					byte[] readBuf = (byte[]) msg.obj;
-					String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
-					sb.append(strIncom); 
-					//textView.setText(sb.toString());
-					//sb.delete(0, sb.length());
-					int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
-					if (endOfLineIndex > 0) {                                            // if end-of-line,
-						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
-						sb.delete(0, sb.length());  //clear
-
-						//Send data to Activity
-						Bundle b = new Bundle();
-						b.putString("watchitdata", sbprint);
-						Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
-						messageToActivity.setData(b);
-						send(messageToActivity);
-
-					}
-					Log.d("Handler in Service: ", "receieved data from bluetooth:...:  " + sb.toString() +  "  Byte :" + msg.arg1 + "...");
-					break;
-
-				}
-			};
-		};
-
-
 	}
-
 
 	@Override
 	public void onStopService() {
@@ -178,9 +141,6 @@ public class WATCHiTService extends AbstractService {
 		}
 	}
 
-
-
-
 	/**
 	 *  Call this from the main activity to shutdown the connection 
 	 *  
@@ -201,6 +161,7 @@ public class WATCHiTService extends AbstractService {
 		private final InputStream mmInStream;
 		private final OutputStream mmOutStream;
 
+		
 		public ConnectedThread(BluetoothSocket socket) {
 			Log.d("ConnectTHREAD", "In thread");
 			mmSocket = socket;
@@ -216,7 +177,7 @@ public class WATCHiTService extends AbstractService {
 			mmInStream = tmpIn;
 			mmOutStream = tmpOut;
 		}
-
+		
 		public void run() {
 
 			byte[] buffer = new byte[1024];  // buffer store for the stream
@@ -229,8 +190,28 @@ public class WATCHiTService extends AbstractService {
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-					h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
+					//h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
 					Log.d("Service.Thread.Run(): ", " bytes:  " + bytes);
+					
+					String strIncom = new String(buffer, 0, bytes);                 // create string from bytes array
+					sb.append(strIncom); 
+					//textView.setText(sb.toString());
+					//sb.delete(0, sb.length());
+					int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+					if (endOfLineIndex > 0) {                                            // if end-of-line,
+						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
+						sb.delete(0, sb.length());  //clear
+						Log.d("low level:  ", sbprint);
+						
+						//Send data to Activity
+						Bundle b = new Bundle();
+						b.putString("watchitdata", sbprint);
+						Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
+						messageToActivity.setData(b);
+						send(messageToActivity);
+
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 					Log.d("thread RUN", "error:  " + e);
@@ -238,8 +219,6 @@ public class WATCHiTService extends AbstractService {
 				}
 			}
 		}
-
-
 		/**
 		 *  Send data to WATChiT
 		 **/
@@ -253,7 +232,6 @@ public class WATCHiTService extends AbstractService {
 			}
 		}
 
-
 		/** Shut down thread *
 		 * */
 		public void cancel() {
@@ -262,7 +240,6 @@ public class WATCHiTService extends AbstractService {
 			} catch (IOException e) { }
 		} 
 	}
-
 
 	/**
 	 * Show a notification while this service is running.
