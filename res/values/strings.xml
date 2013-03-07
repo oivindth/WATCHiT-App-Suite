@@ -1,12 +1,20 @@
 <resources>
 
+    <!-- Main Strings -->
+    
     <string name="app_name">WATCHiT Reflection App</string>
     <string name="title_activity_main">DashBoard</string>
-    <string name ="title_activity_trainingprocedure">Training Procedure </string>
+    <string name ="title_activity_settings">Set up </string>
+    <string name ="title_activity_map">Map</string>
+    <string name= "title_activity_event">Events</string>
     
-   <string name="local_service_started"> Service started. Now waiting for data from WATCHiT </string>
-   <string name="local_service_stopped"> Service stopped. No longer communicating with WATCHiT..</string>
-    
+   <string name="watchit_service_started"> WATCHiT connected and running. </string>
+   <string name="watchit_service_stopped"> WATCHiT no longer connected.</string>
+   
+   <string name="server_sync"> Syncing with server.. </string>
+   
+   
+   <!-- Menu strings -->
     <string name="menu_settings">Settings</string>
     <string name="menu_spaces">Spaces</string>
     <string name="menu_sync">Synchronization</string>
@@ -14,18 +22,17 @@
     <string name="menu_home">Home</string>
     <string name="menu_map">Map</string>
     <string name="menu_dashboard">Dashboard</string>
-    
-    <string name ="buttonSharedSpaces">Shared Spaces</string>
-    <string name ="buttonPrivateSpace">Private Space</string>
-    <string name ="buttonSpaces">Spaces</string>
-    
+    <string name="menu_logout">Switch User</string>
+
     <string name= "cancel">Cancel</string>
     
     
+    <!-- App configurations: -->
     <string name="host">129.241.103.122</string>
     <string name="port">5222</string>
     <string name="domain">mirror-server-ntnu</string>
     <string name="application_id">watchIt_Reflection_App</string>
+    <string name ="sdkcache">sdkcache</string>
     
 
 

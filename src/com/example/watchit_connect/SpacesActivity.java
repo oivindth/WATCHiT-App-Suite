@@ -56,9 +56,9 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
     @Override
     public void onResume() {
     	super.onResume();
-    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
+    	SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), sApp.connectionHandler, sApp.dbName);
     	spaceHandler.setMode(Mode.ONLINE);
-    	app.spaceHandler = spaceHandler;
+    	sApp.spaceHandler = spaceHandler;
   
 			
     		spaces = spaceHandler.getAllSpaces();
@@ -100,8 +100,8 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 		protected Boolean doInBackground(Void...params) {
 			
 		      try {
-		    	  if (app.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-		    		  app.connectionHandler.connect();
+		    	  if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
+		    		  sApp.connectionHandler.connect();
 		    	  
 		      } catch (ConnectionStatusException e) {
 		    	  e.printStackTrace();
@@ -149,15 +149,15 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
 		@Override
 		protected Boolean doInBackground(Void...params) {
 	      try {
-	    	  if (app.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
-	    		  app.connectionHandler.connect();
+	    	  if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) 
+	    		  sApp.connectionHandler.connect();
 	    	  
 	      } catch (ConnectionStatusException e) {
 	    	  e.printStackTrace();
 	    	  Toast.makeText(getBaseContext(), "Could not make a connection. Is wifi or 3g turned on?", Toast.LENGTH_SHORT).show();
 	    	  return false;
 	      }
-			spaces = app.spaceHandler.getAllSpaces();
+			spaces = sApp.spaceHandler.getAllSpaces();
 		    spacesNames = new ArrayList<String> ();
 			for (Space space : spaces) {
 				spacesNames.add(space.getId());
@@ -215,10 +215,10 @@ public class SpacesActivity extends BaseActivity implements OnSpaceItemSelectedL
  	 * @return Space
  	 */
  	private Space createPrivateSpace() {
- 	    Space myPrivateSpace = app.spaceHandler.getDefaultSpace();
+ 	    Space myPrivateSpace = sApp.spaceHandler.getDefaultSpace();
  	    if (myPrivateSpace == null) {
  	      try {
- 	        myPrivateSpace = app.spaceHandler.createDefaultSpace();
+ 	        myPrivateSpace = sApp.spaceHandler.createDefaultSpace();
  	      } catch (SpaceManagementException e) {
  	    	  e.printStackTrace();
  	    	  Toast.makeText(getBaseContext(), "Failed to create space... ", Toast.LENGTH_SHORT).show();

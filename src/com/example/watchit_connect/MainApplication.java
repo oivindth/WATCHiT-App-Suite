@@ -18,6 +18,7 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.os.RemoteException;
 
+
 /**
  * Application object. Used as a pool for global variables and dataobjects to simplify passing them between activities and services.
  * Implemented as singleton.
@@ -34,10 +35,7 @@ public class MainApplication extends Application {
       return sInstance;
     }
     
-    
     public ServiceManager service;
-    
-    
     
     @Override
     public void onCreate() {
@@ -57,15 +55,19 @@ public class MainApplication extends Application {
 	
 	public List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 	
+	/**
+	 * Handlers used for MIRROR Spaces.
+	 */
 	public ConnectionConfigurationBuilder connectionConfigurationBuilder; 
 	public ConnectionConfiguration connectionConfig; 
-	
 	public ConnectionHandler connectionHandler; 
 	public SpaceHandler spaceHandler; 
-	public String dbName = "sdkcache"; //TODO: put in resources string
+	public String dbName = "sdkcache"; 
+	public DataHandler dataHandler;
+	
 	public List<Space> spacesInHandler = new ArrayList<Space>();
 	public List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
-	public DataHandler dataHandler;
+	
 	public Space currentActiveSpace;
 	
 	private String userName;
@@ -93,11 +95,6 @@ public class MainApplication extends Application {
 	public void setApplicationMode (Mode mode) {
 		spaceHandler.setMode(mode);
 		dataHandler.setMode(mode);
-
-		
-		if (OnlineMode) {
-			//TODO: do something
-		}
 		
 		if (mode == Mode.ONLINE) {
 		// If we need to do more than update the handlers.

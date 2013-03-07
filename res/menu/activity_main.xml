@@ -7,5 +7,10 @@
         android:icon="@drawable/ic_navigation_refresh"
         android:showAsAction="ifRoom|withText" />
     
+    <item android:id="@+id/menu_logout"
+        android:title="@string/menu_logout"
+        android:showAsAction="never" />
+        
+    
     
 </menu>

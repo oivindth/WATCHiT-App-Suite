@@ -1,34 +1,19 @@
 package com.example.watchit_connect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import parsing.Parser;
-import parsing.GenericSensorData;
 import service.ServiceManager;
 
-import com.example.watchit_connect.MainFragment.MainFragmentListener;
-import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
-import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.RemoteException;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,21 +38,21 @@ public class MainActivity extends BaseActivity  {
         getActionBar().setDisplayHomeAsUpEnabled(false);
         
         // Create a service and handle incoming messages
-        app.service = new ServiceManager(this, LocalService.class, new Handler() {
+        sApp.service = new ServiceManager(this, WATCHiTService.class, new Handler() {
           @Override
           public void handleMessage(Message msg) {
             // Receive message from service
             switch (msg.what) {
-            case LocalService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
+            case WATCHiTService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
           	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
           	  dismissProgress();
               break;
-              case LocalService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
+              case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
             	  String data = msg.getData().getString("watchitdata");
                   //textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
                   Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
                   //GenericSensorData gsd = Parser.buildSimpleXMLObject(data, latitude, longitude);
-              	String jid = app.getUserName() + "@" + app.connectionHandler.getConfiguration().getDomain(); 
+              	String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
                   //dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
                   //new CreateSpaceTask().execute();
                   //new PublishDataTask().execute(dataObject);
@@ -113,8 +98,6 @@ public class MainActivity extends BaseActivity  {
 			
 			@Override
 			public void onClick(View v) {
-				showToast("Open webview to view web page here...?");
-				
 			}
 		});
         
@@ -187,16 +170,10 @@ public class MainActivity extends BaseActivity  {
             }
         });
     }
-        
-        
-        
+          
     @Override
     public void onResume() {
     	super.onResume();
-    	
-    
-    	
-	
     }
     
     
@@ -222,39 +199,28 @@ public class MainActivity extends BaseActivity  {
     	
             case R.id.menu_sync:
             	//showProgress(true);
+            	//TODO: Not here
             	if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
-            		app.spaceHandler.setMode(Mode.ONLINE);
-            		app.dataHandler.setMode(Mode.ONLINE);
+            		sApp.spaceHandler.setMode(Mode.ONLINE);
+            		sApp.dataHandler.setMode(Mode.ONLINE);
             	}
             	new GetSpacesTask(this).execute();
-            	app.dataHandler.setMode(Mode.ONLINE);
-            	app.dataHandler.addDataObjectListener(myListener);
-            	new GetDataFromSpaceTask(this ,"team#38").execute();
+            	//sApp.dataHandler.setMode(Mode.ONLINE);
+            	//sApp.dataHandler.addDataObjectListener(myListener);
+            	new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
             	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + app.connectionHandler.getConfiguration().getDomain());
+            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
             	Log.d("BASEACTIVITY", dob.toString());
-            	new PublishDataTask(this, dob, "team#38").execute();
-            	
-            	PublishDataTask dataTask = new PublishDataTask(this, dob, "team#38");
-            	dataTask.execute();
-            	
-            	
-            	
+            	new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
             	
             	//showProgress(false);
             	return true;
-      
-            
-         
-
-            	
+      	
             default:
                 return super.onOptionsItemSelected(item);
         }
-	
     }
 
-       
     /**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -296,11 +262,16 @@ public class MainActivity extends BaseActivity  {
 		}
 	}
 	
-
-	
-	
-	
-
-
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+  		//unregisterReceiver(mReceiver);
+      
+      try {
+    	   sApp.service.unbind();
+      } catch (Exception e) {
+    	  e.printStackTrace();
+      }
+    }
 
 }

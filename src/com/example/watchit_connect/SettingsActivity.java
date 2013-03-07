@@ -11,11 +11,13 @@ import com.example.watchit_connect.ApplicationsSettingsFragment.ApplicationsSett
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataObject;
+import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 
 import Utilities.UtilityClass;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,6 +37,11 @@ import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
+/**
+ * Activity containing a fragment where settings for online mode, location(gps) and watchit can be enabled
+ * @author oivindth
+ *
+ */
 public class SettingsActivity extends BaseActivity implements ApplicationsSettingsFfragmentListener {
 
 
@@ -44,6 +51,11 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 	private ListAdapter adapter;
 	private List<BluetoothDevice> devices; 
 	String deviceAdress = "";
+	private BluetoothAdapter btAdapter;
+	private String bluetoothDeviceName;
+	private BluetoothDevice device;
+	private BluetoothSocket btSocket;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,11 +92,11 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     	
             case R.id.menu_sync:
             	new GetSpacesTask(this).execute();
-            	app.dataHandler.setMode(Mode.ONLINE);
-            	app.dataHandler.addDataObjectListener(myListener);
+            	sApp.dataHandler.setMode(Mode.ONLINE);
+            	sApp.dataHandler.addDataObjectListener(myListener);
             	new GetDataFromSpaceTask(this ,"team#38").execute();
             	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + app.connectionHandler.getConfiguration().getDomain());
+            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
             	Log.d("BASEACTIVITY", dob.toString());
             	new PublishDataTask(this, dob, "team#38").execute();
             	  
@@ -100,9 +112,9 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     	
     	fragment = (ApplicationsSettingsFragment) getSupportFragmentManager().findFragmentByTag("settings");
     	boolean s1,s2,s3;
-    	s1 = app.OnlineMode;
-    	s2 = app.isLocationOn;
-    	s3 = app.isWATChiTOn;
+    	s1 = sApp.OnlineMode;
+    	s2 = sApp.isLocationOn;
+    	s3 = sApp.isWATChiTOn;
     	fragment.updateView(s1, s2,s3 );
     	
     	super.onResume();
@@ -119,7 +131,6 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     	 
     }
 	
-    //TODO: should probably use LocalBroadcast manager for more effieicency and security
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 	    public void onReceive(Context context, Intent intent) {
 	        String action = intent.getAction();
@@ -130,8 +141,8 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 	            // Add the name and address to an array adapter to show in a ListView
 	            //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 	            Log.d("device found", "device name : " + device.getName());
-	            if (!app.bluetoothDevices.contains(device)) {
-	            	app.bluetoothDevices.add(device);
+	            if (!sApp.bluetoothDevices.contains(device)) {
+	            	sApp.bluetoothDevices.add(device);
 	            devices.add(device);
 	            }
 	            	
@@ -164,13 +175,13 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 					public void onClick(DialogInterface dialog, int which) {
 						deviceAdress = devices.get(which).getAddress();
 						Log.d("shiiiiit", devices.get(which).getAddress());
-						Message message = Message.obtain(null, LocalService.MSG_DEVICE_NAME);
+						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
 						Bundle b = new Bundle();
 						b.putString("btDevice", deviceAdress);
 						b.putInt("btdevicepos", which);
 						message.setData(b);
 						try {
-							app.service.send(message);
+							sApp.service.send(message);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -191,8 +202,17 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 				//TODO: Change spacehandler and datahandler to online mode, log in user to spaces.
 				//Set "hasLoggedIn" to true
 				
-				//TODO: Change handlers to online mode man.
-				app.OnlineMode = true;
+				sApp.OnlineMode = true;
+				sApp.setApplicationMode(Mode.ONLINE);
+				try {
+					sApp.connectionHandler.connect();
+				} catch (ConnectionStatusException e) {
+					sApp.OnlineMode = false;
+					sApp.setApplicationMode(Mode.OFFLINE);
+					showToast("Failed to connect..");
+					e.printStackTrace();
+				}
+				
 				
 			} else {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -204,7 +224,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               app.OnlineMode = false;
+		    	               sApp.OnlineMode = false;
 		    	             
 		    	           }
 		    	       });
@@ -219,10 +239,12 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		
 		} else {
 			//TODO: Change handlers to offline mode maaaan.
-			app.OnlineMode = false;
+			sApp.OnlineMode = false;
+			sApp.setApplicationMode(Mode.OFFLINE);
+			
 			
 		}
-		fragment.updateView(app.OnlineMode, app.isLocationOn, app.isWATChiTOn);
+		fragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
 	}
 
 	@Override
@@ -232,12 +254,12 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 			if (!btAdapter.isEnabled()) {
 			    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			    startActivity(enableBtIntent);
-				app.isWATChiTOn = false;
+				sApp.isWATChiTOn = false;
 				return;
 			} else {
-				app.service.start();
+				sApp.service.start();
 				//service.start();
-				app.isWATChiTOn = true;
+				sApp.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
     			// If there are paired devices
     			if (pairedDevices.size() > 0) {
@@ -248,7 +270,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
     			       devices.add(device);
     			      
     			    }
-    			    app.bluetoothDevices = devices;
+    			    sApp.bluetoothDevices = devices;
     			}
     			
         		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -262,12 +284,12 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
    						//showProgress("WATCHiT", "waiting for ack from WATCHiT");
    						deviceAdress = devices.get(which).getAddress();
    						Log.d("shiiiiit", devices.get(which).getAddress());
-   						Message message = Message.obtain(null, LocalService.MSG_DEVICE_NAME);
+   						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
    						Bundle b = new Bundle();
    						b.putString("btDevice", deviceAdress);
    						b.putInt("btdevicepos", which);
    						message.setData(b);
-   						app.sendMessageToService(message);
+   						sApp.sendMessageToService(message);
    					}
    				});
         		
@@ -277,16 +299,16 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	           public void onClick(DialogInterface dialog, int id) {
 		    	        	   arrayAdapter.clear();
 		    	        	   devices.clear();
-		    	        	   app.bluetoothDevices.clear();
+		    	        	   sApp.bluetoothDevices.clear();
 		   	        		btAdapter.startDiscovery();
 		    	           }
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               app.isWATChiTOn = false;
+		    	               sApp.isWATChiTOn = false;
 		    	               fragment.updateView(false);
 		    	               devices.clear();
-		    	               app.bluetoothDevices.clear();
+		    	               sApp.bluetoothDevices.clear();
 		    	               arrayAdapter.clear();
 		    	           }
 		    	       });
@@ -297,17 +319,17 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		}
 			
 		if (!on) {
-			if (app.service.isRunning()) app.service.stop();
+			if (sApp.service.isRunning()) sApp.service.stop();
 			showToast("Stopped WATCHiT sync...");
-			app.isWATChiTOn= false;
+			sApp.isWATChiTOn= false;
 		}
 		
-		 fragment.updateView(app.OnlineMode, app.isLocationOn, app.isWATChiTOn);
+		 fragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
 		
 	}
 
 	@Override
-	public void locationMode(boolean on) { //TODO: MOVE LOCATIONMANAGER TO BASE?
+	public void locationMode(boolean on) { 
 		LocationManager locationManager =
 	            (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 	    boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -321,13 +343,11 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
 		    	               enableSettings(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		    	          
-		    	      
 		    	           }
 		    	       });
 		    	builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	           public void onClick(DialogInterface dialog, int id) {
-		    	               app.isLocationOn = false;
+		    	               sApp.isLocationOn = false;
 		    	           }
 		    	       });
 		    	
@@ -339,17 +359,17 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		    	dialog.show(); 
 		    	
 		    } else {
-		    	//gps er på..:
-		        //TODO: Now use latitude and longitude in dataobjects.
-		    	app.isLocationOn = true;
+		    	//gps is on.
+		        //TODO: Now use real latitude and longitude in dataobjects.
+		    	sApp.isLocationOn = true;
 		    }
 	    	
 	    } else {
 	    	//TODO: Do not want to use location. Stop adding location to dataobject or just add mocked location data?
-	    	app.isLocationOn = false;
+	    	sApp.isLocationOn = false;
 	    	
 	    }
-	    fragment.updateView(app.OnlineMode, app.isLocationOn, app.isWATChiTOn);
+	    fragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
 	
 	}
 

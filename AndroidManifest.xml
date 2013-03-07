@@ -41,7 +41,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service android:name="com.example.watchit_connect.LocalService"></service>
+        <service android:name="com.example.watchit_connect.WATCHiTService"></service>
         <activity
             android:name="com.example.watchit_connect.SpaceActivity"
             android:label="@string/title_activity_main" >

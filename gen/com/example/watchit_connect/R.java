@@ -168,8 +168,9 @@ containing a value of this type.
         public static final int main_view=0x7f04000f;
         public static final int map=0x7f040023;
         public static final int menu_help=0x7f040028;
-        public static final int menu_map=0x7f04002a;
-        public static final int menu_settings=0x7f04002b;
+        public static final int menu_logout=0x7f04002a;
+        public static final int menu_map=0x7f04002b;
+        public static final int menu_settings=0x7f04002c;
         public static final int menu_sync=0x7f040029;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
@@ -221,10 +222,12 @@ containing a value of this type.
         public static final int activity_space=0x7f080004;
     }
     public static final class string {
-        public static final int action_sign_in_register=0x7f050027;
-        public static final int action_sign_in_short=0x7f050028;
+        public static final int action_sign_in_register=0x7f050029;
+        public static final int action_sign_in_short=0x7f05002a;
+        /**  Main Strings 
+         */
         public static final int app_name=0x7f050011;
-        public static final int application_id=0x7f050024;
+        public static final int application_id=0x7f050025;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
         public static final int auth_client_availability_notification_title=0x7f05000e;
@@ -234,10 +237,7 @@ containing a value of this type.
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
         public static final int auth_client_requested_by_msg=0x7f050010;
-        public static final int buttonPrivateSpace=0x7f05001e;
-        public static final int buttonSharedSpaces=0x7f05001d;
-        public static final int buttonSpaces=0x7f05001f;
-        public static final int cancel=0x7f050020;
+        public static final int cancel=0x7f050021;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -291,31 +291,40 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f05000d;
-        public static final int domain=0x7f050023;
-        public static final int error_field_required=0x7f05002f;
-        public static final int error_incorrect_password=0x7f05002e;
-        public static final int error_incorrect_user=0x7f05002c;
-        public static final int error_invalid_email=0x7f05002b;
-        public static final int error_invalid_password=0x7f05002d;
-        public static final int host=0x7f050021;
-        public static final int local_service_started=0x7f050014;
-        public static final int local_service_stopped=0x7f050015;
-        public static final int login_progress_signing_in=0x7f05002a;
-        public static final int menu_config=0x7f050019;
-        public static final int menu_dashboard=0x7f05001c;
-        public static final int menu_forgot_password=0x7f050029;
-        public static final int menu_home=0x7f05001a;
-        public static final int menu_map=0x7f05001b;
-        public static final int menu_settings=0x7f050016;
-        public static final int menu_spaces=0x7f050017;
-        public static final int menu_sync=0x7f050018;
-        public static final int port=0x7f050022;
-        public static final int prompt_password=0x7f050026;
+        public static final int domain=0x7f050024;
+        public static final int error_field_required=0x7f050031;
+        public static final int error_incorrect_password=0x7f050030;
+        public static final int error_incorrect_user=0x7f05002e;
+        public static final int error_invalid_email=0x7f05002d;
+        public static final int error_invalid_password=0x7f05002f;
+        /**  App configurations: 
+         */
+        public static final int host=0x7f050022;
+        public static final int login_progress_signing_in=0x7f05002c;
+        public static final int menu_config=0x7f05001c;
+        public static final int menu_dashboard=0x7f05001f;
+        public static final int menu_forgot_password=0x7f05002b;
+        public static final int menu_home=0x7f05001d;
+        public static final int menu_logout=0x7f050020;
+        public static final int menu_map=0x7f05001e;
+        /**  Menu strings 
+         */
+        public static final int menu_settings=0x7f050019;
+        public static final int menu_spaces=0x7f05001a;
+        public static final int menu_sync=0x7f05001b;
+        public static final int port=0x7f050023;
+        public static final int prompt_password=0x7f050028;
         /**  Strings related to login 
          */
-        public static final int prompt_username=0x7f050025;
+        public static final int prompt_username=0x7f050027;
+        public static final int sdkcache=0x7f050026;
+        public static final int server_sync=0x7f050018;
+        public static final int title_activity_event=0x7f050015;
         public static final int title_activity_main=0x7f050012;
-        public static final int title_activity_trainingprocedure=0x7f050013;
+        public static final int title_activity_map=0x7f050014;
+        public static final int title_activity_settings=0x7f050013;
+        public static final int watchit_service_started=0x7f050016;
+        public static final int watchit_service_stopped=0x7f050017;
     }
     public static final class style {
         public static final int ActionBarCompat=0x7f070002;

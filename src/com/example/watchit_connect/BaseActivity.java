@@ -2,21 +2,12 @@ package com.example.watchit_connect;
 
 import parsing.GenericSensorData;
 import parsing.Parser;
-import service.ServiceManager;
-
 import de.imc.mirror.sdk.DataObjectListener;
-import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
-
-import Utilities.UtilityClass;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,41 +15,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
-import asynctasks.GetDataFromSpaceTask;
-import asynctasks.GetSpacesTask;
-import asynctasks.PublishDataTask;
 
 /**
  * Base class for our activities to avoid duplicate code.
  * @author oivindth
- *
  */
 public abstract class BaseActivity extends FragmentActivity {
 	
 	private ProgressDialog mProgressDialog;
-	protected MainApplication app;
+	protected MainApplication sApp;
 	
-	String latitude = "123.33411"; //TODO: Get real data instead of mock.
-	String longitude = "32342343.2"; //TODO: Get real data from ze phone instead of ze mock.
-	protected BluetoothAdapter btAdapter;
-	protected String bluetoothDeviceName;
-	protected BluetoothDevice device;
-	protected BluetoothSocket btSocket;
+	String mockLatitude = "123"; 
+	String mockLongitude = "323"; 
+
 	protected DataObjectListener myListener;
-	
-	
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -68,8 +43,8 @@ public abstract class BaseActivity extends FragmentActivity {
 			
 	        super.onCreate(savedInstanceState); 
 	
-	        app = MainApplication.getInstance();
-	        app.dataHandler = new DataHandler(app.connectionHandler, app.spaceHandler);
+	        sApp = MainApplication.getInstance();
+	        sApp.dataHandler = new DataHandler(sApp.connectionHandler, sApp.spaceHandler);
 
 	   	    myListener = new DataObjectListener() {
 	       	 // implement this interface in a controller class of your application
@@ -85,31 +60,23 @@ public abstract class BaseActivity extends FragmentActivity {
 	   			 GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 	   			 Toast.makeText(getBaseContext(), "Receieved dataobject from space: " + objectId, Toast.LENGTH_SHORT).show();
 	   	    	 System.out.println("Received object " + objectId + " from space " + spaceId);
-	   	
 	   		}
 	       	 };
 	        
-	       	app.dataHandler.addDataObjectListener(myListener);
-	       	
-	
-	       
-
-	   
+	       	sApp.dataHandler.addDataObjectListener(myListener);
 	    }
 		
 		@Override
 		public void onResume () {
 			super.onResume();
 
-			
 			// Register the BroadcastReceiver
 	    	IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-	    	//mReceiver.
-		}
-		//TODO: I MAin istedenforher . 
+	    	registerReceiver(mReceiver, filter);
+		} 
 		
 		/**
-		 * Global Broadcast receiever. Listen for change in internet connectivity status.
+		 * Listen for change in internet connectivity status.
 		 */
 		private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		    public void onReceive(Context context, Intent intent) {
@@ -121,7 +88,13 @@ public abstract class BaseActivity extends FragmentActivity {
 		            String reason = intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
 		            boolean isFailover = intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
 		            showToast("reason" + reason);
-		            if (noConnectivity) Log.d("BREC.", "no connectivity");
+		            if (noConnectivity) {
+		            	Log.d("BROADCASTRECEIEVER BASEACTIVITY:", "no connectivity");
+		            	sApp.OnlineMode = false;
+		            	sApp.setApplicationMode(Mode.OFFLINE);
+		            	showToast("Lost connection to the internet. Application online mode disabled.");
+		            }
+		            	
 		            if (isFailover) Log.d("REC", "FAILOVER");
 		            
 		            NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
@@ -133,16 +106,11 @@ public abstract class BaseActivity extends FragmentActivity {
 		    };
 		
 		};
-		
 		protected void enableSettings (String settingId) {
 		    Intent settingsIntent = new Intent(settingId);
 		    startActivity(settingsIntent); 
 		}
 		
-   
-    
-
-    
     public void showToast(String msg ) {
     	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -171,19 +139,11 @@ public abstract class BaseActivity extends FragmentActivity {
 	            mProgressDialog.dismiss();
 	            mProgressDialog = null;
 	        }
-		
 	    }
     
     @Override
     protected void onDestroy() {
       super.onDestroy();
-
-  		
-  		//unregisterReceiver(mReceiver);
+      unregisterReceiver(mReceiver);
     }
-      
-
-    
-    
-	
 }

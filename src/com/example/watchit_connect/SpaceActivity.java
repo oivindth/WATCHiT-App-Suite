@@ -7,6 +7,7 @@ import com.example.watchit_connect.SpacesFragment.OnSpaceItemSelectedListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataObject;
+import android.R.menu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,11 @@ import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
+/**
+ * 
+ * @author oivindth
+ *
+ */
 public class SpaceActivity extends BaseActivity implements OnSpaceItemSelectedListener  {
 
 	
@@ -45,6 +51,7 @@ public class SpaceActivity extends BaseActivity implements OnSpaceItemSelectedLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
+        
     	switch (item.getItemId()) {
     	
     		case android.R.id.home:
@@ -59,11 +66,11 @@ public class SpaceActivity extends BaseActivity implements OnSpaceItemSelectedLi
     	
             case R.id.menu_sync:
             	new GetSpacesTask(this).execute();
-            	app.dataHandler.setMode(Mode.ONLINE);
-            	app.dataHandler.addDataObjectListener(myListener);
+            	sApp.dataHandler.setMode(Mode.ONLINE);
+            	sApp.dataHandler.addDataObjectListener(myListener);
             	new GetDataFromSpaceTask(this ,"team#38").execute();
             	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + app.connectionHandler.getConfiguration().getDomain());
+            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
             	Log.d("BASEACTIVITY", dob.toString());
             	new PublishDataTask(this, dob, "team#38").execute();
             	  
@@ -79,9 +86,9 @@ public class SpaceActivity extends BaseActivity implements OnSpaceItemSelectedLi
 	@Override
 	public void onSpaceItemSelected(int position) {
 		//Space space = app.spaceHandler.getAllSpaces().get(position); //TODO: Too heavy.
-		Space space = app.spacesInHandler.get(position);
-		Log.d("SIZE", "s : " + app.spacesInHandler.size());
-		app.switchSpace(space);
+		Space space = sApp.spacesInHandler.get(position);
+		Log.d("SIZE", "s : " + sApp.spacesInHandler.size());
+		sApp.switchSpace(space);
 		//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 		new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
 	}

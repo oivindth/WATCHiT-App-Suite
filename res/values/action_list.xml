@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- If action bar drop down menu is used this is how to define the navigation elements -->
 <resources>
     <string-array name="action_list">
         <item>main</item>

@@ -16,24 +16,18 @@ import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
-public class LocalService extends AbstractService {
+public class WATCHiTService extends AbstractService {
 	
 	private NotificationManager mNM;
 	
 	private BluetoothSocket btSocket;
     
-	private static final int REQUEST_ENABLE_BT = 1;
 	final int RECIEVE_MESSAGE = 1;        // Status  for Handler
 	private BluetoothAdapter btAdapter = null;
 	private StringBuilder sb = new StringBuilder();
@@ -45,7 +39,7 @@ public class LocalService extends AbstractService {
 
 	// Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    private int NOTIFICATION = R.string.local_service_started;
+    private int NOTIFICATION = R.string.watchit_service_started;
   
     static final int MSG_SET_INT_VALUE = 9993;
     static final int MSG_SET_STRING_VALUE =9994;
@@ -56,7 +50,7 @@ public class LocalService extends AbstractService {
     
     @Override
     public void onStartService() {
-    	Log.i("LocalService", "We are now in service");
+    	Log.i("WATCHiTService", "We are now in service");
     	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
     	// Display a notification about us starting.  We put an icon in the status bar.
@@ -77,11 +71,7 @@ public class LocalService extends AbstractService {
     					String sbprint = sb.substring(0, endOfLineIndex);               // extract string
     					sb.delete(0, sb.length());  //clear
     					
-    					//send xml to activity.
-    					// Send data as an Integer
-    	                //mClients.get(i).send(Message.obtain(null, MSG_SET_INT_VALUE, intvaluetosend, 0));
-
-    	                //Send data as a String
+    	                //Send data to Activity
     	                Bundle b = new Bundle();
     	                b.putString("watchitdata", sbprint);
     	                Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
@@ -91,58 +81,12 @@ public class LocalService extends AbstractService {
     				}
     				Log.d("Recieved from arduino: ", "...String:"+ sb.toString() +  "  Byte:" + msg.arg1 + "...");
     				break;
-    			case MSG_CONNECTION_ESTABLISHED:
-    				Log.d("LOCALService", "message sendt receieved in wrong handler...?");
-    				break;
+
     			}
     		};
     	};
     	
     	
-    	/*
-    	btAdapter = BluetoothAdapter.getDefaultAdapter();
-    	//checkBTState();
-    	Log.d("TAG", "...onResume - try connect...");
-
-    	// Set up a pointer to the remote node using it's address.
-    	BluetoothDevice device = getDevice("BTJacket");
-
-    	// Two things are needed to make a connection:
-    	//   A MAC address, which we got above.
-    	//   A Service ID or UUID.  In this case we are using the
-    	//     UUID for SPP.
-    	try {
-
-    		btSocket = device.createRfcommSocketToServiceRecord(uuid);
-    	} catch (IOException e) {
-    		//errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
-    	}
-
-    	// Discovery is resource intensive.  Make sure it isn't going on
-    	// when you attempt to connect and pass your message.
-    	btAdapter.cancelDiscovery();
-
-    	// Establish the connection.  This will block until it connects.
-    	Log.d("TAG ","...Connecting...");
-    	try {
-    		btSocket.connect();
-    		
-    		Log.d("TAG", "....Connection ok...");
-    		
-    	} catch (IOException e) {
-    		try {
-    			btSocket.close();
-    		} catch (IOException e2) {
-    			//errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
-    		}
-    	}
-
-    	// Create a data stream so we can talk to server.
-    	Log.d("TAG", "...Create Socket...");
-    	//send(Message.obtain(null, MSG_SET_INT_VALUE));
-    	mConnectedThread = new ConnectedThread(btSocket);
-    	mConnectedThread.start();
-    	*/
     }
 
     
@@ -195,7 +139,7 @@ public class LocalService extends AbstractService {
 	    		
 	    		Log.d("TAG", "....Connection ok...");
 	    		
-	    		send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED));
+	    		send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED)); //Let acitvity know that a connection to watchit has been made.
 	    	} catch (IOException e) {
 	    		e.printStackTrace();
 	    		try {
@@ -215,6 +159,7 @@ public class LocalService extends AbstractService {
 		}
 	}
         
+	/*
 	  private BluetoothDevice getDevice(String deviceAdress) {
 	       	BluetoothDevice mDevice = null;
 	   		Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
@@ -227,9 +172,9 @@ public class LocalService extends AbstractService {
 	           }
 	   		return mDevice;
 	       }
+	       */
 
 
-		    
 		    /* Call this from the main activity to shutdown the connection */
 		    public void cancel() {
 		        try {
@@ -259,10 +204,7 @@ public class LocalService extends AbstractService {
 		        }
 		      
 		        public void run() {
-		        	//Looper.prepare();
 		        	
-		   
-		        	Log.d("THREAD", "inside run" );
 		            byte[] buffer = new byte[1024];  // buffer store for the stream
 		            int bytes; // bytes returned from read()
 		 
@@ -309,7 +251,7 @@ public class LocalService extends AbstractService {
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
-        CharSequence text = getText(R.string.local_service_started);
+        CharSequence text = getText(R.string.watchit_service_started);
 
         // Set the icon, scrolling text and timestamp
         Notification notification = new Notification(R.drawable.androidavatar , text,
@@ -320,17 +262,11 @@ public class LocalService extends AbstractService {
                 new Intent(this, MainActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, "label ls",
+        notification.setLatestEventInfo(this, "WATCHiT",
                        text, contentIntent);
 
         // Send the notification.
         mNM.notify(NOTIFICATION, notification);
     }
-
-
-
-
-	
-	
 
 }

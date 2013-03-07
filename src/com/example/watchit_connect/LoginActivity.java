@@ -98,9 +98,9 @@ public class LoginActivity extends Activity {
 			mUserNameView = (EditText) findViewById(R.id.username);
 			mUserNameView.setText("admin");
 
-			//TODO: Only for debugging
+			
 			mPasswordView = (EditText) findViewById(R.id.password);
-			mPasswordView.setText("mirror");
+		
 			
 			mPasswordView
 					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -308,9 +308,6 @@ public class LoginActivity extends Activity {
 		  } else {
 			  spaceHandler.setMode(Mode.OFFLINE);
 		  }
-		  
-
-	    	
 	    	app.spaceHandler = spaceHandler;
 		  
 	    	 app.setPassword(mPassword);
