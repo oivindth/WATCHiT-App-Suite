@@ -94,7 +94,10 @@ public class SpaceActivity extends BaseActivity implements OnSpaceItemSelectedLi
 		Log.d("SIZE", "s : " + sApp.spacesInHandler.size());
 		sApp.switchSpace(space);
 		//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
-		new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
+		//new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
+		showToast("Noe registered to event: " + space.getName());
+		finish();
+		
 	}
         
 }

@@ -37,14 +37,14 @@
         
 
        <RadioButton
-           android:id="@+id/radioButton1"
+           android:id="@+id/radioButtonLocation"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:clickable="false"
            android:text="Location" />
 
        <RadioButton
-           android:id="@+id/radioButton1"
+           android:id="@+id/radioButtonwatchit"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="WATChiT" />

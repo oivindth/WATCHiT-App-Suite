@@ -92,12 +92,12 @@ public abstract class BaseActivity extends FragmentActivity {
 		        	boolean noConnectivity = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
 		            String reason = intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
 		            boolean isFailover = intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
-		            showToast("reason" + reason);
+		            //showToast("reason" + reason);
 		            if (noConnectivity) {
 		            	Log.d("BROADCASTRECEIEVER BASEACTIVITY:", "no connectivity");
 		            	sApp.OnlineMode = false;
 		            	sApp.setApplicationMode(Mode.OFFLINE);
-		            	showToast("Lost connection to the internet. Application online mode disabled.");
+		            	//showToast("Lost connection to the internet. Application online mode disabled.");
 		            }
 		            	
 		            if (isFailover) Log.d("REC", "FAILOVER");

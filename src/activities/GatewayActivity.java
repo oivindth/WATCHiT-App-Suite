@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioButton;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
@@ -27,12 +28,15 @@ import asynctasks.PublishDataTask;
  */
 public class GatewayActivity extends BaseActivity {
 	
+	
+	RadioButton online, location, watchit;
+	StatusFragment statusFragment;
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gateway);
 
-		StatusFragment statusFragment = new StatusFragment();
+		statusFragment = new StatusFragment();
 		// Begin fragment transaction.
 		getSupportFragmentManager().beginTransaction()
 		.add(R.id.gateway_fragment_container, statusFragment  ,"status").commit(); 
@@ -41,6 +45,9 @@ public class GatewayActivity extends BaseActivity {
 	
 	@Override
 	public void onResume() {
+		statusFragment.getView().findViewById(R.id.radioButtonOnline).setSelected(sApp.OnlineMode);
+		statusFragment.getView().findViewById(R.id.radioButtonLocation).setSelected(sApp.isLocationOn);
+		statusFragment.getView().findViewById(R.id.radioButtonwatchit).setSelected(sApp.isWATChiTOn);
 		super.onResume();
 	}
 	@Override
