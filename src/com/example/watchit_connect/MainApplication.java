@@ -21,9 +21,10 @@ import android.os.RemoteException;
 
 /**
  * Application object. Used as a pool for global variables and dataobjects to simplify passing them between activities and services.
- * Implemented as singleton.
+ * Implemented as singleton. Also contains WATChiT service object making watchit data available for several applications. 
+ * (WATCHiTService should possibly also be implemented as singleton)
  * @author oivindth
- *
+
  */
 public class MainApplication extends Application {
 	

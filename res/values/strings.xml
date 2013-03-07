@@ -12,7 +12,7 @@
    <string name="watchit_service_stopped"> WATCHiT no longer connected.</string>
    
    <string name="server_sync"> Syncing with server.. </string>
-   
+   <string name="status">Status</string>
    
    <!-- Menu strings -->
     <string name="menu_settings">Settings</string>
@@ -23,6 +23,7 @@
     <string name="menu_map">Map</string>
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_logout">Switch User</string>
+    <string name="menu_event" > Event</string>
 
     <string name= "cancel">Cancel</string>
     

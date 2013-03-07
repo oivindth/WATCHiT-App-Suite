@@ -34,16 +34,7 @@
            >
         
         <activity
-            android:name="com.example.watchit_connect.MainActivity"
-            android:label="@string/title_activity_main" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <service android:name="com.example.watchit_connect.WATCHiTService"></service>
-        <activity
-            android:name="com.example.watchit_connect.SpaceActivity"
+            android:name="activities.MainDashBoardActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +43,29 @@
         </activity>
         
         <activity
-            android:name="com.example.watchit_connect.SettingsActivity"
+            android:name="activities.GatewayActivity"
+            android:label="@string/title_activity_main"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
+        
+        <service android:name="service.WATCHiTService"></service>
+        <activity
+            android:name="activities.SpaceActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="activities.SettingsActivity"
             android:label="Settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,7 +77,7 @@
 
         
         <activity
-            android:name="com.example.watchit_connect.MapActivity"
+            android:name="activities.MapActivity"
             android:label="Map"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
@@ -76,7 +89,7 @@
         
         
          <activity
-            android:name="com.example.watchit_connect.LoginActivity"
+            android:name="activities.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

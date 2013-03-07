@@ -1,8 +1,8 @@
 package asynctasks;
 
-import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainApplication;
 
+import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
 import de.imc.mirror.sdk.android.DataObject;

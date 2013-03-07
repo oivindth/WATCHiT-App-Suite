@@ -1,6 +1,5 @@
 package parsing;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +37,6 @@ public class Parser {
 	 * @return
 	 */
 	public static GenericSensorData buildSimpleXMLObject(String watchitData, String latitude, String longitude ) {
-		
-		//TODO: parse watchit string
 		
 		GenericSensorData genericSensorData = new GenericSensorData(new Location(latitude, longitude), 
 				new Value("note", "", watchitData));
@@ -82,11 +79,6 @@ public class Parser {
 	   	dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 
 	   	
-	   	
-	   	if (genericSensorData.getValue().getType() == ValueType.MOOD.toString()) {
-	   		
-	   	}
-	   	
 	   	 DataObject dataObject = dataObjectBuilder.build();
 	   	 Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
@@ -106,42 +98,5 @@ public class Parser {
 		}
 		return data;
 	}
-	
-	/**
-	 * Build a dummy data object for testing
-	 * @return
-	 */
-	public static DataObject buildDummyDataObject() {
-		DataObjectBuilder dataObjectBuilder =
-		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
-		Date date = new Date();
-				dataObjectBuilder.addCDTCreationInfo(date, "admin", "mirror:application:watchit:genericsensordata");
-
-				CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_0_1);
-				cdmDataBuilder.setPublisher("admin");
-				cdmDataBuilder.setTimestamp(date.toGMTString());
-				CDMData cdmData = cdmDataBuilder.build();
-				dataObjectBuilder.setCDMData(cdmData);
-				
-		    	 Map <String, String> attributes = new HashMap<String, String>();
-		    	 
-		    	 attributes.put("latitude", "63.381679");
-		    	 attributes.put("longitude", "10.415039");
-		    	 dataObjectBuilder.addElement("location", attributes, "", true);
-		    	 
-		    	 attributes.clear();
-		    	 
-		    	 attributes.put("type", "test");
-		    	 attributes.put("unit", "text");
-		    	 dataObjectBuilder.addElement("value", attributes , "Hello world", true);
-		    	 
-		    	 
-		    
-		    	 
-		    	 DataObject dataObject = dataObjectBuilder.build();
-		    	 return dataObject;
-	}
-	
-	
 	
 }

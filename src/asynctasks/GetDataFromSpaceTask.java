@@ -3,9 +3,9 @@ package asynctasks;
 import parsing.GenericSensorData;
 import parsing.Parser;
 
-import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainApplication;
 
+import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -47,7 +47,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				//app.dataHandler.registerSpace(mSpaceId); //TODO one space at a time. Register this when u choose space.
 				//app.dataHandler.addDataObjectListener(myListener);
 				//MainApplication.dataObjects
-				app.dataHandler.setMode(Mode.ONLINE);
+		
 				app.dataHandler.registerSpace(mSpaceId);
 				app.dataObjects = app.dataHandler.retrieveDataObjects(mSpaceId);
 

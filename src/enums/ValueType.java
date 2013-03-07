@@ -1,5 +1,10 @@
 package enums;
 
+/**
+ * Not in use at the moment
+ * @author oivindth
+ *
+ */
 public enum ValueType {
 	
 	

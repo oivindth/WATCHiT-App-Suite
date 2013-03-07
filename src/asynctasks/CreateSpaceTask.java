@@ -2,8 +2,8 @@ package asynctasks;
 
 import java.util.List;
 
+import activities.BaseActivity;
 import android.os.AsyncTask;
-import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainApplication;
 
 import de.imc.mirror.sdk.Space;

@@ -1,9 +1,12 @@
 package asynctasks;
 
-import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainApplication;
+
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
+import activities.BaseActivity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -11,11 +14,13 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	private String mUserName;
 	private String mPassword;
 	private BaseActivity mActivity;
+	private MainApplication sApp;
 	
 	public AuthenticateUserTask (BaseActivity activity ,String userName, String password) {
 		mUserName = userName;
 		mPassword = password;
 		mActivity = activity;
+		sApp = MainApplication.getInstance();
 	}
 	
 	@Override
@@ -44,8 +49,15 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 
 		if (success) {
 			mActivity.showToast("Logged in user.");
+			Log.d("AUTHENTICATEUSERTASK", "Succsessfully logged in the user");
+			sApp.OnlineMode =true;
+			sApp.setApplicationMode(Mode.ONLINE);
 		} else {
 			mActivity.showToast("Failed to connect user" );
+			
+			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");
+			sApp.OnlineMode =false;
+			sApp.setApplicationMode(Mode.OFFLINE);
 		}
 	}
 	@Override

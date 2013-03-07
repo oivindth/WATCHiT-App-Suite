@@ -1,9 +1,9 @@
 package asynctasks;
 
+import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.watchit_connect.BaseActivity;
 import com.example.watchit_connect.MainApplication;
 
 public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
