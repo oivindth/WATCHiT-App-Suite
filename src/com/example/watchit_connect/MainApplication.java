@@ -6,6 +6,7 @@ import java.util.List;
 import service.ServiceManager;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
@@ -17,6 +18,7 @@ import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.Log;
 
 
 /**
@@ -94,13 +96,20 @@ public class MainApplication extends Application {
 	}
 	
 	public void setApplicationMode (Mode mode) {
-		spaceHandler.setMode(mode);
-		dataHandler.setMode(mode);
+		Log.d("object: ", "mode :" + mode );
 		
-		if (mode == Mode.ONLINE) {
-		// If we need to do more than update the handlers.
-		} else {
+		Log.d("datahandler", "datahandlerobject: "  +dataHandler);
+		spaceHandler.setMode(mode);
+		dataHandler.setMode(Mode.ONLINE);
+		
+		
+		if (mode == Mode.OFFLINE) {
+			if (connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
+				connectionHandler.disconnect();
+			}
 		}
+		
+		
 	}
 	
 	//public List<Space> spaces; 

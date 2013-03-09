@@ -3,6 +3,7 @@ package old;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.R.layout;
 //import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
@@ -26,7 +27,7 @@ import android.widget.Toast;
  * @author oivindth
  *
  */
-public class SpaceFragment extends ListFragment {
+public class SpaceFragment extends SherlockListFragment {
 	
 	private int pos;
 	private Space space;

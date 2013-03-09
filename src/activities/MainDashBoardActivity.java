@@ -1,28 +1,17 @@
 package activities;
 
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.id;
-import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.R.menu;
-
+import parsing.GenericSensorData;
 import parsing.Parser;
 import service.ServiceManager;
 import service.WATCHiTService;
-
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.DataObject;
-import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,6 +19,15 @@ import android.widget.Toast;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.example.watchit_connect.R;
+
+import de.imc.mirror.sdk.DataObjectListener;
+import de.imc.mirror.sdk.android.DataHandler;
+import de.imc.mirror.sdk.android.DataObject;
 
 
 public class MainDashBoardActivity extends BaseActivity  {
@@ -41,11 +39,12 @@ public class MainDashBoardActivity extends BaseActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboardlayout);
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         
         new GetSpacesTask(this).execute();
         
         // Create a service and handle incoming messages
+        //TODO: Make handler static to avoid (potential) leaks?
         sApp.service = new ServiceManager(this, WATCHiTService.class, new Handler() {
           @Override
           public void handleMessage(Message msg) {
@@ -73,7 +72,28 @@ public class MainDashBoardActivity extends BaseActivity  {
         });
         
         
-    
+        sApp.dataHandler = new DataHandler(sApp.connectionHandler, sApp.spaceHandler);
+
+   	    myListener = new DataObjectListener() {
+       	 // implement this interface in a controller class of your application
+      
+   		@Override
+   		public void handleDataObject(
+   				de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
+   				showToast("New object receieved in space");
+   			 String objectId = dataObject.getId();
+   			 //Log.d("HandleDataObjet", dataObject.getCDMData().)
+   			 
+   			 Log.d("HandleDataObject", dataObject.toString());
+   			 GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+   			 Toast.makeText(getBaseContext(), "Receieved dataobject from space: " + objectId, Toast.LENGTH_SHORT).show();
+   	    	 System.out.println("Received object " + objectId + " from space " + spaceId);
+   		}
+       	 };
+        
+       	sApp.dataHandler.addDataObjectListener(myListener);
+        
+        
         mDashboardFormView = findViewById(R.id.dashboard_main);
 		mDashboardStatusView = findViewById(R.id.dashboard_status);
         
@@ -107,9 +127,6 @@ public class MainDashBoardActivity extends BaseActivity  {
 			}
 		});
         
- 
- 
-  
  
         buttonMap.setOnClickListener(new View.OnClickListener() {
  
@@ -163,8 +180,11 @@ public class MainDashBoardActivity extends BaseActivity  {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+    	  MenuInflater inflater = getSupportMenuInflater();
+    	   inflater.inflate(R.menu.main, menu);
+    return super.onCreateOptionsMenu(menu);
+    	
+      
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -179,25 +199,15 @@ public class MainDashBoardActivity extends BaseActivity  {
     			
     			//just back use only finish():
                // finish();
+    			showToast("Main");
                 return true;
     	
-            case R.id.menu_sync:
+            case R.id.menu_logout:
             	//showProgress(true);
             	//TODO: Not here
-            	if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
-            		sApp.spaceHandler.setMode(Mode.ONLINE);
-            		sApp.dataHandler.setMode(Mode.ONLINE);
-            	}
-            	new GetSpacesTask(this).execute();
-            	//sApp.dataHandler.setMode(Mode.ONLINE);
-            	//sApp.dataHandler.addDataObjectListener(myListener);
-            	new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
-            	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
-            	Log.d("BASEACTIVITY", dob.toString());
-            	new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
+       
             	
-            	//showProgress(false);
+            	showToast("Logging out...");
             	return true;
       	
             default:
@@ -208,7 +218,6 @@ public class MainDashBoardActivity extends BaseActivity  {
     /**
 	 * Shows the progress UI and hides the login form.
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	private void showProgress(final boolean show) {
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in

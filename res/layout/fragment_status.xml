@@ -7,90 +7,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp" >
-        
-            <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-        
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
-        
-    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="25dp" >
-        
+        android:layout_marginTop="25dp"
+        android:orientation="vertical" >
 
-       <RadioButton
-           android:id="@+id/radioButtonOnline"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:clickable="false"
-           android:text="Online" />
-        
+        <RadioButton
+            android:id="@+id/radioButtonOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="Online" />
 
-       <RadioButton
-           android:id="@+id/radioButtonLocation"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:clickable="false"
-           android:text="Location" />
+        <RadioButton
+            android:id="@+id/radioButtonLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="Location" />
 
-       <RadioButton
-           android:id="@+id/radioButtonwatchit"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="WATChiT" />
-        
+        <RadioButton
+            android:id="@+id/radioButtonwatchit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WATChiT" />
     </LinearLayout>
-    
-  
-    
-      <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="50dp" >
-        
-            <TextView
-        android:id="@+id/textView11"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textVieweventsubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="News Feed or badges:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-        
-              <LinearLayout
-        android:layout_width="match_parent"
+        android:text="Currently registered to event: "
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textViewEventName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="1dp" >
-        
-            
-              <QuickContactBadge
-          android:id="@+id/quickContactBadge1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-
-      <QuickContactBadge
-          android:id="@+id/quickContactBadge2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-
-      <QuickContactBadge
-          android:id="@+id/quickContactBadge3"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-            
-      </LinearLayout>
-    </LinearLayout>
-
-    
-
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="20dp"
+  />
 </LinearLayout>

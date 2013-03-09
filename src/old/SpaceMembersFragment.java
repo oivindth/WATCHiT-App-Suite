@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.R.layout;
 
@@ -15,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-public class SpaceMembersFragment extends ListFragment {
+public class SpaceMembersFragment extends SherlockListFragment {
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

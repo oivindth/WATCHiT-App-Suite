@@ -17,6 +17,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	private MainApplication sApp;
 	
 	public AuthenticateUserTask (BaseActivity activity ,String userName, String password) {
+		Log.d("AuthenticateUserTask", "in constructor");
 		mUserName = userName;
 		mPassword = password;
 		mActivity = activity;
@@ -25,6 +26,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(Void... params) {
+		Log.d("AuthenticateUserTask", "doInBackground");
 		/*
         //Configure connection
 		connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
@@ -34,11 +36,18 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
         */
       try {
     	  MainApplication.getInstance().connectionHandler.connect();
+    	
+    	 
       } catch (ConnectionStatusException e) {
     	  e.printStackTrace();
     	  return false;
-      }
-		return true;
+    	  
+      }  catch (Exception e) {
+ 		 e.printStackTrace();
+ 		 return false;
+		
+	}
+      return true; 
 	}
 
 	
@@ -46,7 +55,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	protected void onPostExecute(final Boolean success) {
 		//mAuthTask = null;
 		//showProgress(false);
-
+		Log.d("AuthenticateUserTask", "onPostExecute");
 		if (success) {
 			mActivity.showToast("Logged in user.");
 			Log.d("AUTHENTICATEUSERTASK", "Succsessfully logged in the user");

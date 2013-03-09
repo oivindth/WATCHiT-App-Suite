@@ -5,6 +5,10 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="/Users/oivindth/Downloads/spaces-sdk-android-1.1.3.jar"/>
-	<classpathentry kind="lib" path="/Users/oivindth/Downloads/spaces-sdk-java-1.1.3.jar"/>
+	<classpathentry kind="lib" path="libs/spaces-sdk-api-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/simple-xml-2.6.2.jar"/>
+	<classpathentry kind="lib" path="libs/actionbarsherlock-plugin-maps-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/ActionBarSherlockLibrary/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

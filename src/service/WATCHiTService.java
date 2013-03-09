@@ -3,17 +3,10 @@ package service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Set;
 import java.util.UUID;
 
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.drawable;
-import com.example.watchit_connect.R.string;
-
-
-
-
 import activities.MainDashBoardActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,14 +16,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 /**
- * Service class for communicating with WATCHiT. Runs a thread so it can always receieve data.
- * BUG: Sometimes bytes are dropped. 
- * BUG2: Sometimes wrong letter is receieved(d instead of s.... maybe I just dont remember correctly and this deosent happen).
+ * Service class for communicating with WATCHiT. Runs a thread so it can always receieve data when paired and connected to WATCHiT device.
+ * Should be easy to extend so that it works with other bluetooth devices.
  * @author oivindth
  *
  */

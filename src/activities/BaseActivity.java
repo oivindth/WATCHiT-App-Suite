@@ -1,15 +1,13 @@
 package activities;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.string;
 
-import parsing.GenericSensorData;
-import parsing.Parser;
+
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.DataHandler;
-import de.imc.mirror.sdk.android.DataObject;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -21,7 +19,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,7 +26,7 @@ import android.widget.Toast;
  * Base class for our activities to avoid duplicate code.
  * @author oivindth
  */
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends SherlockFragmentActivity {
 	
 	private ProgressDialog mProgressDialog;
 	protected MainApplication sApp;
@@ -41,34 +38,12 @@ public abstract class BaseActivity extends FragmentActivity {
 	
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			    getActionBar().setHomeButtonEnabled(true);
-			    getActionBar().setDisplayHomeAsUpEnabled(true);
-			}
+		
+			getSupportActionBar().setHomeButtonEnabled(true);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			
 	        super.onCreate(savedInstanceState); 
-	
 	        sApp = MainApplication.getInstance();
-	        sApp.dataHandler = new DataHandler(sApp.connectionHandler, sApp.spaceHandler);
-
-	   	    myListener = new DataObjectListener() {
-	       	 // implement this interface in a controller class of your application
-	      
-	   		@Override
-	   		public void handleDataObject(
-	   				de.imc.mirror.sdk.DataObject dataObject, String spaceId) {
-	   				showToast("New object receieved in space");
-	   			 String objectId = dataObject.getId();
-	   			 //Log.d("HandleDataObjet", dataObject.getCDMData().)
-	   			 
-	   			 Log.d("HandleDataObject", dataObject.toString());
-	   			 GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
-	   			 Toast.makeText(getBaseContext(), "Receieved dataobject from space: " + objectId, Toast.LENGTH_SHORT).show();
-	   	    	 System.out.println("Received object " + objectId + " from space " + spaceId);
-	   		}
-	       	 };
-	        
-	       	sApp.dataHandler.addDataObjectListener(myListener);
 	    }
 		
 		@Override
@@ -109,7 +84,6 @@ public abstract class BaseActivity extends FragmentActivity {
 		            // as enabling queuing of HTTP requests when currentNetworkInfo is connected etc.
 		        }
 		    };
-		
 		};
 		protected void enableSettings (String settingId) {
 		    Intent settingsIntent = new Intent(settingId);

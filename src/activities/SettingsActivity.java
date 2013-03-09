@@ -5,19 +5,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.id;
-import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.R.menu;
-import com.example.watchit_connect.R.string;
-
 import parsing.Parser;
 import service.WATCHiTService;
 
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import fragments.ApplicationsSettingsFragment;
 import fragments.ApplicationsSettingsFragment.ApplicationsSettingsFfragmentListener;
 
@@ -37,8 +33,6 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import asynctasks.AuthenticateUserTask;
@@ -47,6 +41,7 @@ import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
 /**
+ * {@GATE Deprecated}
  * Activity containing a fragment where settings for online mode, location(gps) and watchit can be enabled
  * @author oivindth
  *
@@ -71,6 +66,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings); 
 		ApplicationsSettingsFragment settingsFRagment = new ApplicationsSettingsFragment();
+		
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, settingsFRagment  ,"settings").commit(); 
         
@@ -81,7 +77,15 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 	}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_settings, menu);
+        
+    	menu.add("Save")
+        .setIcon(R.drawable.ic_navigation_refresh)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+    menu.add("Switch User")
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+    	
         return true;
     }
     @Override
@@ -116,6 +120,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
         }
     }
 	
+    
     @Override
     public void onResume() {
     	
@@ -208,10 +213,9 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
 	public void onlineModeClicked(boolean on) {
 		if (on) {
 			if ( UtilityClass.isConnectedToInternet(getBaseContext())) {
+				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();	
 				
-				Log.d("onlinemodeclicked", "we are connected");
-				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
-					
+				
 			} else {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		    	// Add the buttons

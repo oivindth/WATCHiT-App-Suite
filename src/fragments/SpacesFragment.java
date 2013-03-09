@@ -3,6 +3,7 @@ package fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.R.layout;
@@ -16,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SpacesFragment extends ListFragment {
+public class SpacesFragment extends SherlockListFragment {
 	
 	OnSpaceItemSelectedListener mListener;
 	

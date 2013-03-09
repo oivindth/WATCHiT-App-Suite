@@ -1,17 +1,23 @@
 package fragments;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
-public class StatusFragment extends Fragment {
+public class StatusFragment extends SherlockFragment {
 	
-
+	TextView textViewEvent;
+	MainApplication sApp;
+	RadioButton radioButtonOnline, radioButtonLocation, radioButtonWATCHiT;
 	
 	@Override
 	/**
@@ -20,6 +26,7 @@ public class StatusFragment extends Fragment {
 	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		sApp = MainApplication.getInstance();
 		
 	}
 	
@@ -31,12 +38,28 @@ public class StatusFragment extends Fragment {
 	 */
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		return  inflater.inflate(R.layout.fragment_status, container, false);
+		View myFragmentView = inflater.inflate(R.layout.fragment_status, container, false);
+		textViewEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventName);
+		radioButtonOnline = (RadioButton) myFragmentView.findViewById(R.id.radioButtonOnline);
+		radioButtonLocation = (RadioButton) myFragmentView.findViewById(R.id.radioButtonLocation);
+		radioButtonWATCHiT = (RadioButton) myFragmentView.findViewById(R.id.radioButtonwatchit);
+		return  myFragmentView;
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		if (sApp.currentActiveSpace == null) {
+			textViewEvent.setText("You have not registered to an event");
+		} else {
+			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
+			textViewEvent.setText(sApp.currentActiveSpace.getName());
+		}
+		
+		radioButtonLocation.setChecked(sApp.isLocationOn);
+		radioButtonOnline.setChecked(sApp.OnlineMode);
+		radioButtonWATCHiT.setChecked(sApp.isWATChiTOn);
 		
 	}
 	

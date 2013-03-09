@@ -1,0 +1,29 @@
+<resources>
+    <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        
+        
+   	    <item name="android:actionBarTabBarStyle">@style/Theme.app.tabbar.style</item>
+        <item name="actionBarTabBarStyle">@style/Widget.app.ActionBar.TabBar</item>
+	</style>
+
+		<style name="Theme.app.tabbar.style" parent="@style/Theme.Sherlock.Light">
+		    <item name="android:background">#33B5E5</item>
+		    <item name="background">#33B5E5</item>
+		  
+		</style>
+		<style name="Widget.app.ActionBar.TabBar" parent="Widget.Sherlock.ActionBar.TabBar">
+		    <item name="android:background">#33B5E5</item>
+		    <item name="background">#33B5E5</item>
+		</style>
+        
+		
+	    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+	        <item name="background">@drawable/bg_striped_img</item>
+	        <item name="android:background">@drawable/bg_striped_img</item>
+	        
+	        <item name="backgroundSplit">@drawable/bg_striped_split_img</item>
+	        <item name="android:backgroundSplit">@drawable/bg_striped_split_img</item>
+	    </style>
+</resources>

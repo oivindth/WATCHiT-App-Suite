@@ -1,20 +1,20 @@
 package activities;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 import com.example.watchit_connect.R.id;
 import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.R.menu;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+//import com.google.android.gms.maps.GoogleMap;
+//import com.google.android.gms.maps.SupportMapFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
 
 public class MapActivity extends BaseActivity {
 	
-	private GoogleMap mMap;
+	//private GoogleMap mMap;
 	
 	
 	@Override
@@ -23,14 +23,14 @@ public class MapActivity extends BaseActivity {
 		setContentView(R.layout.map_activity);
 		
 		//mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		setUpMapIfNeeded();
+		//setUpMapIfNeeded();
 		
 	}
 	
 	@Override
 	public void onResume () {
 		super.onResume();
-		setUpMapIfNeeded();
+		//setUpMapIfNeeded();
 	
 		
 	}
@@ -38,8 +38,14 @@ public class MapActivity extends BaseActivity {
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_map, menu);
-        return true;
+		menu.add("Save")
+        .setIcon(R.drawable.ic_navigation_refresh)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+    menu.add("Switch User")
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+    return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,18 +87,18 @@ public class MapActivity extends BaseActivity {
     }
 	
 	
-	private void setUpMapIfNeeded() {
+	//private void setUpMapIfNeeded() {
 	    // Do a null check to confirm that we have not already instantiated the map.
-	    if (mMap == null) {
-	        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-	                            .getMap();
+	    //if (mMap == null) {
+	      //  mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+	                          //  .getMap();
 	        // Check if we were successful in obtaining the map.
-	        if (mMap != null) {
+	        //if (mMap != null) {
 	            // The Map is verified. It is now safe to manipulate the map.
 
-	        }
-	    }
-	}
+	        //}
+	    //}
+	//}
 	
 	
 	
