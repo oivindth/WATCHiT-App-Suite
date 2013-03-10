@@ -16,6 +16,7 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="1dp"
               android:text="Configure"
+              android:textColor="@android:color/holo_blue_light"
               android:textAppearance="?android:attr/textAppearanceLarge" />
           
     </LinearLayout>
@@ -40,6 +41,7 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="1dp"
               android:text="Online: "
+               android:textColor="@android:color/holo_blue_light"
               android:textAppearance="?android:attr/textAppearanceMedium" />
                
         <ToggleButton
@@ -47,7 +49,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="40dp"
-              android:text="Online" />
+              android:textColor="@android:color/white"
+               />
         
         </LinearLayout>
           
@@ -65,6 +68,7 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="1dp"
               android:text="Location: "
+               android:textColor="@android:color/holo_blue_light"
               android:textAppearance="?android:attr/textAppearanceMedium" />
            
           <ToggleButton
@@ -72,7 +76,10 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="20dp"
-              android:text="online: " />
+          
+              android:textColor="@android:color/white"
+
+               />
 		</LinearLayout>
           
            
@@ -84,46 +91,31 @@
           
                
              <TextView
-              android:id="@+id/textViewOnline"
+              android:id="@+id/textViewWATCHiT"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginTop="1dp"
               android:text="WATCHiT: "
+              android:textColor="@android:color/holo_blue_light"
               android:textAppearance="?android:attr/textAppearanceMedium" />
            
            <ToggleButton
               android:id="@+id/toggleButtonWATCHiT"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="14dp"
-              android:text="WatchiT: " />
-           </LinearLayout> 
+              android:layout_marginLeft="14dp"    
+              android:textColor="@android:color/white" />
+           
+        
            
     </LinearLayout>
     
-    
-   <!--   <RadioGroup
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <RadioButton android:id="@+id/radio_app1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app1"
-        android:onClick="onRadioButtonClicked"/>
-    <RadioButton android:id="@+id/radio_app2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app2"
-        android:onClick="onRadioButtonClicked"/>
-</RadioGroup> -->
+</LinearLayout>
 
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical" >
-
-         
 
 
       </LinearLayout>

@@ -1,4 +1,4 @@
-package activities;
+package old;
 
 import parsing.Parser;
 
@@ -9,6 +9,7 @@ import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
 import fragments.SpacesFragment;
 import fragments.SpacesFragment.OnSpaceItemSelectedListener;
+import activities.BaseActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

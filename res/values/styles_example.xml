@@ -25,6 +25,8 @@
         <item name="actionBarTabStyle">@style/ActionBarTabStyle.Example</item>
         <item name="actionDropDownStyle">@style/DropDownNav.Example</item>
         <item name="actionBarStyle">@style/ActionBar.Solid.Example</item>
+          <!-- Switch library to use switch button in older api then 4.0 -->
+    	<item name="switchStyle">@style/Widget.Holo.Light.CompoundButton.Switch</item>
 
                 <!-- Light.DarkActionBar specific -->
         <item name="actionBarWidgetTheme">@style/Theme.Example.Widget</item>
@@ -70,5 +72,8 @@
         <item name="popupMenuStyle">@style/PopupMenu.Example</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Example</item>
     </style>
+    
+    
+  
 
 </resources>

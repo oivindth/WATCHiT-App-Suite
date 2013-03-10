@@ -60,7 +60,7 @@
         <service android:name="service.LocationService"></service>
         
         <activity
-            android:name="activities.SpaceActivity"
+            android:name="old.SpaceActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

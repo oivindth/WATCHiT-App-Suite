@@ -8,6 +8,7 @@ import service.WATCHiTService;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 
+import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
@@ -231,8 +233,25 @@ public class MainDashBoardActivity extends BaseActivity  {
                 return true;
     	
             case R.id.menu_logout:
-            	//showProgress(true);
-            	showToast("Logging out...");
+            	showProgress(true);
+            	SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        		SharedPreferences.Editor editor = settings.edit();
+        		//Set "hasLoggedIn" to true
+        		editor.putBoolean("hasLoggedIn", false);
+        		editor.putString("username", "");
+        		editor.putString("password", "");
+        		// Commit the edits!
+        		
+        		editor.commit();
+        		
+        		if (sApp.connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
+    				sApp.connectionHandler.disconnect();
+        		}
+        		intent = new Intent(this, LoginActivity.class);
+        		startActivity(intent);
+        		showProgress(false);
+        		finish();
+        		
             	return true;
       	
             default:

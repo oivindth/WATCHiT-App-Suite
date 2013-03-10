@@ -81,6 +81,7 @@ public class MainApplication extends Application {
 	public void switchSpace(Space space) {
 		try {
 			resetHandler();
+			dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 			dataHandler.registerSpace(space.getId());
 			currentActiveSpace = space;
 		} catch (UnknownEntityException e) {
@@ -98,7 +99,7 @@ public class MainApplication extends Application {
 		
 		Log.d("datahandler", "datahandlerobject: "  +dataHandler);
 		spaceHandler.setMode(mode);
-		dataHandler.setMode(Mode.ONLINE);
+		dataHandler.setMode(mode);
 		
 		if (mode == Mode.OFFLINE) {
 			if (connectionHandler.getStatus() == ConnectionStatus.ONLINE) {

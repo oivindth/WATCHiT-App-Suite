@@ -14,6 +14,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 
+import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataObject;
@@ -101,6 +102,9 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		bar.addTab(tab1);
 		bar.addTab(tab2);
 		bar.addTab(tab3);
+		
+		new GetSpacesTask(this).execute();
+		
 		}
 	
 		private class MyTabListener implements ActionBar.TabListener
@@ -177,9 +181,10 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	            	//showProgress(true);
 	            	//TODO: Not here
 	       
-	            	//new GetSpacesTask(this).execute();
+	            	new GetSpacesTask(this).execute();
 	            	//sApp.dataHandler.setMode(Mode.ONLINE);
 	            	//sApp.dataHandler.addDataObjectListener(myListener);
+	            	if (sApp.currentActiveSpace == null) return true;
 	            	new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
 	            	//DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
 	            			//("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
@@ -287,8 +292,11 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	public void onlineModeClicked(boolean on) {
 		if (on) {
 			if ( UtilityClass.isConnectedToInternet(getBaseContext())) {
+				//if (sApp.connectionHandler.getStatus() == ConnectionStatus.ONLINE) 
+    				
+        		
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();	
-				
+				sApp.OnlineMode = true;
 				
 			} else {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -323,11 +331,11 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	@Override
 	public void WATCHiTSwitchClicked(boolean on) {
 		if (on) {
-			
 			if (!btAdapter.isEnabled()) {
 			    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			    startActivity(enableBtIntent);
 				sApp.isWATChiTOn = false;
+				WATCHiTSwitchClicked(on);
 				return;
 			} else {
 				sApp.service.start();

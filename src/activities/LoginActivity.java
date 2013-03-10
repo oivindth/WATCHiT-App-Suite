@@ -300,12 +300,16 @@ public class LoginActivity extends Activity {
 		  app.connectionHandler = connectionHandler;
 		  app.dbName ="sdkcache";
 		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
-		  if (connected) spaceHandler.setMode(Mode.ONLINE);
+		  if (connected) {
+			  spaceHandler.setMode(Mode.ONLINE);
+			  app.OnlineMode = true;
+		  }
 		  if (!connected) spaceHandler.setMode(Mode.OFFLINE);
 		  
 		  app.spaceHandler = spaceHandler;
 		  app.setPassword(mPassword);
 		  app.setUserName(mUserName);
+		  
 	  }
 	  
 	  private void startMainActivity() {
