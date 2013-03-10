@@ -5,13 +5,10 @@ import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class ApplicationsSettingsFragment extends SherlockFragment {

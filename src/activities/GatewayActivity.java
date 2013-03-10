@@ -32,7 +32,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
@@ -42,8 +42,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
@@ -56,16 +54,14 @@ import asynctasks.PublishDataTask;
  */
 public class GatewayActivity extends BaseActivity implements OnSpaceItemSelectedListener, ApplicationsSettingsFfragmentListener  {
 	
-	RadioButton online, location, watchit;
-	StatusFragment statusFragment;
-	TextView textViewEvent;
-	SpacesFragment spaceFragment;
-	ApplicationsSettingsFragment settingsFragment;
+ 	private StatusFragment statusFragment;
+	private SpacesFragment spaceFragment;
+	private ApplicationsSettingsFragment settingsFragment;
 	private BluetoothAdapter btAdapter;
 	private List<String> arrayAdapter;
 	private ListAdapter adapter;
 	private List<BluetoothDevice> devices; 
-	String deviceAdress = "";
+	private String deviceAdress = "";
 	
 	
 	@Override
@@ -136,12 +132,19 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		// TODO Auto-generated method stub
 		}
 	}
-	
-		
+
 	@Override
 	public void onResume() {
-
 		super.onResume();
+		// Register the BroadcastReceiver
+    	IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+    	IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+    	IntentFilter filter3 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+    	IntentFilter filter4 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+    	registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+    	registerReceiver(mReceiver, filter2); // Don't forget to unregister during onDestroy
+    	registerReceiver(mReceiver, filter3); // Don't forget to unregister during onDestroy
+    	registerReceiver(mReceiver, filter4); // Don't forget to unregister during onDestroy
 	}
 	
     @Override
@@ -169,35 +172,23 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	    			//just back use only finish():
 	                finish();
 	                return true;
-	    	
-	                
+	    	  
 	            case R.id.menu_sync:
 	            	//showProgress(true);
 	            	//TODO: Not here
 	       
-	            	new GetSpacesTask(this).execute();
+	            	//new GetSpacesTask(this).execute();
 	            	//sApp.dataHandler.setMode(Mode.ONLINE);
 	            	//sApp.dataHandler.addDataObjectListener(myListener);
 	            	new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
-	            	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-	            			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
-	            	Log.d("BASEACTIVITY", dob.toString());
-	            	new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
+	            	//DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
+	            			//("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());
+	            	//Log.d("BASEACTIVITY", dob.toString());
+	            	//new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
 	            	
 	            	//showProgress(false);
 	            	return true;
 	            	
-	            
-	            case R.id.menu_settings:
-	            	intent = new Intent(this, SettingsActivity.class);
-	            	startActivity(intent);
-	            	return true;
-	            	
-	            case R.id.menu_event:
-	            	intent = new Intent(this, SpaceActivity.class);
-	            	startActivity(intent);
-	            	return true;
-	      	
 	            default:
 	                return super.onOptionsItemSelected(item);
 	        }
@@ -210,6 +201,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	
 	@Override
 	public void onDestroy () {
+		unregisterReceiver(mReceiver);
 		super.onDestroy();
 	}
 
@@ -220,7 +212,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				Log.d("SIZE", "s : " + sApp.spacesInHandler.size());
 				sApp.switchSpace(space);
 				//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
-				//new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
+				new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
 				showToast("Noe registered to event: " + space.getName());
 				//finish();
 		
@@ -269,7 +261,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						deviceAdress = devices.get(which).getAddress();
-						Log.d("shiiiiit", devices.get(which).getAddress());
 						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
 						Bundle b = new Bundle();
 						b.putString("btDevice", deviceAdress);
@@ -287,6 +278,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				AlertDialog dialog = builder.create();
 				dialog.show();
 	        }
+	       // if (LocationManager.)
 	    }
 	};
 
@@ -322,11 +314,8 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			}
 		
 		} else {
-			//TODO: Change handlers to offline mode maaaan.
 			sApp.OnlineMode = false;
 			sApp.setApplicationMode(Mode.OFFLINE);
-			
-			
 		}
 		settingsFragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
 	}
@@ -343,14 +332,14 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			} else {
 				sApp.service.start();
 				//service.start();
-				sApp.isWATChiTOn = true;
+				//sApp.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
     			// If there are paired devices
     			if (pairedDevices.size() > 0) {
     			    // Loop through paired devices
     			    for (BluetoothDevice device : pairedDevices) {
     			        // Add the name and address to an array adapter to show in a ListView
-    			       arrayAdapter.add(device.getName() + "\n" + device.getAddress());
+    			       arrayAdapter.add(device.getName());
     			       devices.add(device);
     			      
     			    }
@@ -362,12 +351,12 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
         		Log.d("SETTINGSACTIVITY", "adapter size : " + arrayAdapter.size());
         		adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, arrayAdapter);
         		
+        			builder.setTitle("Choose WATCHiT device: ");
         		   builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
    					@Override
    					public void onClick(DialogInterface dialog, int which) {
    						//showProgress("WATCHiT", "waiting for ack from WATCHiT");
    						deviceAdress = devices.get(which).getAddress();
-   						Log.d("shiiiiit", devices.get(which).getAddress());
    						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
    						Bundle b = new Bundle();
    						b.putString("btDevice", deviceAdress);
@@ -443,18 +432,18 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		    	dialog.show(); 
 		    	
 		    } else {
-		    	//gps is on.
-		        //TODO: Now use real latitude and longitude in dataobjects.
+		    	if (!sApp.locationService.isRunning()) sApp.locationService.start();
 		    	sApp.isLocationOn = true;
+		    	showToast("Location enabled.");
 		    }
 	    	
 	    } else {
 	    	//TODO: Do not want to use location. Stop adding location to dataobject or just add mocked location data?
-	    	sApp.isLocationOn = false;
+	    	if (sApp.locationService.isRunning()) sApp.locationService.stop();
+			showToast("Stopped location service...");
+			sApp.isLocationOn= false;
 	    	
 	    }
 	    settingsFragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
-	
 	}
-
 }

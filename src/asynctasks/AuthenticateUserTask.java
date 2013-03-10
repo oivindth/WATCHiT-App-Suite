@@ -11,17 +11,19 @@ import android.util.Log;
 public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 
 	
-	private String mUserName;
-	private String mPassword;
 	private BaseActivity mActivity;
 	private MainApplication sApp;
 	
 	public AuthenticateUserTask (BaseActivity activity ,String userName, String password) {
 		Log.d("AuthenticateUserTask", "in constructor");
-		mUserName = userName;
-		mPassword = password;
 		mActivity = activity;
 		sApp = MainApplication.getInstance();
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		mActivity.showProgress("Server", "Syncing with server....");
 	}
 	
 	@Override
@@ -54,7 +56,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(final Boolean success) {
 		//mAuthTask = null;
-		//showProgress(false);
+		mActivity.dismissProgress();
 		Log.d("AuthenticateUserTask", "onPostExecute");
 		if (success) {
 			mActivity.showToast("Logged in user.");

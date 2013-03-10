@@ -1,4 +1,4 @@
-package activities;
+package old;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import fragments.ApplicationsSettingsFragment;
 import fragments.ApplicationsSettingsFragment.ApplicationsSettingsFfragmentListener;
 
 import Utilities.UtilityClass;
+import activities.BaseActivity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

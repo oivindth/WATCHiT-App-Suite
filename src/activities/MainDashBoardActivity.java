@@ -2,6 +2,7 @@ package activities;
 
 import parsing.GenericSensorData;
 import parsing.Parser;
+import service.LocationService;
 import service.ServiceManager;
 import service.WATCHiTService;
 import android.animation.Animator;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
@@ -50,20 +50,28 @@ public class MainDashBoardActivity extends BaseActivity  {
           public void handleMessage(Message msg) {
             // Receive message from service
             switch (msg.what) {
-            case WATCHiTService.MSG_CONNECTION_ESTABLISHED: //TODO: Not receiving this from the service when checking the bluetooth...
+            case WATCHiTService.MSG_CONNECTION_ESTABLISHED:
+            	sApp.isWATChiTOn = true;
           	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
           	  dismissProgress();
               break;
+            case WATCHiTService.MSG_CONNECTION_LOST:
+            	Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
+            	break;
               case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
             	  String data = msg.getData().getString("watchitdata");
                   //textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
                   Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
-                  //GenericSensorData gsd = Parser.buildSimpleXMLObject(data, latitude, longitude);
-              	String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
-                  //dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
+                  String lat = String.valueOf(sApp.getLatitude());
+                  String lot = String.valueOf(sApp.getLongitude());
+                  
+                  GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
+              	  String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
+                  DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
                   //new CreateSpaceTask().execute();
-                  //new PublishDataTask().execute(dataObject);
+                  new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
               	Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
+                  Log.d("watchitdata:  ", data);
                   break;
               default:
                 super.handleMessage(msg);
@@ -71,6 +79,26 @@ public class MainDashBoardActivity extends BaseActivity  {
           }
         });
         
+     // Create a service and handle incoming messages
+        //TODO: Make handler static to avoid (potential) leaks?
+        sApp.locationService = new ServiceManager(this, LocationService.class, new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            // Receive message from service
+            switch (msg.what) {
+            case LocationService.MSG_UPDATE_LOCATION:
+            	Log.d("MainDashBoardActivity", "receieved location update..");
+            	double longitude = msg.getData().getDouble("longitude");
+            	double latitude = msg.getData().getDouble("latitude");
+            	sApp.setLongitude(longitude);
+            	sApp.setLatitude(latitude);
+            	
+            	showToast("New location: " + " long:  " + longitude + " lat: " + latitude );
+              break;
+     
+            } 
+          }
+        });
         
         sApp.dataHandler = new DataHandler(sApp.connectionHandler, sApp.spaceHandler);
 
@@ -204,9 +232,6 @@ public class MainDashBoardActivity extends BaseActivity  {
     	
             case R.id.menu_logout:
             	//showProgress(true);
-            	//TODO: Not here
-       
-            	
             	showToast("Logging out...");
             	return true;
       	

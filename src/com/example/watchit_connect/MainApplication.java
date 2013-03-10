@@ -38,19 +38,13 @@ public class MainApplication extends Application {
       return sInstance;
     }
     
-    public ServiceManager service;
+    public ServiceManager service, locationService;
     
     @Override
     public void onCreate() {
       super.onCreate();  
       sInstance = this;
-      //sInstance.initializeInstance();
     }
-
-    //protected void initializeInstance() {
-        // do all your initialization here
-        //sessionHandler = new SessionHandler( 
-          //  this.getSharedPreferences( "PREFS_PRIVATE", Context.MODE_PRIVATE ) );
 	
 	private boolean valuesSet = false;
 	
@@ -76,6 +70,9 @@ public class MainApplication extends Application {
 	private String userName;
 	private String password;
 
+	private double longitude;;
+	private double latitude; 
+
 
 	/**
 	 * Switch the current active space.
@@ -92,6 +89,7 @@ public class MainApplication extends Application {
 	}
 	
 	private void resetHandler() {
+		//dataHandler.getHandledSpaces().clear();
 		dataHandler = new DataHandler(connectionHandler, spaceHandler);
 	}
 	
@@ -102,17 +100,15 @@ public class MainApplication extends Application {
 		spaceHandler.setMode(mode);
 		dataHandler.setMode(Mode.ONLINE);
 		
-		
 		if (mode == Mode.OFFLINE) {
 			if (connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
 				connectionHandler.disconnect();
 			}
+			
+			
 		}
-		
-		
 	}
-	
-	//public List<Space> spaces; 
+
 	public boolean getvaluesSet() {
 		return valuesSet;
 	}
@@ -120,8 +116,6 @@ public class MainApplication extends Application {
 		valuesSet = bool;
 	}
 	
-
-
 	public String getUserName() {
 		return userName;
 	}
@@ -151,6 +145,21 @@ public class MainApplication extends Application {
 		}
         return true;
 		
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	
+	public void setLongitude(Double longitude) {			
+		this.longitude = longitude;
+	}
+	
+	public void setLatitude (Double latitude) {
+		this.latitude = latitude;
 	}
 	
 	

@@ -20,6 +20,10 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 			mDataObject = dataObject;
 			mSpaceId = spaceId;
 		}
+		public PublishDataTask (DataObject dataObject, String spaceId) {
+			mDataObject = dataObject;
+			mSpaceId = spaceId;
+		}
 		
         @Override
         protected void onPreExecute() {

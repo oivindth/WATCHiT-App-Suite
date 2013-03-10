@@ -31,15 +31,11 @@ public class WATCHiTService extends AbstractService {
 
 	private BluetoothSocket btSocket;
 
-	final int RECIEVE_MESSAGE = 1;        // Status  for Handler
 	private BluetoothAdapter btAdapter = null;
 
 	StringBuilder sb = new StringBuilder();
 	private ConnectedThread mConnectedThread;
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
-	private String deviceAdress;
-
-
 	// Unique Identification Number for the Notification.
 	// We use it on Notification start, and to cancel it.
 	private int NOTIFICATION = R.string.watchit_service_started;
@@ -82,7 +78,7 @@ public class WATCHiTService extends AbstractService {
 			mConnectedThread.write(msg.getData().getString("watchitdata"));
 		}
 		if (msg.what == MSG_DEVICE_NAME) {
-			deviceAdress = msg.getData().getString("btDevice");
+			msg.getData().getString("btDevice");
 			int pos = msg.getData().getInt("btdevicepos");
 			btAdapter = BluetoothAdapter.getDefaultAdapter();
 			//checkBTState();
@@ -181,7 +177,6 @@ public class WATCHiTService extends AbstractService {
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-					//h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
 					Log.d("Service.Thread.Run(): ", " bytes:  " + bytes);
 					
 					String strIncom = new String(buffer, 0, bytes);                 // create string from bytes array

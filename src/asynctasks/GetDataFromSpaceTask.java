@@ -1,18 +1,10 @@
 package asynctasks;
 
-import parsing.GenericSensorData;
-import parsing.Parser;
-
 import com.example.watchit_connect.MainApplication;
 
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-import de.imc.mirror.sdk.DataObjectListener;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.DataHandler;
-import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
@@ -36,7 +28,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	
 		@Override
 		protected void onPreExecute() {
-			mActivity.showProgress("finished", "trying to fetch dataobjects..");
+			mActivity.showProgress("Sync", "Syncing event...");
 		}
 	
 		@Override

@@ -57,6 +57,8 @@
         
         
         <service android:name="service.WATCHiTService"></service>
+        <service android:name="service.LocationService"></service>
+        
         <activity
             android:name="activities.SpaceActivity"
             android:label="@string/title_activity_main" >
@@ -67,7 +69,7 @@
         </activity>
         
         <activity
-            android:name="activities.SettingsActivity"
+            android:name="old.SettingsActivity"
             android:label="Settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

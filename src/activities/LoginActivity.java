@@ -4,18 +4,12 @@ package activities;
 
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.id;
-import com.example.watchit_connect.R.layout;
-import com.example.watchit_connect.R.menu;
-import com.example.watchit_connect.R.string;
-
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
-import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
