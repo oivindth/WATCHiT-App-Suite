@@ -1130,9 +1130,8 @@ containing a value of this type.
         public static final int main_view=0x7f070036;
         public static final int map=0x7f07004d;
         public static final int menu_help=0x7f070050;
-        public static final int menu_logout=0x7f070054;
+        public static final int menu_logout=0x7f070053;
         public static final int menu_map=0x7f070051;
-        public static final int menu_refresh=0x7f070053;
         public static final int menu_settings=0x7f070052;
         public static final int menu_sync=0x7f07004f;
         public static final int none=0x7f070010;
@@ -1359,21 +1358,21 @@ containing a value of this type.
         public static final int watchit_service_stopped=0x7f050023;
     }
     public static final class style {
-        public static final int ActionBar_Solid_Example=0x7f060061;
-        public static final int ActionBar_Transparent_Example=0x7f060062;
+        public static final int ActionBar_Solid_Example=0x7f060062;
+        public static final int ActionBar_Transparent_Example=0x7f060063;
         public static final int ActionBarCompat=0x7f06005d;
-        public static final int ActionBarTabStyle_Example=0x7f060065;
+        public static final int ActionBarTabStyle_Example=0x7f060066;
         public static final int AppTheme=0x7f06005b;
         public static final int DashboardButton=0x7f06005e;
         public static final int DialogWindowTitle_Sherlock=0x7f060036;
         public static final int DialogWindowTitle_Sherlock_Light=0x7f060037;
-        public static final int DropDownListView_Example=0x7f060064;
-        public static final int DropDownNav_Example=0x7f060066;
+        public static final int DropDownListView_Example=0x7f060065;
+        public static final int DropDownNav_Example=0x7f060067;
         public static final int FooterBar=0x7f06005f;
         public static final int LoginFormContainer=0x7f06005c;
-        public static final int PopupMenu_Example=0x7f060063;
+        public static final int PopupMenu_Example=0x7f060064;
         public static final int Preference_SwitchPreference=0x7f060002;
-        public static final int ProgressBar_Example=0x7f060067;
+        public static final int ProgressBar_Example=0x7f060068;
         public static final int Sherlock___TextAppearance_Small=0x7f06004a;
         public static final int Sherlock___Theme=0x7f06004d;
         public static final int Sherlock___Theme_DarkActionBar=0x7f06004f;
@@ -1405,11 +1404,11 @@ containing a value of this type.
         public static final int TextAppearance_Sherlock_Widget_PopupMenu_Large=0x7f060042;
         public static final int TextAppearance_Sherlock_Widget_PopupMenu_Small=0x7f060044;
         public static final int TextAppearance_Sherlock_Widget_TextView_SpinnerItem=0x7f060046;
-        public static final int Theme_Example=0x7f060060;
+        public static final int Theme_Example=0x7f060061;
         /**  this style is only referenced in a Light.DarkActionBar based theme 
  this style is only referenced in a Light.DarkActionBar based theme 
          */
-        public static final int Theme_Example_Widget=0x7f060068;
+        public static final int Theme_Example_Widget=0x7f060069;
         public static final int Theme_Sherlock=0x7f060051;
         public static final int Theme_Sherlock_Dialog=0x7f060059;
         public static final int Theme_Sherlock_ForceOverflow=0x7f060056;
@@ -1467,6 +1466,7 @@ containing a value of this type.
         public static final int Widget_Sherlock_ProgressBar_Horizontal=0x7f060033;
         public static final int Widget_Sherlock_Spinner_DropDown_ActionBar=0x7f060027;
         public static final int Widget_Sherlock_TextView_SpinnerItem=0x7f060035;
+        public static final int textHoloBlueLight=0x7f060060;
     }
     public static final class styleable {
         /** Attributes that can be used with a Android.

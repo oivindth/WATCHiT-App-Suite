@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Status:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/holo_blue_light"
+            style="@style/textHoloBlueLight"
              />
     </LinearLayout>
 
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text="Event:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/holo_blue_light" />
+            android:textColor="#33B5E5" />
     </LinearLayout>
 
 

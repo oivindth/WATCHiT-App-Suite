@@ -25,6 +25,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
@@ -45,9 +47,9 @@ public class MainDashBoardActivity extends BaseActivity  {
         
         new GetSpacesTask(this).execute();
         
-        // Create a service and handle incoming messages
+     // Create a service and handle incoming messages
         //TODO: Make handler static to avoid (potential) leaks?
-        sApp.service = new ServiceManager(this, WATCHiTService.class, new Handler() {
+        sApp.service = new ServiceManager(getBaseContext(), WATCHiTService.class, new Handler() {
           @Override
           public void handleMessage(Message msg) {
             // Receive message from service
@@ -55,10 +57,20 @@ public class MainDashBoardActivity extends BaseActivity  {
             case WATCHiTService.MSG_CONNECTION_ESTABLISHED:
             	sApp.isWATChiTOn = true;
           	  Log.d("MainActivity Handler ", "Connection established message receieved from service.");
-          	  dismissProgress();
+          	  showToast("Connection to WATCHiT established..");
+          	  //dismissProgress();
               break;
+            case WATCHiTService.MSG_CONNECTION_FAILED:
+            	//dismissProgress();
+            	sApp.isWATChiTOn = false;
+            	Log.d("MainDashBoardActivityHandler: ", " Connection failed");
+            	showToast(" Failed to connect to WATCHiT....");
+            	
+            	break;
             case WATCHiTService.MSG_CONNECTION_LOST:
             	Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
+            	showToast("Warning: Lost connection with WATCHiT!");
+            	sApp.isWATChiTOn = false;
             	break;
               case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
             	  String data = msg.getData().getString("watchitdata");
@@ -80,10 +92,12 @@ public class MainDashBoardActivity extends BaseActivity  {
             } 
           }
         });
+		
+		
         
-     // Create a service and handle incoming messages
-        //TODO: Make handler static to avoid (potential) leaks?
-        sApp.locationService = new ServiceManager(this, LocationService.class, new Handler() {
+  
+        //LocationService.
+        sApp.locationService = new ServiceManager(getBaseContext(), LocationService.class, new Handler() {
           @Override
           public void handleMessage(Message msg) {
             // Receive message from service
@@ -128,26 +142,11 @@ public class MainDashBoardActivity extends BaseActivity  {
 		mDashboardStatusView = findViewById(R.id.dashboard_status);
         
         // new GetSpacesTask().execute();
-        /**
-         * Creating all buttons instances
-         * */
-        //Button buttonEvent = (Button) findViewById(R.id.btn_event);
- 
-
-        //Button buttonSetUp = (Button) findViewById(R.id.btn_setup);
- 
-        // Dashboard Messages button
         Button buttonMap = (Button) findViewById(R.id.btn_map);
- 
-        // Dashboard Places button
         Button buttonApp2 = (Button) findViewById(R.id.btn_app2);
-
         Button buttonGateway = (Button) findViewById(R.id.btn_gateway);
- 
-        // Dashboard Photos button
         Button buttonProfile = (Button) findViewById(R.id.btn_profile);
         
-        //DashBoard mirror text view
         TextView textview = (TextView) findViewById(R.id.footerTextView);
         
         textview.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +161,7 @@ public class MainDashBoardActivity extends BaseActivity  {
  
             @Override
             public void onClick(View view) {
-                // Launching News Feed Screen
+
                 Intent i = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(i);
             }
@@ -173,7 +172,6 @@ public class MainDashBoardActivity extends BaseActivity  {
             @Override
             public void onClick(View view) {
             	showToast("Not yet implemented.");
-                // Launching News Feed Screen
                 //Intent i = new Intent(getApplicationContext(), );
                 //startActivity(i);
             }
@@ -189,12 +187,10 @@ public class MainDashBoardActivity extends BaseActivity  {
             }
         });
  
-        // Listening to Photos button click
         buttonProfile.setOnClickListener(new View.OnClickListener() {
  
             @Override
             public void onClick(View view) {
-                // Launching News Feed Screen
             	showToast("Profile with badges?");
                 //Intent i = new Intent(getApplicationContext(), PhotosActivity.class);
                 //startActivity(i);
@@ -205,6 +201,13 @@ public class MainDashBoardActivity extends BaseActivity  {
     @Override
     public void onResume() {
     	super.onResume();
+    	int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+    	if (resultCode == ConnectionResult.SUCCESS) {
+    		//proceed as normal
+    	} else {
+    		GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+
+    	}
     }
     
     

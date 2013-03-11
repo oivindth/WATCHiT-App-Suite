@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import parsing.GenericSensorData;
 import parsing.Parser;
+import service.ServiceManager;
 import service.WATCHiTService;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -36,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -43,6 +46,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
@@ -74,6 +78,9 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		//FragmentTransaction ft; 
 		//getSupportFragmentManager().beginTransaction()
 		//.add(R.id.gateway_fragment_container, statusFragment  ,"status").commit(); 
+		
+		
+		
 		
 		devices = new ArrayList<BluetoothDevice>();
 		
@@ -294,7 +301,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			if ( UtilityClass.isConnectedToInternet(getBaseContext())) {
 				//if (sApp.connectionHandler.getStatus() == ConnectionStatus.ONLINE) 
     				
-        		
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();	
 				sApp.OnlineMode = true;
 				
@@ -335,13 +341,16 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			    startActivity(enableBtIntent);
 				sApp.isWATChiTOn = false;
-				WATCHiTSwitchClicked(on);
 				return;
 			} else {
 				sApp.service.start();
 				//service.start();
 				//sApp.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+				
+				arrayAdapter = new ArrayList<String>();
+				devices = new ArrayList<BluetoothDevice>();
+				
     			// If there are paired devices
     			if (pairedDevices.size() > 0) {
     			    // Loop through paired devices
@@ -363,7 +372,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
         		   builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
    					@Override
    					public void onClick(DialogInterface dialog, int which) {
-   						//showProgress("WATCHiT", "waiting for ack from WATCHiT");
+   						//showProgress("WATCHiT", "Connecting to WATCHiT....");
    						deviceAdress = devices.get(which).getAddress();
    						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
    						Bundle b = new Bundle();
@@ -404,9 +413,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			showToast("Stopped WATCHiT sync...");
 			sApp.isWATChiTOn= false;
 		}
-		
 		 settingsFragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
-		
 	}
 
 	@Override

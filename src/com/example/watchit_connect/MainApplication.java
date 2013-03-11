@@ -84,6 +84,8 @@ public class MainApplication extends Application {
 			dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 			dataHandler.registerSpace(space.getId());
 			currentActiveSpace = space;
+			
+			
 		} catch (UnknownEntityException e) {
 			e.printStackTrace();
 		}

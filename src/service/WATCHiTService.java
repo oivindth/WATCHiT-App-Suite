@@ -26,8 +26,8 @@ import android.util.Log;
  *
  */
 public class WATCHiTService extends AbstractService {
-
-	private NotificationManager mNM;
+	//TODO: Refactor bluetooth connection out and make it an asynctask.
+	
 
 	private BluetoothSocket btSocket;
 
@@ -35,24 +35,24 @@ public class WATCHiTService extends AbstractService {
 
 	StringBuilder sb = new StringBuilder();
 	private ConnectedThread mConnectedThread;
+	//TODO: from random string instead of hardcoded uuid?
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
-	// Unique Identification Number for the Notification.
-	// We use it on Notification start, and to cancel it.
-	private int NOTIFICATION = R.string.watchit_service_started;
 
+
+	
+	
 	public static final int MSG_SET_INT_VALUE = 9993;
 	public static final int MSG_SET_STRING_VALUE =9994;
 	public static final int MSG_SET_STRING_VALUE_TO_ACTIVITY = 9995;
 	public static final int MSG_CONNECTION_ESTABLISHED = 9996;
 	public static final int MSG_CONNECTION_LOST = 9997;
+	public static final int MSG_CONNECTION_FAILED = 9999;
 	public static final int MSG_DEVICE_NAME = 9998;
 
 	@Override
 	public void onStartService() {
 		Log.i("WATCHiTService", "We are now in service");
-		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		// Display a notification about us starting.  We put an icon in the status bar.
-		showNotification();
+		
 	}
 
 	@Override
@@ -73,8 +73,8 @@ public class WATCHiTService extends AbstractService {
 	 * case: msg_device_name: device paired. Create, open sockets and connect.
 	 */
 	public void onReceiveMessage(Message msg) {
-		Log.d("onreceievemessage in localservice", "correct place");
 		if (msg.what == MSG_SET_STRING_VALUE) {
+			Log.d("WATCHiTService", " writing data to watchit. Data: " + msg.getData().getString("watchitdata"));
 			mConnectedThread.write(msg.getData().getString("watchitdata"));
 		}
 		if (msg.what == MSG_DEVICE_NAME) {
@@ -82,7 +82,7 @@ public class WATCHiTService extends AbstractService {
 			int pos = msg.getData().getInt("btdevicepos");
 			btAdapter = BluetoothAdapter.getDefaultAdapter();
 			//checkBTState();
-			Log.d("WATCHITSERVICE", "...onResume - try connect...");
+			Log.d("WATCHITSERVICE", ".... try connect...");
 
 			BluetoothDevice device = MainApplication.getInstance().bluetoothDevices.get(pos);
 
@@ -112,6 +112,7 @@ public class WATCHiTService extends AbstractService {
 				send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED)); //Let acitvity know that a connection to watchit has been made.
 			} catch (IOException e) {
 				e.printStackTrace();
+				send(Message.obtain(null, this.MSG_CONNECTION_FAILED));
 				try {
 					btSocket.close();
 				} catch (IOException e2) {
@@ -137,7 +138,6 @@ public class WATCHiTService extends AbstractService {
 			btSocket.close();
 		} catch (IOException e) { }
 	} 
-
 	/**
 	 * Thread used for constantly listening to data receieved from bluetooth(WATCHiT).
 	 * @author oivindth
@@ -227,27 +227,6 @@ public class WATCHiTService extends AbstractService {
 		} 
 	}
 
-	/**
-	 * Show a notification while this service is running.
-	 */
-	private void showNotification() {
-		// In this sample, we'll use the same text for the ticker and the expanded notification
-		CharSequence text = getText(R.string.watchit_service_started);
 
-		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(R.drawable.androidavatar , text,
-				System.currentTimeMillis());
-
-		//The PendingIntent to launch our activity if the user selects this notification
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, MainDashBoardActivity.class), 0);
-
-		// Set the info for the views that show in the notification panel.
-		notification.setLatestEventInfo(this, "WATCHiT",
-				text, contentIntent);
-
-		// Send the notification.
-		mNM.notify(NOTIFICATION, notification);
-	}
 
 }

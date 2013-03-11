@@ -47,6 +47,8 @@ public class LoginActivity extends Activity {
 	// Values for email and password at the time of the login attempt.
 	private String mUserName;
 	private String mPassword;
+	String username;
+	String password;
 
 	// UI references.
 	private EditText mUserNameView;
@@ -74,8 +76,8 @@ public class LoginActivity extends Activity {
 	      boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
 	      if(hasLoggedIn) {
 	    	  
-	    	  String username = settings.getString("username", "");
-	    	  String password = settings.getString("password", "");
+	    	  username = settings.getString("username", "");
+	    	  password = settings.getString("password", "");
 	    	  //Configure connection
 				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
 		        connectionConfigurationBuilder.setHost(getString(R.string.host));
@@ -290,6 +292,9 @@ public class LoginActivity extends Activity {
 		editor.putBoolean("hasLoggedIn", true);
 		editor.putString("username", mUserName);
 		editor.putString("password", mPassword);
+		username = mUserName;
+		password = mPassword;
+		
 		// Commit the edits!
 		editor.commit();
 	  }
@@ -307,8 +312,8 @@ public class LoginActivity extends Activity {
 		  if (!connected) spaceHandler.setMode(Mode.OFFLINE);
 		  
 		  app.spaceHandler = spaceHandler;
-		  app.setPassword(mPassword);
-		  app.setUserName(mUserName);
+		  app.setPassword(password);
+		  app.setUserName(username);
 		  
 	  }
 	  
