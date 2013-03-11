@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import parsing.GenericSensorData;
-import parsing.Parser;
-import service.ServiceManager;
 import service.WATCHiTService;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -16,11 +13,9 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 
-import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.DataObject;
-
+import dialogs.ServerSettingsDialog;
 import fragments.ApplicationsSettingsFragment;
 import fragments.SpacesFragment;
 import fragments.ApplicationsSettingsFragment.ApplicationsSettingsFfragmentListener;
@@ -38,7 +33,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -46,11 +40,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
-import asynctasks.PublishDataTask;
 
 /**
  * Gateway application.
@@ -92,10 +84,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		
 		ActionBar bar = getSupportActionBar();
 		
-		
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
-		
 		
 		ActionBar.Tab tab1 = bar.newTab();
 		ActionBar.Tab tab2 = bar.newTab();
@@ -169,9 +158,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	        Intent intent;
 	        
-	        int id = item.getItemId();
-	        Log.d("item ID : ", "onOptionsItemSelected Item ID" + id);
-	        
 	    	switch (item.getItemId()) {
 	    	
 	    		case android.R.id.home:
@@ -200,6 +186,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	            	
 	            	//showProgress(false);
 	            	return true;
+	    
 	            	
 	            default:
 	                return super.onOptionsItemSelected(item);

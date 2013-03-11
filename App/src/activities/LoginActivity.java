@@ -2,6 +2,11 @@ package activities;
 
 
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
@@ -10,6 +15,8 @@ import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
+import dialogs.ServerSettingsDialog;
+import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -20,18 +27,20 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import asynctasks.GetDataFromSpaceTask;
+import asynctasks.GetSpacesTask;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well. Source: Android
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends SherlockFragmentActivity implements ServerSettingsDialogListener  {
 	/**
 	 * The default username to populate the username field with.
 	 */
@@ -43,12 +52,18 @@ public class LoginActivity extends Activity {
 	private UserLoginTask mAuthTask = null;
 	
 	private MainApplication app;
+	private ServerSettingsDialog serverDialog;
 
 	// Values for email and password at the time of the login attempt.
 	private String mUserName;
 	private String mPassword;
-	String username;
-	String password;
+	private String username;
+	private String password;
+	
+	private String host;
+	private String domain;
+	private String applicationId;
+	private int port;
 
 	// UI references.
 	private EditText mUserNameView;
@@ -72,19 +87,29 @@ public class LoginActivity extends Activity {
 	        super.onCreate(savedInstanceState);
 	        app = MainApplication.getInstance();
 	        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-	      //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-	      boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
-	      if(hasLoggedIn) {
-	    	  
+	        host = settings.getString("host", getString(R.string.host));
+	    	domain = settings.getString("domain", getString(R.string.domain));
+	    	applicationId = getString(R.string.application_id);
+	    	port = settings.getInt("port", 5222);
+	    	
+	    	
+	    	Log.d("LoginActivity ", "host " + host);
+	    	Log.d("LoginActivity ", "port " + port);
+	    	Log.d("LoginActivity ", "domain " + domain);
+	    	
+	    	boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
+	    	if(hasLoggedIn) {
 	    	  username = settings.getString("username", "");
 	    	  password = settings.getString("password", "");
+	    	  
 	    	  //Configure connection
-				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
-		        connectionConfigurationBuilder.setHost(getString(R.string.host));
+				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain, applicationId );
+		        connectionConfigurationBuilder.setHost(host);
+		        connectionConfigurationBuilder.setPort(port);
 		        connectionConfig = connectionConfigurationBuilder.build();
 		        connectionHandler = new ConnectionHandler(username, password, connectionConfig);
 			
-		        updateGlobalConnectionVariables(false);
+    		updateGlobalConnectionVariables(false);
 	    	  startMainActivity();
 	      }
 	    	  
@@ -127,11 +152,21 @@ public class LoginActivity extends Activity {
 					});
 	      
 	  }
+	  
+	  @Override
+	  public void onResume() {
+		  super.onResume();
+		  
+	  }
+	  
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
 			super.onCreateOptionsMenu(menu);
-			getMenuInflater().inflate(R.menu.activity_login, menu);
-			return true;
+			
+			 MenuInflater inflater = getSupportMenuInflater();
+		  	   inflater.inflate(R.menu.activity_login, menu);
+		  	   return super.onCreateOptionsMenu(menu); 
+
 		}
 		/**
 		 * Attempts to sign in or register the account specified by the login form.
@@ -240,8 +275,9 @@ public class LoginActivity extends Activity {
 			protected Boolean doInBackground(Void... params) {
 
 		        //Configure connection
-				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(getString(R.string.domain), getString(R.string.application_id));
-		        connectionConfigurationBuilder.setHost(getString(R.string.host));
+				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain,applicationId);
+		        connectionConfigurationBuilder.setHost(host);
+		        connectionConfigurationBuilder.setPort(port);
 		        connectionConfig = connectionConfigurationBuilder.build();
 		        connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
 		      try {
@@ -250,7 +286,6 @@ public class LoginActivity extends Activity {
 		    	  e.printStackTrace();
 		    	  return false;
 		      }
-
 				return true;
 			}
 
@@ -323,4 +358,33 @@ public class LoginActivity extends Activity {
           startActivity(intent);
           finish();
 	  }	  
+	  
+	  
+	  @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        Intent intent;
+	        
+	    	switch (item.getItemId()) {
+	    	
+	            case R.id.menu_server_settings:
+	            	serverDialog = new ServerSettingsDialog();
+	            	serverDialog.show(getSupportFragmentManager(), "serverdialog");
+	            	return true;
+	            default:
+	                return super.onOptionsItemSelected(item);
+	        }
+	    }
+
+	@Override
+	public void saveServerSettingsButtonClick() {
+		SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        host = settings.getString("host", getString(R.string.host));
+    	domain = settings.getString("domain", getString(R.string.domain));
+    	applicationId = getString(R.string.application_id);
+    	port = settings.getInt("port", 5222);
+		
+	}
+	  
+
+	  
 }

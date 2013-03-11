@@ -91,6 +91,12 @@ public class MainApplication extends Application {
 		}
 	}
 	
+	
+	public void changeServer(String host, String domain, String port) {
+		//connectionConfigurationBuilder
+	}
+	
+	
 	private void resetHandler() {
 		//dataHandler.getHandledSpaces().clear();
 		dataHandler = new DataHandler(connectionHandler, spaceHandler);
