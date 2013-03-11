@@ -30,8 +30,8 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 	private ProgressDialog mProgressDialog;
 	protected MainApplication sApp;
 	
-	String mockLatitude = "123"; 
-	String mockLongitude = "323"; 
+	//String mockLatitude = "123"; 
+	//String mockLongitude = "323"; 
 
 	protected DataObjectListener myListener;
 	
