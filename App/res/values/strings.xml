@@ -2,11 +2,16 @@
 
     <!-- Main Strings -->
     
-    <string name="app_name">WATCHiT Reflection App</string>
+    <string name="app_name">Emergency!Reflect</string>
+    <string name ="gateway_name">Gateway</string> 
+    <string name = "dashboard_name">Dashboard</string>
+    <string name ="map_name">iMap</string>
+    
     <string name="title_activity_main">DashBoard</string>
     <string name ="title_activity_settings">Set up </string>
-    <string name ="title_activity_map">Map</string>
+    <string name ="title_activity_map">Map app</string>
     <string name= "title_activity_event">Events</string>
+    <string name = "title_activity_config">Configure</string>
     
    <string name="watchit_service_started"> WATCHiT connected and running. </string>
    <string name="watchit_service_stopped"> WATCHiT no longer connected.</string>

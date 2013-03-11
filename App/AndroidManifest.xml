@@ -30,15 +30,11 @@
         android:label="@string/app_name"
         android:name="com.example.watchit_connect.MainApplication"
         android:uiOptions="none"
+		 android:theme="@style/Theme.Example">
 
-            android:theme="@style/Theme.Example"
-             >
-           
-        
         <activity
             android:name="activities.MainDashBoardActivity"
-            android:label="@string/title_activity_main" >
-        
+            android:label="@string/dashboard_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -47,7 +43,7 @@
         
         <activity
             android:name="activities.GatewayActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/gateway_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -60,17 +56,8 @@
         <service android:name="service.LocationService"></service>
         
         <activity
-            android:name="old.SpaceActivity"
-            android:label="@string/title_activity_main" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        
-        <activity
             android:name="activities.MapActivity"
-            android:label="Map"
+            android:label="@string/map_name"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,7 +65,6 @@
             </intent-filter>
         </activity>
         
-
          <activity
             android:name="activities.LoginActivity"
             android:label="@string/app_name"
