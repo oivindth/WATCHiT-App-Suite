@@ -7,6 +7,8 @@
         android:showAsAction="ifRoom|withText" />
 
   
+    <item android:id="@+id/menu_mock_watchit_data"
+        android:title="Publish mock watchit data(testing)"
+        android:showAsAction="never" />
         
-     
 </menu>

@@ -1131,10 +1131,11 @@ containing a value of this type.
         public static final int login_status_message=0x7f07002d;
         public static final int main_view=0x7f070036;
         public static final int map=0x7f070050;
-        public static final int menu_logout=0x7f070056;
-        public static final int menu_map=0x7f070054;
-        public static final int menu_server_settings=0x7f070053;
-        public static final int menu_settings=0x7f070055;
+        public static final int menu_logout=0x7f070057;
+        public static final int menu_map=0x7f070055;
+        public static final int menu_mock_watchit_data=0x7f070053;
+        public static final int menu_server_settings=0x7f070054;
+        public static final int menu_settings=0x7f070056;
         public static final int menu_sync=0x7f070052;
         public static final int none=0x7f070010;
         public static final int normal=0x7f070001;

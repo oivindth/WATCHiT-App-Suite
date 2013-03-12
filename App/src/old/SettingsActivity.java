@@ -107,7 +107,7 @@ public class SettingsActivity extends BaseActivity implements ApplicationsSettin
             case R.id.menu_sync:
             	new GetSpacesTask(this).execute();
             	sApp.dataHandler.setMode(Mode.ONLINE);
-            	sApp.dataHandler.addDataObjectListener(myListener);
+            	//sApp.dataHandler.addDataObjectListener(myListener);
             	new GetDataFromSpaceTask(this ,"team#38").execute();
             	DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
             			("HelloWorld", "44.84866", "10.30683"), "admin" + "@" + sApp.connectionHandler.getConfiguration().getDomain());

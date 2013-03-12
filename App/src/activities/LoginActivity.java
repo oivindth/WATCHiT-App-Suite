@@ -12,10 +12,12 @@ import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
+import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import dialogs.ServerSettingsDialog;
 import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
+import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -54,9 +56,11 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	// Values for email and password at the time of the login attempt.
 	private String mUserName;
 	private String mPassword;
+	
 	private String username;
 	private String password;
 	
+	boolean hasLoggedIn;
 	private String host;
 	private String domain;
 	private String applicationId;
@@ -69,9 +73,9 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
 	
-	ConnectionConfigurationBuilder connectionConfigurationBuilder;
-	ConnectionConfiguration connectionConfig;
-	ConnectionHandler connectionHandler;
+	private ConnectionConfigurationBuilder connectionConfigurationBuilder;
+	private ConnectionConfiguration connectionConfig;
+	private ConnectionHandler connectionHandler;
 	
 	// A special thanks to Telmo Marques from stackoverflow for how to display login activity only once.
 	// source:  http://stackoverflow.com/questions/9964480/how-to-display-login-screen-only-one-time
@@ -83,21 +87,25 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        app = MainApplication.getInstance();
+	        
+	        
+	        // Get host and domain from sharedpreferences or use default values(mirror-server-ntnu) if they are not set.
 	        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
 	        host = settings.getString("host", getString(R.string.host));
 	    	domain = settings.getString("domain", getString(R.string.domain));
 	    	applicationId = getString(R.string.application_id);
-	    	port = settings.getInt("port", 5222);
+	    	port = settings.getInt("port", 5222); //5222 is standard port.
 	    	
+	    	username = settings.getString("username", "");
+	    	password = settings.getString("password", "");
 	    	
 	    	Log.d("LoginActivity ", "host " + host);
 	    	Log.d("LoginActivity ", "port " + port);
 	    	Log.d("LoginActivity ", "domain " + domain);
 	    	
-	    	boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
+	    	hasLoggedIn =  settings.getBoolean("hasLoggedIn", false);
 	    	if(hasLoggedIn) {
-	    	  username = settings.getString("username", "");
-	    	  password = settings.getString("password", "");
+	    	  
 	    	  
 	    	  //Configure connection
 				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain, applicationId );
@@ -106,21 +114,20 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		        connectionConfig = connectionConfigurationBuilder.build();
 		        connectionHandler = new ConnectionHandler(username, password, connectionConfig);
 			
-    		updateGlobalConnectionVariables(false);
-	    	  startMainActivity();
+		        if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
+		        	//new UserLoginTask().execute();
+		        } else {
+		        	updateGlobalConnectionVariables(false);
+			    	  startMainActivity();
+		        }
 	      }
 	    	  
-	    	 
-	  
 	      setContentView(R.layout.activity_login);
 	      
-	   // Set up the login form.
-			//mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
+	      	// Set up the login form.
 			mUserNameView = (EditText) findViewById(R.id.username);
-
 			mPasswordView = (EditText) findViewById(R.id.password);
-		
-			
+
 			mPasswordView
 					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 						@Override
@@ -268,13 +275,19 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 			@Override
 			protected Boolean doInBackground(Void... params) {
-
+				
+				
+					username = mUserName;
+					password = mPassword;
+				
+			
+				
 		        //Configure connection
 				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain,applicationId);
 		        connectionConfigurationBuilder.setHost(host);
 		        connectionConfigurationBuilder.setPort(port);
 		        connectionConfig = connectionConfigurationBuilder.build();
-		        connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
+		        connectionHandler = new ConnectionHandler(username, password, connectionConfig);
 		      try {
 		    	  connectionHandler.connect();
 		      } catch (ConnectionStatusException e) {
@@ -333,17 +346,19 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		  app.connectionConfigurationBuilder = connectionConfigurationBuilder;
 		  app.connectionConfig = connectionConfig;
 		  app.connectionHandler = connectionHandler;
-		  app.dbName ="sdkcache";
-		  SpaceHandler spaceHandler = new SpaceHandler(getBaseContext(), app.connectionHandler, app.dbName);
-		  if (connected) {
-			  spaceHandler.setMode(Mode.ONLINE);
-			  app.OnlineMode = true;
-		  }
-		  if (!connected) spaceHandler.setMode(Mode.OFFLINE);
+		  app.spaceHandler = new SpaceHandler(getApplicationContext(), app.connectionHandler, "databasett");
+	      app.dataHandler = new DataHandler(app.connectionHandler, app.spaceHandler);
 		  
-		  app.spaceHandler = spaceHandler;
+		  if (connected) {
+			  app.OnlineMode = true;
+			  app.spaceHandler.setMode(Mode.ONLINE);
+			  app.dataHandler.setMode(Mode.ONLINE);
+		  }
+		  
 		  app.setPassword(password);
 		  app.setUserName(username);
+		  
+
 		  
 	  }
 	  

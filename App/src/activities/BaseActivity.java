@@ -1,5 +1,8 @@
 package activities;
 
+import parsing.GenericSensorData;
+import parsing.Parser;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
@@ -7,6 +10,7 @@ import com.example.watchit_connect.R;
 
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+import de.imc.mirror.sdk.android.DataObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,10 +34,11 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 	private ProgressDialog mProgressDialog;
 	protected MainApplication sApp;
 	
+	
 	//String mockLatitude = "123"; 
 	//String mockLongitude = "323"; 
 
-	protected DataObjectListener myListener;
+	
 	
 		@Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,8 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 			
 	        super.onCreate(savedInstanceState); 
 	        sApp = MainApplication.getInstance();
+
+	        
 	    }
 		
 		@Override

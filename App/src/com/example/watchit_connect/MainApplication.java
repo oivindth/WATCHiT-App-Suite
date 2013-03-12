@@ -3,15 +3,20 @@ package com.example.watchit_connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import parsing.GenericSensorData;
+import parsing.Parser;
+
 import service.ServiceManager;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.ConnectionStatus;
+import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
+import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.app.Application;
@@ -19,6 +24,7 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
 
 
 /**
@@ -26,27 +32,26 @@ import android.util.Log;
  * Implemented as singleton. Also contains WATChiT service object making watchit data available for several applications. 
  * (WATCHiTService should possibly also be implemented as singleton)
  * @author oivindth
-
  */
 public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
-
-    public Mode applicationMode;
     
+    public ServiceManager service, locationService;
+
     public static MainApplication getInstance() {
       return sInstance;
     }
-    
-    public ServiceManager service, locationService;
-    
     @Override
     public void onCreate() {
       super.onCreate();  
       sInstance = this;
     }
-	
-	private boolean valuesSet = false;
+    
+   
+    
+    public DataObjectListener myListener;
+    
 	
 	public boolean OnlineMode, isLocationOn, isWATChiTOn = false; //TODO: Not best place to have this
 	
@@ -59,8 +64,9 @@ public class MainApplication extends Application {
 	public ConnectionConfiguration connectionConfig; 
 	public ConnectionHandler connectionHandler; 
 	public SpaceHandler spaceHandler; 
-	public String dbName = "sdkcache"; 
+	public String dbName = "sdkcache2"; 
 	public DataHandler dataHandler;
+
 	
 	public List<Space> spacesInHandler = new ArrayList<Space>();
 	public List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
@@ -81,50 +87,41 @@ public class MainApplication extends Application {
 	public void switchSpace(Space space) {
 		try {
 			resetHandler();
+			
 			dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
+			
 			dataHandler.registerSpace(space.getId());
+			Log.d("swithspace ", "current registered space: " + space.getId());
 			currentActiveSpace = space;
 			
 			
 		} catch (UnknownEntityException e) {
+			Log.d("failed", "WE FAIL!!!");
 			e.printStackTrace();
 		}
 	}
 	
-	
-	public void changeServer(String host, String domain, String port) {
-		//connectionConfigurationBuilder
-	}
-	
+
 	
 	private void resetHandler() {
-		//dataHandler.getHandledSpaces().clear();
+
+		spaceHandler = new SpaceHandler(getApplicationContext(), connectionHandler, dbName);
 		dataHandler = new DataHandler(connectionHandler, spaceHandler);
 	}
 	
 	public void setApplicationMode (Mode mode) {
-		Log.d("object: ", "mode :" + mode );
 		
-		Log.d("datahandler", "datahandlerobject: "  +dataHandler);
-		spaceHandler.setMode(mode);
-		dataHandler.setMode(mode);
 		
 		if (mode == Mode.OFFLINE) {
 			if (connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
 				connectionHandler.disconnect();
 			}
-			
+			spaceHandler.setMode(mode);
+			dataHandler.setMode(mode);
 			
 		}
 	}
 
-	public boolean getvaluesSet() {
-		return valuesSet;
-	}
-	public void setValuesSet(boolean bool) {
-		valuesSet = bool;
-	}
-	
 	public String getUserName() {
 		return userName;
 	}

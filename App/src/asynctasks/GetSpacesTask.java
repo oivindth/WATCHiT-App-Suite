@@ -9,13 +9,15 @@ import com.example.watchit_connect.MainApplication;
 public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private BaseActivity mActivity;
+	MainApplication sApp;
 		
 		public GetSpacesTask (BaseActivity activity) {
 			mActivity = activity;
+			sApp = MainApplication.getInstance();
 		}
 		protected Boolean doInBackground(Void...params) {
 			try {
-					MainApplication.getInstance().spacesInHandler = MainApplication.getInstance().spaceHandler.getAllSpaces();
+					sApp.spacesInHandler = sApp.spaceHandler.getAllSpaces();
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;

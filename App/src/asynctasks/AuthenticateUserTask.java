@@ -1,8 +1,12 @@
 package asynctasks;
 
+import java.util.List;
+
 import com.example.watchit_connect.MainApplication;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+import de.imc.mirror.sdk.android.DataObject;
+import de.imc.mirror.sdk.android.DataObjectBuilder;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import activities.BaseActivity;
 import android.os.AsyncTask;
@@ -13,6 +17,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private BaseActivity mActivity;
 	private MainApplication sApp;
+	List l;
 	
 	public AuthenticateUserTask (BaseActivity activity ,String userName, String password) {
 		Log.d("AuthenticateUserTask", "in constructor");
@@ -36,19 +41,18 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
         connectionConfig = connectionConfigurationBuilder.build();
         connectionHandler = new ConnectionHandler(mUserName, mPassword, connectionConfig);
         */
+		
       try {
     	  MainApplication.getInstance().connectionHandler.connect();
-    	
-    	 
-      } catch (ConnectionStatusException e) {
+    	  sApp.spaceHandler.setMode(Mode.ONLINE);
+  		  sApp.dataHandler.setMode(Mode.ONLINE);
+  		  //sApp.dataHandler.registerSpace("team#42");
+
+  		  
+      } catch (Exception e) {
     	  e.printStackTrace();
     	  return false;
-    	  
-      }  catch (Exception e) {
- 		 e.printStackTrace();
- 		 return false;
-		
-	}
+      }  
       return true; 
 	}
 
@@ -61,14 +65,9 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 		if (success) {
 			mActivity.showToast("Logged in user.");
 			Log.d("AUTHENTICATEUSERTASK", "Succsessfully logged in the user");
-			sApp.OnlineMode =true;
-			sApp.setApplicationMode(Mode.ONLINE);
 		} else {
 			mActivity.showToast("Failed to connect user" );
-			
 			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");
-			sApp.OnlineMode =false;
-			sApp.setApplicationMode(Mode.OFFLINE);
 		}
 	}
 	@Override

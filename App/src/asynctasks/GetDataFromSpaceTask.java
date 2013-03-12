@@ -1,10 +1,13 @@
 package asynctasks;
 
+import java.util.ArrayList;
+
 import com.example.watchit_connect.MainApplication;
 
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
@@ -12,6 +15,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private String mSpaceId;
 	private BaseActivity mActivity;
+	
 	
 	private MainApplication app;
 	
@@ -36,11 +40,11 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 			Log.d("GETDATAFROMSPACETASK", "do in background");
 			try {
 			
-				//app.dataHandler.registerSpace(mSpaceId); //TODO one space at a time. Register this when u choose space.
-				//app.dataHandler.addDataObjectListener(myListener);
-				//MainApplication.dataObjects
-		
-				app.dataHandler.registerSpace(mSpaceId);
+				  //app.spaceHandler.setMode(Mode.ONLINE);
+	      		  //app.dataHandler.setMode(Mode.ONLINE);
+	      		  //app.dataHandler.registerSpace("team#42");
+				
+				app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 				app.dataObjects = app.dataHandler.retrieveDataObjects(mSpaceId);
 
 			} catch (UnknownEntityException e) {
@@ -54,8 +58,11 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 			mActivity.dismissProgress();
 			if (success) {
 				Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
+				Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
+				mActivity.showToast("Size of data receieved from space " + app.dataObjects.size());
 				//Log.d("GETDATATASK", app.dataObjects.get(app.dataObjects.size()-1).toString());
 			} else {
+				mActivity.showToast("Size of data receieved from space");
 				Log.d("GETDATATASK", "FAIL");
 			}
 		}
