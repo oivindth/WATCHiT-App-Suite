@@ -70,6 +70,8 @@
                 android:layout_marginLeft="20dp"
                 android:textColor="@android:color/white" />
         </LinearLayout>
+        
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +85,7 @@
                 android:layout_marginTop="1dp"
                 android:text="WATCHiT: "
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#0099CC" />
+                android:textColor="#33B5E5" />
 
             <ToggleButton
                 android:id="@+id/toggleButtonWATCHiT"

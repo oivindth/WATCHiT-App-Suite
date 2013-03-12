@@ -2,7 +2,6 @@ package activities;
 
 
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -20,7 +19,6 @@ import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -33,12 +31,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import asynctasks.GetDataFromSpaceTask;
-import asynctasks.GetSpacesTask;
 
 /**
- * Activity which displays a login screen to the user, offering registration as
- * well. Source: Android
+ * Activity which displays a login screen to the user. 
+ * Also possible to change server settings.
+ * Source: Android
  */
 public class LoginActivity extends SherlockFragmentActivity implements ServerSettingsDialogListener  {
 	/**
@@ -118,11 +115,9 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	      setContentView(R.layout.activity_login);
 	      
 	   // Set up the login form.
-			mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
+			//mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
 			mUserNameView = (EditText) findViewById(R.id.username);
-			mUserNameView.setText("admin");
 
-			
 			mPasswordView = (EditText) findViewById(R.id.password);
 		
 			
@@ -361,9 +356,7 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	  
 	  
 	  @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-	        Intent intent;
-	        
+	    public boolean onOptionsItemSelected(MenuItem item) {	        
 	    	switch (item.getItemId()) {
 	    	
 	            case R.id.menu_server_settings:
@@ -381,10 +374,6 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
         host = settings.getString("host", getString(R.string.host));
     	domain = settings.getString("domain", getString(R.string.domain));
     	applicationId = getString(R.string.application_id);
-    	port = settings.getInt("port", 5222);
-		
-	}
-	  
-
-	  
+    	port = settings.getInt("port", 5222);	
+	} 
 }
