@@ -17,16 +17,12 @@ import no.ntnu.emergencyreflect.R;
 
 public class ServerSettingsDialog extends SherlockDialogFragment {
 	
-	
 	EditText host, domain, port;
-
 	ServerSettingsDialogListener mListener;
-	
 
 	//Container Activity must implement this interface
 	public interface ServerSettingsDialogListener {
 		public void saveServerSettingsButtonClick();
-			
 	}
 	
 	@Override
@@ -68,8 +64,6 @@ public class ServerSettingsDialog extends SherlockDialogFragment {
 	           });      
 	    
 	    builder.setTitle("Server");
-	    
-	
 	    
 	    return builder.create();
 	

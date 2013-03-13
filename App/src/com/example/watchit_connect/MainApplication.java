@@ -1,5 +1,7 @@
 package com.example.watchit_connect;
 
+import interfaces.VariableChangeListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,9 @@ public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
     
+    VariableChangeListener variableChangeListener;
+     
+    
     public ServiceManager service, locationService;
 
     public static MainApplication getInstance() {
@@ -46,9 +51,10 @@ public class MainApplication extends Application {
     public void onCreate() {
       super.onCreate();  
       sInstance = this;
+      
     }
     
-   
+
     
     public DataObjectListener myListener;
     
@@ -119,8 +125,13 @@ public class MainApplication extends Application {
 		return longitude;
 	}
 	
-	public void setLongitude(Double longitude) {			
+	public void setLongitude(Double longitude) {		
+		
+		Double oldLng = this.longitude;
 		this.longitude = longitude;
+		 if( longitude != oldLng) {
+			 this.variableChangeListener.onVariableChanged(longitude);
+		 }
 	}
 	
 	public void setLatitude (Double latitude) {
@@ -128,17 +139,8 @@ public class MainApplication extends Application {
 	}
 	
 	
-	/*
-	   @Override
-	    protected void onDestroy() {
-	      super.onDestroy();
-	  		      
-	      try { service.unbind(); }
-	      catch (Throwable t) {
-	    	  t.printStackTrace();
-	      }
-	    }
-	*/
+		  
+	   
 	
 
 

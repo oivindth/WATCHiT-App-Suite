@@ -1,57 +1,65 @@
 package dialogs;
 
+import interfaces.LayersChangeListener;
 import no.ntnu.emergencyreflect.R;
-import activities.LoginActivity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public class MapLayersDialog extends SherlockDialogFragment {
+import enums.SharedPreferencesNames;
+
+public class MapLayersDialog extends SherlockDialogFragment  {
 
 	final CharSequence[] items = {"Persons", "Mood"};
-    final boolean[] states = {false, false, false};
+    private boolean[] states = {false, false};
+    private SharedPreferences mapPreferences;
+    
+    LayersChangeListener mListener;
+
+    
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+		mapPreferences = getActivity().getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , 0 );
+		states[0] = mapPreferences.getBoolean("mood_layer", false);
+	    states[1] = mapPreferences.getBoolean("person_layer", false);	
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 		// Get the layout inflater
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
 		//View view = inflater.inflate(R.layout.dialog_server_settings, null);
 		//builder.setView(view);
+		
 		 builder.setMultiChoiceItems(items, states, new DialogInterface.OnMultiChoiceClickListener(){
 		        public void onClick(DialogInterface dialogInterface, int item, boolean state) {
 		        	
 		        }
 		    });
-
+		
 		builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+
 			@Override
 			 public void onClick(DialogInterface dialog, int id)
 		    {
-		        SparseBooleanArray CheCked = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
-		        if (CheCked.get(0))
-		        {
-		            Toast.makeText(getActivity().getBaseContext(), "Item 1", Toast.LENGTH_SHORT).show();
-		        }
-		        if (CheCked.get(1))
-		        {
-		            Toast.makeText(getActivity().getBaseContext(), "Item 2", Toast.LENGTH_SHORT).show();
-		        }
-		        if (CheCked.get(2))
-		        {
-		            Toast.makeText(getActivity().getBaseContext(), "Item 3", Toast.LENGTH_SHORT).show();
-		        }
+				SharedPreferences.Editor ed = mapPreferences.edit();
+		        SparseBooleanArray checked = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
+		        boolean person = checked.get(0);
+		        boolean moods = checked.get(1);
+		        
+		        ed.putBoolean("person_layer", person);
+		        ed.putBoolean("mood_layer", moods);
+		        ed.commit();
+		        
+		        mListener.onPersonLayerChanged(person);
+		        mListener.onMoodLayerChanged(moods);
+ 
 		    }
 		});
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -61,11 +69,18 @@ public class MapLayersDialog extends SherlockDialogFragment {
 		});      
 
 		builder.setTitle("Layers");
-
-
-
 		return builder.create();
 
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (LayersChangeListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement MapLayersDialogListener interface");
+		}
 	}
 
 }
