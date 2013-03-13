@@ -41,7 +41,8 @@ public class MapActivity extends BaseActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		// save state when in on pause or in ondestroy..
+		
+		
 	}
 	
 	
@@ -91,10 +92,7 @@ public class MapActivity extends BaseActivity {
 	    }
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
+
 	
 	
 	
