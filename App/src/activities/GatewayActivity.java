@@ -15,6 +15,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
@@ -61,7 +62,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	private ListAdapter adapter;
 	private List<BluetoothDevice> devices; 
 	private String deviceAdress = "";
-
+	//private DataObjectListener myListener; 
 
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
@@ -91,6 +92,9 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		bar.addTab(tab2);
 		bar.addTab(tab3);
 
+		//createDataObjectListener();
+		//sApp.dataHandler.addDataObjectListener(myListener);
+		
 	}
 
 	private class MyTabListener implements ActionBar.TabListener
@@ -142,6 +146,26 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		inflater.inflate(R.menu.activity_gateway, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
+	
+	/**
+	 * Set up the dataobject listener for handling published dataobjects. 
+	 * Currently only works when published from own phone. Need to put this in a thread to make
+	 * it work when other phones also publish?
+	 */
+	/*
+	private void createDataObjectListener() {
+		myListener = new DataObjectListener() {
+			// implement this interface in a controller class of your application
+
+			@Override
+			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
+					String spaceId) {
+				String objectId = dataObject.getId();
+				Log.d("¿l: ", "Received object " + objectId + " from space " + spaceId);
+				showToast("Receieved object from space... " + spaceId);
+			}
+		};
+	} */
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

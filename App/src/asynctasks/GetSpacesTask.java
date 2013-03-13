@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.example.watchit_connect.MainApplication;
 
+import de.imc.mirror.sdk.exceptions.UnknownEntityException;
+
 public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private BaseActivity mActivity;
@@ -36,10 +38,10 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 
 		protected void onPostExecute(final Boolean success) {
 			mActivity.dismissProgress();
-			sApp.currentActiveSpace = sApp.spacesInHandler.get(0);
+			
+	
 			if (success) {
 				Log.d("GETSPACESTASK", "successfully fetched spaces");
-				mActivity.showToast("Events synced!" + "\n"+ "You are now registered to event: " + sApp.currentActiveSpace.getName());
 				
 			} else {
 				Log.d("GETSPACESTASK", "Something went terribly wrong when trying to get spaces." );

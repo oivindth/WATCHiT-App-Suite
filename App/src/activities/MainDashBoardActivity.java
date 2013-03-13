@@ -126,7 +126,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 					String spaceId) {
 				String objectId = dataObject.getId();
 				Log.d("¿l: ", "Received object " + objectId + " from space " + spaceId);
-				showToast("Receieved object from space... " + spaceId);
+				Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
 			}
 		};
 	}

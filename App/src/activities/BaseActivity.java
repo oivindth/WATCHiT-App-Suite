@@ -4,6 +4,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.example.watchit_connect.MainApplication;
 import com.example.watchit_connect.R;
 
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -70,6 +72,8 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 		            if (noConnectivity) {
 		            	Log.d("BROADCASTRECEIEVER BASEACTIVITY:", "no connectivity");
 		            	sApp.OnlineMode = false;
+		            	sApp.dataHandler.setMode(Mode.OFFLINE);
+		            	sApp.spaceHandler.setMode(Mode.OFFLINE);
 		            	sApp.connectionHandler.disconnect();
 		            	showToast("Lost connection to the internet. Application online mode disabled.");
 		            }
