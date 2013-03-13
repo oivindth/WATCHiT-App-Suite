@@ -2,7 +2,7 @@ package activities;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.R;
+import no.ntnu.emergencyreflect.R;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 

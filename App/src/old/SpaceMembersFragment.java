@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.layout;
+import no.ntnu.emergencyreflect.R;
 
 import de.imc.mirror.sdk.SpaceMember;
 import android.os.Bundle;

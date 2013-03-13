@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.layout;
+import no.ntnu.emergencyreflect.R;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.example.watchit_connect.R;
+import no.ntnu.emergencyreflect.R;
 
 public class ServerSettingsDialog extends SherlockDialogFragment {
 	
@@ -31,9 +31,7 @@ public class ServerSettingsDialog extends SherlockDialogFragment {
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		
-		
-		
+
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 	    // Get the layout inflater
 	    LayoutInflater inflater = getActivity().getLayoutInflater();

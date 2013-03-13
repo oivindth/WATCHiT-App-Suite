@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.layout;
+import no.ntnu.emergencyreflect.R;
 //import com.example.watchit_connect.Spaces.SpacesFragment.OnSpaceItemSelectedListener;
 
 import de.imc.mirror.sdk.Space;

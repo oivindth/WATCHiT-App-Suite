@@ -7,9 +7,7 @@ import java.util.Set;
 import old.SpaceFragment.OnSpaceInfoSelectedListener;
 
 
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.id;
-import com.example.watchit_connect.R.layout;
+import no.ntnu.emergencyreflect.R;
 
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;

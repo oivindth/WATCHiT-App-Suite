@@ -21,7 +21,7 @@ import asynctasks.PublishDataTask;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.watchit_connect.R;
+import no.ntnu.emergencyreflect.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 

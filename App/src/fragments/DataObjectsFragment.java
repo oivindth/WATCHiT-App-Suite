@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.R;
-import com.example.watchit_connect.R.layout;
+import no.ntnu.emergencyreflect.R;
 
 import parsing.GenericSensorData;
 import parsing.Parser;

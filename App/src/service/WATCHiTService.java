@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.R;
+import no.ntnu.emergencyreflect.R;
 import activities.MainDashBoardActivity;
 import android.app.Notification;
 import android.app.NotificationManager;

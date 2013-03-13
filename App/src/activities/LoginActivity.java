@@ -7,7 +7,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.MainApplication;
-import com.example.watchit_connect.R;
+import no.ntnu.emergencyreflect.R;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
