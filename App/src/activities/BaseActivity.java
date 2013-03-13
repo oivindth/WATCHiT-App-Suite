@@ -70,6 +70,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 		            if (noConnectivity) {
 		            	Log.d("BROADCASTRECEIEVER BASEACTIVITY:", "no connectivity");
 		            	sApp.OnlineMode = false;
+		            	sApp.connectionHandler.disconnect();
 		            	showToast("Lost connection to the internet. Application online mode disabled.");
 		            }
 		            	
