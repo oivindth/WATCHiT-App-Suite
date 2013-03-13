@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * Not being used at the moment.
+ * @deprecated Not being used at the moment.
  * @author oivindth
  *
  */

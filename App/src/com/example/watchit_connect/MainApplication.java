@@ -79,48 +79,7 @@ public class MainApplication extends Application {
 	private double longitude;;
 	private double latitude; 
 
-
-	/**
-	 * Switch the current active space.
-	 * @param space
-	 */
-	public void switchSpace(Space space) {
-		try {
-			resetHandler();
-			
-			dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
-			
-			dataHandler.registerSpace(space.getId());
-			Log.d("swithspace ", "current registered space: " + space.getId());
-			currentActiveSpace = space;
-			
-			
-		} catch (UnknownEntityException e) {
-			Log.d("failed", "WE FAIL!!!");
-			e.printStackTrace();
-		}
-	}
 	
-
-	
-	private void resetHandler() {
-
-		spaceHandler = new SpaceHandler(getApplicationContext(), connectionHandler, dbName);
-		dataHandler = new DataHandler(connectionHandler, spaceHandler);
-	}
-	
-	public void setApplicationMode (Mode mode) {
-		
-		
-		if (mode == Mode.OFFLINE) {
-			if (connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
-				connectionHandler.disconnect();
-			}
-			spaceHandler.setMode(mode);
-			dataHandler.setMode(mode);
-			
-		}
-	}
 
 	public String getUserName() {
 		return userName;

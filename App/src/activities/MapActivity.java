@@ -1,6 +1,5 @@
 package activities;
 
-import old.SettingsActivity;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -66,13 +65,7 @@ public class MapActivity extends BaseActivity {
             	}
             	//showProgress("...");
             	return true;
-        
-            
-            case R.id.menu_settings:
-            	intent = new Intent(this, SettingsActivity.class);
-            	startActivity(intent);
-            	//finish();
-            	return true;
+    
             	
             default:
                 return super.onOptionsItemSelected(item);

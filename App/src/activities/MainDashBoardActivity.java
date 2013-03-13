@@ -31,9 +31,7 @@ import de.imc.mirror.sdk.android.DataObject;
 
 public class MainDashBoardActivity extends BaseActivity  {
 
-
 	private DataObjectListener myListener;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +46,6 @@ public class MainDashBoardActivity extends BaseActivity  {
 		sApp.dataHandler.addDataObjectListener(myListener);
 		
 		new GetSpacesTask(this).execute();
-		
 		
 	}
 

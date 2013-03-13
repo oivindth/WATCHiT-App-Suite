@@ -25,16 +25,17 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 		public PublishDataTask (DataObject dataObject, String spaceId) {
 			mDataObject = dataObject;
 			mSpaceId = spaceId;
+			sApp = MainApplication.getInstance();
 		}
 		
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        }
+	      @Override
+	        protected void onPreExecute() {
+	        	super.onPreExecute();
+	        }
+		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 	    	 try {
-	    		 
 	    		 // sApp.spaceHandler.setMode(Mode.ONLINE);
 	      		 // sApp.dataHandler.setMode(Mode.ONLINE);
 	      		 // sApp.dataHandler.registerSpace("team#42");
@@ -47,9 +48,9 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 		}
 
 		protected void onPostExecute(final Boolean success) {
+		
 			if (success) {
-			Log.d("PUBLISHDATATASK", "data object published! ");
-			mActivity.showToast("dataobject published to space with id: " + mSpaceId);
+			Log.d("PUBLISHDATATASK", "data :");
 			} else {
 			Log.d("PUBLISHDATATASK", "Something went wrong");
 			mActivity.showToast("Failed to publish dataobject.....");

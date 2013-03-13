@@ -7,7 +7,6 @@ import com.example.watchit_connect.MainApplication;
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {

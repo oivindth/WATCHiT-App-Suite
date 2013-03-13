@@ -15,6 +15,15 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 			mActivity = activity;
 			sApp = MainApplication.getInstance();
 		}
+		
+		@Override
+		public void onPreExecute() {
+			super.onPreExecute();
+			mActivity.showProgress("Syncing", "Syncing......");
+			
+		}
+		
+		
 		protected Boolean doInBackground(Void...params) {
 			try {
 					sApp.spacesInHandler = sApp.spaceHandler.getAllSpaces();
@@ -26,6 +35,7 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 		}
 
 		protected void onPostExecute(final Boolean success) {
+			mActivity.dismissProgress();
 			if (success) {
 				Log.d("GETSPACESTASK", "successfully fetched spaces");
 			} else {

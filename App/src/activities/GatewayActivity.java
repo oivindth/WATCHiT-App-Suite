@@ -3,9 +3,6 @@ package activities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import org.jivesoftware.smackx.pubsub.ItemPublishEvent;
-
-import parsing.GenericSensorData;
 import parsing.Parser;
 
 import service.WATCHiTService;
@@ -17,19 +14,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.R;
 
-import de.imc.mirror.sdk.DataObjectListener;
-import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.android.ConnectionConfiguration;
-import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
-import de.imc.mirror.sdk.android.ConnectionHandler;
-import de.imc.mirror.sdk.android.DataHandler;
+import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.android.DataObjectBuilder;
-import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
-import dialogs.ServerSettingsDialog;
 import fragments.ApplicationsSettingsFragment;
 import fragments.SpacesFragment;
 import fragments.ApplicationsSettingsFragment.ApplicationsSettingsFfragmentListener;
@@ -46,7 +34,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.RemoteException;
@@ -55,10 +42,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.GetDataFromSpaceTask;
-import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
 /**
@@ -81,7 +66,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 
 		devices = new ArrayList<BluetoothDevice>();
 		statusFragment = new StatusFragment();
@@ -107,7 +91,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		bar.addTab(tab2);
 		bar.addTab(tab3);
 
-
 	}
 
 	private class MyTabListener implements ActionBar.TabListener
@@ -128,7 +111,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			default:
 				break;
 			}
-
 		}
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
@@ -139,8 +121,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			// TODO Auto-generated method stub
 		}
 	}
-
-
 
 	@Override
 	public void onResume() {
@@ -174,16 +154,15 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			//  intent = new Intent(this, MainActivity.class);
 			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// startActivity(intent);
-
 			//just back use only finish():
 			finish();
 			return true;
 
 		case R.id.menu_sync:
-			//if (sApp.currentActiveSpace == null) {
-			//showToast("Please register with an event first...");
-			//return true;
-			//}
+			if (sApp.currentActiveSpace == null) {
+			showToast("Please register with an event first...");
+			return true;
+			}
 			new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
 			return true;
 		case R.id.menu_mock_watchit_data:
@@ -211,6 +190,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	@Override
 	public void onSpaceItemSelected(int position) {
 		//Space space = app.spaceHandler.getAllSpaces().get(position); //TODO: Too heavy.
+	
 		Space space = sApp.spacesInHandler.get(position);
 		//switch space
 		sApp.currentActiveSpace = space;
@@ -221,12 +201,11 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 		new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
 		showToast("Noe registered to event: " + space.getName());
 		//finish();
+		
 	}
 
 
@@ -330,7 +309,11 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 
 		} else {
 			sApp.OnlineMode = false;
-			sApp.setApplicationMode(Mode.OFFLINE);
+			sApp.dataHandler.setMode(Mode.OFFLINE);
+			sApp.spaceHandler.setMode(Mode.OFFLINE);
+			sApp.connectionHandler.disconnect();
+			
+			
 		}
 		settingsFragment.updateView(sApp.OnlineMode, sApp.isLocationOn, sApp.isWATChiTOn);
 	}
