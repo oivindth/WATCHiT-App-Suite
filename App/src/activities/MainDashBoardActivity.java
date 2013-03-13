@@ -46,6 +46,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 		sApp.dataHandler.addDataObjectListener(myListener);
 		
 		new GetSpacesTask(this).execute();
+
 		
 	}
 

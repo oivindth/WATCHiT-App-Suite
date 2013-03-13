@@ -340,7 +340,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 					// Loop through paired devices
 					for (BluetoothDevice device : pairedDevices) {
 						// Add the name and address to an array adapter to show in a ListView
-						arrayAdapter.add(device.getName());
+						arrayAdapter.add("Name: " + device.getName() + "\n" + " Adress: " + device.getAddress());
 						devices.add(device);
 
 					}
