@@ -1,32 +1,21 @@
 package com.example.watchit_connect;
 
-import interfaces.VariableChangeListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import parsing.GenericSensorData;
-import parsing.Parser;
-
 import service.ServiceManager;
 
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
-import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.os.RemoteException;
-import android.util.Log;
-import android.widget.Toast;
 
 
 /**
@@ -39,7 +28,7 @@ public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
     
-    VariableChangeListener variableChangeListener;
+    //VariableChangeListener variableChangeListener;
      
     
     public ServiceManager service, locationService;
@@ -129,9 +118,9 @@ public class MainApplication extends Application {
 		
 		Double oldLng = this.longitude;
 		this.longitude = longitude;
-		 if( longitude != oldLng) {
-			 this.variableChangeListener.onVariableChanged(longitude);
-		 }
+		 //if( longitude != oldLng) {
+		//	 this.variableChangeListener.onVariableChanged(longitude);
+		 //}
 	}
 	
 	public void setLatitude (Double latitude) {
