@@ -2,7 +2,6 @@ package activities;
 
 
 import interfaces.LayersChangeListener;
-import interfaces.VariableChangeListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -25,7 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
-public class MapActivity extends BaseActivity implements LayersChangeListener, VariableChangeListener {
+public class MapActivity extends BaseActivity implements LayersChangeListener {
 	
 	private GoogleMap mMap;
 	private MainApplication sApp;
@@ -129,12 +128,6 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, V
 	}
 
 
-
-	@Override
-	public void onVariableChanged(Object... variableThatHasChanged) {
-
-		
-	}
 
 	@Override
 	public void onMoodLayerChanged(boolean on) {
