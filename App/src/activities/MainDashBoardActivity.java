@@ -51,12 +51,20 @@ public class MainDashBoardActivity extends BaseActivity  {
 		sApp.dataHandler.addDataObjectListener(myListener);
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
-			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE)
-			new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
-			return;
+			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
+				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
+				
+			} else {
+				new GetSpacesTask(this).execute();
+				
+			}
+			
+			
+		} else {
+			new GetSpacesTask(this).execute();
 		}
 		
-		new GetSpacesTask(this).execute();
+	
 	}
 
 	
