@@ -27,8 +27,8 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		mapPreferences = getActivity().getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , 0 );
-		states[0] = mapPreferences.getBoolean("mood_layer", false);
-	    states[1] = mapPreferences.getBoolean("person_layer", false);	
+		states[1] = mapPreferences.getBoolean("mood_layer", false);
+	    states[0] = mapPreferences.getBoolean("person_layer", false);	
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 		// Get the layout inflater
@@ -50,15 +50,14 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 		    {
 				SharedPreferences.Editor ed = mapPreferences.edit();
 		        SparseBooleanArray checked = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
-		        boolean person = checked.get(0);
 		        boolean moods = checked.get(1);
+		        boolean person = checked.get(0);
 		        
 		        ed.putBoolean("person_layer", person);
 		        ed.putBoolean("mood_layer", moods);
 		        ed.commit();
 		        
-		        mListener.onPersonLayerChanged(person);
-		        mListener.onMoodLayerChanged(moods);
+		        mListener.onLayersChanged(person, moods);
  
 		    }
 		});

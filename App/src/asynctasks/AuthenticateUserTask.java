@@ -44,8 +44,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 		
       try {
     	  MainApplication.getInstance().connectionHandler.connect();
-    	  sApp.spaceHandler.setMode(Mode.ONLINE);
-  		  sApp.dataHandler.setMode(Mode.ONLINE);
+    	 
   		  //sApp.dataHandler.registerSpace("team#42");
 
   		  
@@ -65,6 +64,9 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 		if (success) {
 			mActivity.showToast("Logged in user.");
 			Log.d("AUTHENTICATEUSERTASK", "Succsessfully logged in the user");
+			 sApp.spaceHandler.setMode(Mode.ONLINE);
+	  		  sApp.dataHandler.setMode(Mode.ONLINE);
+	  		  sApp.OnlineMode = true;
 		} else {
 			mActivity.showToast("Failed to connect user" );
 			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");

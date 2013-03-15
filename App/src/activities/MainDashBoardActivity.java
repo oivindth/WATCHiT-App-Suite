@@ -1,10 +1,12 @@
 package activities;
 
+import interfaces.LocationChangedListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
 import service.LocationService;
 import service.ServiceManager;
 import service.WATCHiTService;
+import Utilities.UtilityClass;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import asynctasks.AuthenticateUserTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
@@ -25,13 +28,15 @@ import no.ntnu.emergencyreflect.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.android.DataObject;
 
 
 public class MainDashBoardActivity extends BaseActivity  {
 
-	private DataObjectListener myListener;
+	DataObjectListener myListener;
+	private LocationChangedListener locationListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +50,15 @@ public class MainDashBoardActivity extends BaseActivity  {
 		createDataObjectListener();
 		sApp.dataHandler.addDataObjectListener(myListener);
 		
-		new GetSpacesTask(this).execute();
-
+		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
+			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE)
+			new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
+		}
 		
+		new GetSpacesTask(this).execute();
 	}
+
+	
 
 	@Override
 	public void onResume() {
@@ -60,7 +70,6 @@ public class MainDashBoardActivity extends BaseActivity  {
 			//proceed as normal
 		} else {
 			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
-
 		}
 	}
 
@@ -81,7 +90,6 @@ public class MainDashBoardActivity extends BaseActivity  {
 			//  intent = new Intent(this, MainActivity.class);
 			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// startActivity(intent);
-
 			//just back use only finish():
 			// finish();
 			showToast("Main");
@@ -92,41 +100,42 @@ public class MainDashBoardActivity extends BaseActivity  {
 			SharedPreferences.Editor editor = settings.edit();
 			//Set "hasLoggedIn" to true
 			editor.putBoolean("hasLoggedIn", false);
-			editor.putString("username", "");
-			editor.putString("password", "");
+			//editor.putString("username", "");
+			//editor.putString("password", "");
 			// Commit the edits!
-
 			editor.commit();
-
 			//if (sApp.connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
 			//sApp.connectionHandler.disconnect();
 			//}
 			intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 			finish();
-
 			return true;
-
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
 	/**
-	 * Set up the dataobject listener for handling published dataobjects. 
-	 * Currently only works when published from own phone. Need to put this in a thread to make
-	 * it work when other phones also publish?
+	 * add new dataobject to lists. 
 	 */
 	private void createDataObjectListener() {
 		myListener = new DataObjectListener() {
 			// implement this interface in a controller class of your application
-
 			@Override
 			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 					String spaceId) {
 				String objectId = dataObject.getId();
-				Log.d("¿l: ", "Received object " + objectId + " from space " + spaceId);
-				Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
+				
+				Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
+				try {
+					//sApp.dataObjects.add(dataObject);
+					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+					sApp.genericSensorDataObjects.add(data);
+					Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
+				} catch (Exception e) {
+					e.printStackTrace();	
+				}
 			}
 		};
 	}
@@ -147,19 +156,21 @@ public class MainDashBoardActivity extends BaseActivity  {
 					sApp.isWATChiTOn = true;
 					Log.d("MainActivity Handler ", "Connection established message receieved from service.");
 					showToast("Connection to WATCHiT established..");
-					//dismissProgress();
+					sApp.broadcastConnectionChange(true);
+					
 					break;
 				case WATCHiTService.MSG_CONNECTION_FAILED:
 					//dismissProgress();
 					sApp.isWATChiTOn = false;
 					Log.d("MainDashBoardActivityHandler: ", " Connection failed");
 					showToast(" Failed to connect to WATCHiT....");
-
+					sApp.broadcastConnectionChange(false);
 					break;
 				case WATCHiTService.MSG_CONNECTION_LOST:
 					Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
 					showToast("Warning: Lost connection with WATCHiT!");
 					sApp.isWATChiTOn = false;
+					sApp.broadcastConnectionChange(false);
 					break;
 				case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
 					String data = msg.getData().getString("watchitdata");
@@ -167,7 +178,6 @@ public class MainDashBoardActivity extends BaseActivity  {
 					Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
 					String lat = String.valueOf(sApp.getLatitude());
 					String lot = String.valueOf(sApp.getLongitude());
-
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
 					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
 					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
@@ -199,8 +209,11 @@ public class MainDashBoardActivity extends BaseActivity  {
 					double latitude = msg.getData().getDouble("latitude");
 					sApp.setLongitude(longitude);
 					sApp.setLatitude(latitude);
-
+					
 					showToast("New location: " + " long:  " + longitude + " lat: " + latitude );
+					
+					//locationListener.onLocationChanged(latitude, longitude);
+					
 					break;
 
 				} 
@@ -209,7 +222,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 	}
 	
 	/**
-	 * Set up the dashboard gui.
+	 * Set up the dashboard with buttins and onclick listeners etc.
 	 */
 	private void setUpDashBoardGUI() {
 		// new GetSpacesTask().execute();

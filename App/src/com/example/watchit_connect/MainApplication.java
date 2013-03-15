@@ -1,7 +1,12 @@
 package com.example.watchit_connect;
 
+
+import interfaces.WATCHiTConnectionChangeListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import parsing.GenericSensorData;
 
 import service.ServiceManager;
 
@@ -16,22 +21,20 @@ import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.Log;
 
 
 /**
  * Application object. Used as a pool for global variables and dataobjects to simplify passing them between activities and services.
  * Implemented as singleton. Also contains WATChiT service object making watchit data available for several applications. 
- * (WATCHiTService should possibly also be implemented as singleton)
  * @author oivindth
  */
 public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
-    
-    //VariableChangeListener variableChangeListener;
      
-    
     public ServiceManager service, locationService;
+
 
     public static MainApplication getInstance() {
       return sInstance;
@@ -40,14 +43,26 @@ public class MainApplication extends Application {
     public void onCreate() {
       super.onCreate();  
       sInstance = this;
-      
     }
     
-
+    //public WATCHiTConnectionChangeListener wclistener;
+    
+    private List<WATCHiTConnectionChangeListener> wclisteners = new ArrayList<WATCHiTConnectionChangeListener>();
+    
+    public void addListener(WATCHiTConnectionChangeListener listener) {
+    	wclisteners.add(listener);
+    }
+    public void broadcastConnectionChange(boolean on) {
+    	for (WATCHiTConnectionChangeListener listener : wclisteners) {
+    		Log.d("broadcasting ", " broadcasting connecting change");
+    		listener.onConnectionChanged(on);
+		}
+    }
+    
+    
     
     public DataObjectListener myListener;
     
-	
 	public boolean OnlineMode, isLocationOn, isWATChiTOn = false; //TODO: Not best place to have this
 	
 	public List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
@@ -66,6 +81,9 @@ public class MainApplication extends Application {
 	public List<Space> spacesInHandler = new ArrayList<Space>();
 	public List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 	
+	public List<GenericSensorData> genericSensorDataObjects = new ArrayList<GenericSensorData>();
+	
+	
 	public Space currentActiveSpace;
 	
 	private String userName;
@@ -75,7 +93,6 @@ public class MainApplication extends Application {
 	private double latitude; 
 
 	
-
 	public String getUserName() {
 		return userName;
 	}
@@ -104,16 +121,13 @@ public class MainApplication extends Application {
 			return false;
 		}
         return true;
-		
 	}
-
 	public Double getLatitude() {
 		return latitude;
 	}
 	public double getLongitude() {
 		return longitude;
 	}
-	
 	public void setLongitude(Double longitude) {		
 		
 		Double oldLng = this.longitude;
@@ -122,15 +136,8 @@ public class MainApplication extends Application {
 		//	 this.variableChangeListener.onVariableChanged(longitude);
 		 //}
 	}
-	
 	public void setLatitude (Double latitude) {
 		this.latitude = latitude;
 	}
 	
-	
-		  
-	   
-	
-
-
 }

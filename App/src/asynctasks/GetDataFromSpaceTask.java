@@ -2,6 +2,8 @@ package asynctasks;
 
 import java.util.ArrayList;
 
+import parsing.Parser;
+
 import com.example.watchit_connect.MainApplication;
 
 import activities.BaseActivity;
@@ -31,7 +33,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	
 		@Override
 		protected void onPreExecute() {
-			mActivity.showProgress("Sync", "Syncing event...");
+			//mActivity.showProgress("Sync", "Syncing event...");
 		}
 	
 		@Override
@@ -56,6 +58,8 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		protected void onPostExecute(final Boolean success) {
 			mActivity.dismissProgress();
 			if (success) {
+				app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
+				Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
 				Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
 				Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
 				mActivity.showToast("Size of data receieved from space " + app.dataObjects.size());

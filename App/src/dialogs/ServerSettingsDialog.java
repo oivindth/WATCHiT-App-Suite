@@ -17,7 +17,9 @@ import no.ntnu.emergencyreflect.R;
 
 public class ServerSettingsDialog extends SherlockDialogFragment {
 	
-	EditText host, domain, port;
+	EditText hostView, domainView, portView;
+	String host, domain, applicationId;
+	int port;
 	ServerSettingsDialogListener mListener;
 
 	//Container Activity must implement this interface
@@ -27,30 +29,41 @@ public class ServerSettingsDialog extends SherlockDialogFragment {
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+		   // Get host and domain from sharedpreferences or use default values(mirror-server-ntnu) if they are not set.
+        SharedPreferences settings = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        host = settings.getString("host", getString(R.string.host));
+    	domain = settings.getString("domain", getString(R.string.domain));
+    	applicationId = getString(R.string.application_id);
+    	port = settings.getInt("port", 5222); //5222 is standard port.
+		
+		
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 	    // Get the layout inflater
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 
 	    View view = inflater.inflate(R.layout.dialog_server_settings, null);
 	    builder.setView(view);
-	    port = (EditText) view.findViewById(R.id.port);
-		domain = (EditText) view.findViewById(R.id.domain);
-		host  = (EditText) view.findViewById(R.id.host);
-	    
+	    portView = (EditText) view.findViewById(R.id.port);
+		domainView = (EditText) view.findViewById(R.id.domain);
+		hostView  = (EditText) view.findViewById(R.id.host);
+		
+	    portView.setText(String.valueOf(port));
+	    domainView.setText(domain);
+	    hostView.setText(host);
+		
 	           builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
 	                   // Update new server info
 	            	   
-	            	   Log.d("dialog", port.getText().toString());
-	            		String stringport = port.getText().toString();
+	            	   Log.d("dialog", portView.getText().toString());
+	            		String stringport = portView.getText().toString();
 	             	   int portint = Integer.parseInt(stringport);
 	             	   SharedPreferences settings = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, 0);
 	            		SharedPreferences.Editor editor = settings.edit();
 	            		//Set "hasLoggedIn" to true
-	            		editor.putString("domain", domain.getText().toString());
-	            		editor.putString("host", host.getText().toString());
+	            		editor.putString("domain", domainView.getText().toString());
+	            		editor.putString("host", hostView.getText().toString());
 	            		editor.putInt("port", portint);
 	            		editor.commit();
 	            	mListener.saveServerSettingsButtonClick();

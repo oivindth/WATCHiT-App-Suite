@@ -2,7 +2,6 @@ package interfaces;
 
 public interface LayersChangeListener {
 	
-	public void onMoodLayerChanged(boolean on);
-	public void onPersonLayerChanged(boolean on);
+	public void onLayersChanged(boolean showPersonsFound, boolean showMoods);
 	
 }

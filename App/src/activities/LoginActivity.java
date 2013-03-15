@@ -88,7 +88,19 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	        super.onCreate(savedInstanceState);
 	        app = MainApplication.getInstance();
 	        
-	        
+	      
+
+			
+			 setContentView(R.layout.activity_login);
+		      
+		      	// Set up the login form.
+				mUserNameView = (EditText) findViewById(R.id.username);
+				mPasswordView = (EditText) findViewById(R.id.password);
+				
+				  mLoginFormView = findViewById(R.id.login_form);
+					mLoginStatusView = findViewById(R.id.login_status);
+					mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+			
 	        // Get host and domain from sharedpreferences or use default values(mirror-server-ntnu) if they are not set.
 	        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
 	        host = settings.getString("host", getString(R.string.host));
@@ -99,11 +111,14 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	    	username = settings.getString("username", "");
 	    	password = settings.getString("password", "");
 	    	
+	    	mUserNameView.setText(username);
+	    	mPasswordView.setText(password);
+	    	
 	    	Log.d("LoginActivity ", "host " + host);
 	    	Log.d("LoginActivity ", "port " + port);
 	    	Log.d("LoginActivity ", "domain " + domain);
 	    	
-	    	hasLoggedIn =  settings.getBoolean("hasLoggedIn", false);
+	    	hasLoggedIn =   settings.getBoolean("hasLoggedIn", false);
 	    	if(hasLoggedIn) {
 	    	  
 	    	  
@@ -114,19 +129,18 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		        connectionConfig = connectionConfigurationBuilder.build();
 		        connectionHandler = new ConnectionHandler(username, password, connectionConfig);
 			
-		        if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
+		       // if (UtilityClass.isConnectedToInternet(getApplicationContext())) {
+		        	
+		        	//attemptLogin(true);
+		        	//showProgress(true);
 		        	//new UserLoginTask().execute();
-		        } else {
+		       // } else {
 		        	updateGlobalConnectionVariables(false);
 			    	  startMainActivity();
-		        }
-	      }
-	    	  
-	      setContentView(R.layout.activity_login);
+		     }
 	      
-	      	// Set up the login form.
-			mUserNameView = (EditText) findViewById(R.id.username);
-			mPasswordView = (EditText) findViewById(R.id.password);
+	    	  
+	     
 
 			mPasswordView
 					.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -134,22 +148,20 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 						public boolean onEditorAction(TextView textView, int id,
 								KeyEvent keyEvent) {
 							if (id == R.id.login || id == EditorInfo.IME_NULL) {
-								attemptLogin();
+								attemptLogin(true);
 								return true;
 							}
 							return false;
 						}
 					});
 
-			mLoginFormView = findViewById(R.id.login_form);
-			mLoginStatusView = findViewById(R.id.login_status);
-			mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+			
 
 			findViewById(R.id.sign_in_button).setOnClickListener(
 					new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
-							attemptLogin();
+							attemptLogin(true);
 						}
 					});
 	      
@@ -175,11 +187,13 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		 * If there are form errors (invalid email, missing fields, etc.), the
 		 * errors are presented and no actual login attempt is made.
 		 */
-		public void attemptLogin() {
+		public void attemptLogin(boolean bool) {
+			
+				
+			
 			if (mAuthTask != null) {
 				return;
 			}
-
 			// Reset errors.
 			mUserNameView.setError(null);
 			mPasswordView.setError(null);
@@ -225,6 +239,8 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 				mAuthTask = new UserLoginTask();
 				mAuthTask.execute((Void) null);
 			}
+			
+	
 		}
 	  
 		/**
@@ -273,14 +289,26 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		 * the user.
 		 */
 		public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				//showProgress(true);
+				
+				
+			}
+			
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				
-				
+				if (!hasLoggedIn) {
 					username = mUserName;
 					password = mPassword;
+				}
+					
 				
-			
+			Log.d("LoginActivity", "username: " + username);
+			Log.d("LoginActivity", " password : " + password);
 				
 		        //Configure connection
 				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain,applicationId);
@@ -333,10 +361,8 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		SharedPreferences.Editor editor = settings.edit();
 		//Set "hasLoggedIn" to true
 		editor.putBoolean("hasLoggedIn", true);
-		editor.putString("username", mUserName);
-		editor.putString("password", mPassword);
-		username = mUserName;
-		password = mPassword;
+		editor.putString("username", username);
+		editor.putString("password", password);
 		
 		// Commit the edits!
 		editor.commit();
@@ -357,9 +383,7 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		  
 		  app.setPassword(password);
 		  app.setUserName(username);
-		  
 
-		  
 	  }
 	  
 	  private void startMainActivity() {

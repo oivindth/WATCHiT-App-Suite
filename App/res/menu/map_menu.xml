@@ -6,7 +6,9 @@
         android:icon="@drawable/ic_navigation_refresh"
         android:showAsAction="always" />
      
-        
+            <item android:id="@+id/menu_mock_watchit_data"
+        android:title="Publish mock watchit data(testing)"
+        android:showAsAction="never" />
         
     <item android:id="@+id/menu_layers"
         android:title="Layers"

@@ -1134,12 +1134,10 @@ containing a value of this type.
         public static final int login_status_message=0x7f07002d;
         public static final int main_view=0x7f070036;
         public static final int map=0x7f070050;
-        public static final int menu_layers=0x7f070058;
-        public static final int menu_logout=0x7f070057;
-        public static final int menu_map=0x7f070055;
+        public static final int menu_layers=0x7f070056;
+        public static final int menu_logout=0x7f070055;
         public static final int menu_mock_watchit_data=0x7f070053;
         public static final int menu_server_settings=0x7f070054;
-        public static final int menu_settings=0x7f070056;
         public static final int menu_sync=0x7f070052;
         public static final int none=0x7f070010;
         public static final int normal=0x7f070001;
@@ -1222,11 +1220,10 @@ containing a value of this type.
     public static final class menu {
         public static final int activity_gateway=0x7f0c0000;
         public static final int activity_login=0x7f0c0001;
-        public static final int activity_map=0x7f0c0002;
-        public static final int activity_settings=0x7f0c0003;
-        public static final int activity_space=0x7f0c0004;
-        public static final int main=0x7f0c0005;
-        public static final int map_menu=0x7f0c0006;
+        public static final int activity_settings=0x7f0c0002;
+        public static final int activity_space=0x7f0c0003;
+        public static final int main=0x7f0c0004;
+        public static final int map_menu=0x7f0c0005;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

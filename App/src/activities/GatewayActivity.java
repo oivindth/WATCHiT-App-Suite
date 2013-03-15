@@ -1,5 +1,7 @@
 package activities;
 
+import interfaces.WATCHiTConnectionChangeListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +64,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	private ListAdapter adapter;
 	private List<BluetoothDevice> devices; 
 	private String deviceAdress = "";
-	//private DataObjectListener myListener; 
+	private WATCHiTConnectionChangeListener wcListener;
 
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
@@ -94,6 +96,18 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 
 		//createDataObjectListener();
 		//sApp.dataHandler.addDataObjectListener(myListener);
+		
+		wcListener = new WATCHiTConnectionChangeListener() {
+			@Override
+			public void onConnectionChanged(boolean on) {
+				sApp.isWATChiTOn = on;
+				Log.d("GatewayActivity", " receving status; " + on);
+				settingsFragment.updateView(on);
+				dismissProgress();
+			}
+		};
+		
+		sApp.addListener(wcListener);
 		
 	}
 
@@ -191,7 +205,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			return true;
 		case R.id.menu_mock_watchit_data:
 			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-					("Hello World", "44.84866", "10.30683"), sApp.connectionHandler.getCurrentUser().getBareJID());
+					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), sApp.connectionHandler.getCurrentUser().getBareJID());
 			new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
 			return true;
 
@@ -214,7 +228,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	@Override
 	public void onSpaceItemSelected(int position) {
 		//Space space = app.spaceHandler.getAllSpaces().get(position); //TODO: Too heavy.
-	
+		showProgress("Event", "Syncing...");
 		Space space = sApp.spacesInHandler.get(position);
 		//switch space
 		sApp.currentActiveSpace = space;
@@ -244,10 +258,10 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				// Add the name and address to an array adapter to show in a ListView
 				//mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 				Log.d("device found", "device name : " + device.getName());
-				if (!sApp.bluetoothDevices.contains(device)) {
-					sApp.bluetoothDevices.add(device);
-					devices.add(device);
-				}
+				if (!sApp.bluetoothDevices.contains(device)) sApp.bluetoothDevices.add(device);
+				if (!devices.contains(device)) devices.add(device);
+					
+				
 
 			}
 			if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
@@ -265,7 +279,7 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				btAdapter.cancelDiscovery();
 				dismissProgress();
 				for (BluetoothDevice device : devices) {
-					arrayAdapter.add(device.getName());
+					arrayAdapter.add("Name: " +device.getName() + "\n" + " Adress: " + device.getAddress());
 				}
 
 				adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, arrayAdapter);
@@ -352,10 +366,8 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				return;
 			} else {
 				sApp.service.start();
-				//service.start();
 				//sApp.isWATChiTOn = true;
 				Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-
 				arrayAdapter = new ArrayList<String>();
 				devices = new ArrayList<BluetoothDevice>();
 
@@ -366,21 +378,17 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 						// Add the name and address to an array adapter to show in a ListView
 						arrayAdapter.add("Name: " + device.getName() + "\n" + " Adress: " + device.getAddress());
 						devices.add(device);
-
 					}
 					sApp.bluetoothDevices = devices;
 				}
-
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
 				Log.d("SETTINGSACTIVITY", "adapter size : " + arrayAdapter.size());
 				adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, arrayAdapter);
-
 				builder.setTitle("Choose WATCHiT device: ");
 				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						//showProgress("WATCHiT", "Connecting to WATCHiT....");
+						showProgress("WATCHiT", "Connecting to WATCHiT....");
 						deviceAdress = devices.get(which).getAddress();
 						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
 						Bundle b = new Bundle();

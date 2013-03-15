@@ -1,6 +1,8 @@
 package parsing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.simpleframework.xml.Serializer;
@@ -76,9 +78,8 @@ public class Parser {
 	   	 attributes.put("unit", genericSensorData.getValue().getUnit());
 	   	 Log.d("building object", "text?:" +genericSensorData.getValue().getText());
 	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
-	   	dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
+	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 
-	   	
 	   	 DataObject dataObject = dataObjectBuilder.build();
 	   	 Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
@@ -97,6 +98,16 @@ public class Parser {
 			e.printStackTrace();
 		}
 		return data;
+	}
+	
+	
+	
+	public static List<GenericSensorData> convertDataObjectsToGenericSensordataObjects (List<de.imc.mirror.sdk.DataObject> dataObjects) {
+		List<GenericSensorData> genericSensorDataObjects = new ArrayList<GenericSensorData>();
+		for (de.imc.mirror.sdk.DataObject dataObject : dataObjects) {
+			 genericSensorDataObjects.add(buildSimpleXMLObject((DataObject) dataObject));
+		}
+		return genericSensorDataObjects;
 	}
 	
 }
