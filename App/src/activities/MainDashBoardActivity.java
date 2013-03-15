@@ -1,6 +1,6 @@
 package activities;
 
-import interfaces.LocationChangedListener;
+import listeners.LocationChangedListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
 import service.LocationService;
@@ -131,6 +131,8 @@ public class MainDashBoardActivity extends BaseActivity  {
 				try {
 					//sApp.dataObjects.add(dataObject);
 					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+					Log.d("data 2k", data.toString());
+					
 					sApp.genericSensorDataObjects.add(data);
 					Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
 				} catch (Exception e) {
@@ -180,7 +182,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 					String lot = String.valueOf(sApp.getLongitude());
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
 					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
-					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid);
+					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
 					//new CreateSpaceTask().execute();
 					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
 					Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();

@@ -1,10 +1,11 @@
 package activities;
 
-import interfaces.WATCHiTConnectionChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import listeners.WATCHiTConnectionChangeListener;
 import parsing.Parser;
 
 import service.WATCHiTService;
@@ -205,7 +206,8 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 			return true;
 		case R.id.menu_mock_watchit_data:
 			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), sApp.connectionHandler.getCurrentUser().getBareJID());
+					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
+					sApp.connectionHandler.getCurrentUser().getBareJID(), sApp.connectionHandler.getCurrentUser().getUsername());
 			new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
 			return true;
 

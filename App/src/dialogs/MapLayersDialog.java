@@ -1,6 +1,6 @@
 package dialogs;
 
-import interfaces.LayersChangeListener;
+import listeners.LayersChangeListener;
 import no.ntnu.emergencyreflect.R;
 import android.app.Activity;
 import android.app.AlertDialog;

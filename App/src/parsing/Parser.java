@@ -1,6 +1,7 @@
 package parsing;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,11 +55,12 @@ public class Parser {
 	 * @param user
 	 * @return
 	 */
-	public static DataObject buildDataObjectFromSimpleXMl (GenericSensorData genericSensorData, String userJID) {
+	public static DataObject buildDataObjectFromSimpleXMl (GenericSensorData genericSensorData, String userJID, String userName) {
 		DataObjectBuilder dataObjectBuilder =
 		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
-		//Date date = new Date();
-		//dataObjectBuilder.addCDTCreationInfo(date, user, "mirror:application:watchit:genericsensordata");
+		Date date = new Date();
+		
+		dataObjectBuilder.addCDTCreationInfo(date, userName, null);
 		CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_1_0);
 		cdmDataBuilder.setPublisher(userJID);
 		cdmDataBuilder.setModelVersion("0.2");

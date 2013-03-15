@@ -1,10 +1,11 @@
 package com.example.watchit_connect;
 
 
-import interfaces.WATCHiTConnectionChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
 
@@ -48,10 +49,10 @@ public class MainApplication extends Application {
     //public WATCHiTConnectionChangeListener wclistener;
     
     private List<WATCHiTConnectionChangeListener> wclisteners = new ArrayList<WATCHiTConnectionChangeListener>();
-    
     public void addListener(WATCHiTConnectionChangeListener listener) {
-    	wclisteners.add(listener);
+    	if (!wclisteners.contains(listener)) wclisteners.add(listener);
     }
+    
     public void broadcastConnectionChange(boolean on) {
     	for (WATCHiTConnectionChangeListener listener : wclisteners) {
     		Log.d("broadcasting ", " broadcasting connecting change");

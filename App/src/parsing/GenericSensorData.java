@@ -24,6 +24,8 @@ import org.simpleframework.xml.Root;
 		@Attribute
 		private String schemaLocation;
 		
+		@Element
+		private CreationInfo creationInfo;
 		
 		@Element
 		private Location location;
@@ -31,6 +33,10 @@ import org.simpleframework.xml.Root;
 		@Element
 		private Value value;
 
+		
+		public CreationInfo getCreationInfo() {
+			return creationInfo;
+		}
 		
 		
 		public GenericSensorData() {
