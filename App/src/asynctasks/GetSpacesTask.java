@@ -21,7 +21,7 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		public void onPreExecute() {
 			super.onPreExecute();
-			mActivity.showProgress("Syncing", "Syncing......");
+			//mActivity.showProgress("Syncing", "Syncing......");
 			
 		}
 		

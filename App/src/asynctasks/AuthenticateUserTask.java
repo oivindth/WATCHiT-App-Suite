@@ -71,6 +71,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 			mActivity.showToast("Failed to connect user" );
 			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");
 		}
+		new GetSpacesTask(mActivity).execute();
 	}
 	@Override
 	protected void onCancelled() {

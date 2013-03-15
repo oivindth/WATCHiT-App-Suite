@@ -53,6 +53,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE)
 			new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
+			return;
 		}
 		
 		new GetSpacesTask(this).execute();
