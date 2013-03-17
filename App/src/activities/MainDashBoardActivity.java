@@ -164,6 +164,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 			public void handleMessage(Message msg) {
 				// Receive message from service
 				switch (msg.what) {
+				/*
 				case WATCHiTService.MSG_CONNECTION_ESTABLISHED:
 					sApp.isWATChiTOn = true;
 					Log.d("MainActivity Handler ", "Connection established message receieved from service.");
@@ -178,6 +179,7 @@ public class MainDashBoardActivity extends BaseActivity  {
 					showToast(" Failed to connect to WATCHiT....");
 					sApp.broadcastConnectionChange(false);
 					break;
+					*/
 				case WATCHiTService.MSG_CONNECTION_LOST:
 					Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
 					showToast("Warning: Lost connection with WATCHiT!");

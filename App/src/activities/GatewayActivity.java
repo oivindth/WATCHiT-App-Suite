@@ -47,6 +47,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import asynctasks.AuthenticateUserTask;
+import asynctasks.ConnectToBluetoothTask;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.PublishDataTask;
 
@@ -66,11 +67,13 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 	private List<BluetoothDevice> devices; 
 	private String deviceAdress = "";
 	private WATCHiTConnectionChangeListener wcListener;
+	private GatewayActivity mActivity;
 
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		mActivity = this;
 		devices = new ArrayList<BluetoothDevice>();
 		statusFragment = new StatusFragment();
 		spaceFragment = new SpacesFragment();
@@ -384,8 +387,10 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						showProgress("WATCHiT", "Connecting to WATCHiT....");
-						deviceAdress = devices.get(which).getAddress();
+						//showProgress("WATCHiT", "Connecting to WATCHiT....");
+						//deviceAdress = devices.get(which).getAddress();
+						/*
+					
 						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
 						Bundle b = new Bundle();
 						b.putString("btDevice", deviceAdress);
@@ -393,7 +398,8 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 						message.setData(b);
 						sApp.sendMessageToService(message);
 						//TODO: Move the connection part to asynctask and send message to service on post execute to start thread?
-						
+						*/
+						new ConnectToBluetoothTask(mActivity , which).execute();
 						
 					}
 				});

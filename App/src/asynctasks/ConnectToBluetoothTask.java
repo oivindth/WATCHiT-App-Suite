@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.xbill.DNS.MXRecord;
+
 import service.WATCHiTService;
 
 import activities.BaseActivity;
@@ -19,6 +21,12 @@ import com.example.watchit_connect.MainApplication;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 
+/**
+ * Asynctask used for bluetooth connection. Since btSocket.connect() blocks until it is connected we need it in a thread(asynctask)
+ * to avoid occupiing the main guithread.
+ * @author oivindth
+ *
+ */
 public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private BaseActivity mActivity;
@@ -40,7 +48,7 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mActivity.showProgress("Server", "establishing connection...");
+		mActivity.showProgress("Bluetooth", "establishing connection...");
 	}
 	
 	@Override
@@ -108,7 +116,7 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 		} else {
 			sApp.isWATChiTOn = false;
 			sApp.broadcastConnectionChange(false);
-			
+			mActivity.showToast("Failed to connect...");
 			
 			
 		}
