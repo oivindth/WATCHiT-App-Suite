@@ -208,6 +208,8 @@ public class WATCHiTService extends AbstractService {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					Message messageToActivity = Message.obtain(null, MSG_CONNECTION_LOST);
+					send(messageToActivity);
 					Log.d("thread RUN", "error:  " + e);
 					break;
 				}

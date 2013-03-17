@@ -289,18 +289,25 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						new ConnectToBluetoothTask(mActivity, which).execute();
+						
+						/*
 						deviceAdress = devices.get(which).getAddress();
 						Message message = Message.obtain(null, WATCHiTService.MSG_DEVICE_NAME);
 						Bundle b = new Bundle();
 						b.putString("btDevice", deviceAdress);
 						b.putInt("btdevicepos", which);
 						message.setData(b);
+						
+						
+						
 						try {
 							sApp.service.send(message);
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} 
+						*/
 					}
 				});
 				// Create the AlertDialog
