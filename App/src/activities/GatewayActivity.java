@@ -235,12 +235,6 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 		//switch space
 		sApp.currentActiveSpace = space;
 		
-		try {
-			sApp.dataHandler.registerSpace(space.getId());
-		} catch (UnknownEntityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 		new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
 		showToast("Noe registered to event: " + space.getName());
@@ -398,6 +392,9 @@ public class GatewayActivity extends BaseActivity implements OnSpaceItemSelected
 						b.putInt("btdevicepos", which);
 						message.setData(b);
 						sApp.sendMessageToService(message);
+						//TODO: Move the connection part to asynctask and send message to service on post execute to start thread?
+						
+						
 					}
 				});
 

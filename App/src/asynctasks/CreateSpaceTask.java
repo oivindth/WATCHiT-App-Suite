@@ -12,6 +12,12 @@ import de.imc.mirror.sdk.android.SpaceMember;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import de.imc.mirror.sdk.exceptions.SpaceManagementException;
 
+
+/**
+ * WARNING: Currently not bein used in the app and there has not been tested. Use at own risk.
+ * @author oivindth
+ *
+ */
 public class CreateSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	
 	

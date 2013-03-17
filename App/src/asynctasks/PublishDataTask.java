@@ -5,10 +5,14 @@ import com.example.watchit_connect.MainApplication;
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
+	/**
+	 * AsyncTask used for publishing dataobject to a space.
+	 * @author oivindth
+	 *
+	 */
 	public class PublishDataTask extends AsyncTask<Void, Void, Boolean> {
 		  
 		private BaseActivity mActivity;

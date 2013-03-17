@@ -29,16 +29,16 @@ public class WATCHiTService extends AbstractService {
 	//TODO: Refactor bluetooth connection out and make it an asynctask.
 	
 
-	private BluetoothSocket btSocket;
+	//private BluetoothSocket btSocket;
 
-	private BluetoothAdapter btAdapter = null;
+	//private BluetoothAdapter btAdapter = null;
 
 	StringBuilder sb = new StringBuilder();
 	private ConnectedThread mConnectedThread;
 	//TODO: from random string instead of hardcoded uuid?
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
 
-
+	MainApplication sApp;
 	
 	
 	public static final int MSG_SET_INT_VALUE = 9993;
@@ -48,18 +48,19 @@ public class WATCHiTService extends AbstractService {
 	public static final int MSG_CONNECTION_LOST = 9997;
 	public static final int MSG_CONNECTION_FAILED = 9999;
 	public static final int MSG_DEVICE_NAME = 9998;
+	public static final int START_CONNECT_THREAD = 10000;
 
 	@Override
 	public void onStartService() {
 		Log.i("WATCHiTService", "We are now in service");
-		
+		sApp = MainApplication.getInstance();
 	}
 
 	@Override
 	public void onStopService() {
 		Log.d("TAG", "...In onPause()...");
 		try     {
-			btSocket.close();
+			sApp.btSocket.close();
 		} catch (Exception e2) {
 			//errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
 			e2.printStackTrace();
@@ -77,6 +78,14 @@ public class WATCHiTService extends AbstractService {
 			Log.d("WATCHiTService", " writing data to watchit. Data: " + msg.getData().getString("watchitdata"));
 			mConnectedThread.write(msg.getData().getString("watchitdata"));
 		}
+		
+		if (msg.what == START_CONNECT_THREAD) {
+			mConnectedThread = new ConnectedThread(sApp.btSocket);
+			mConnectedThread.start();
+			Log.d("WATCHITSERVICE", "Thread started.");
+		}
+		
+		/*
 		if (msg.what == MSG_DEVICE_NAME) {
 			msg.getData().getString("btDevice");
 			int pos = msg.getData().getInt("btdevicepos");
@@ -106,8 +115,9 @@ public class WATCHiTService extends AbstractService {
 			Log.d("WATCHITSERVICE ","...Connecting...");
 			try {
 				btSocket.connect();
-
-				Log.d("WATCHITSERVICE", "....Connection ok...");
+				// Create a data stream so we can talk to watchit(bluetooth)
+				Log.d("WATCHITSERVICE", "...Create Socket...");
+				
 
 				send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED)); //Let acitvity know that a connection to watchit has been made.
 			} catch (IOException e) {
@@ -121,12 +131,9 @@ public class WATCHiTService extends AbstractService {
 				}
 			}
 
-			// Create a data stream so we can talk to watchit(bluetooth)
-			Log.d("WATCHITSERVICE", "...Create Socket...");
-			mConnectedThread = new ConnectedThread(btSocket);
-			mConnectedThread.start();
+		*/
 
-		}
+		//}
 	}
 
 	/**
@@ -135,9 +142,10 @@ public class WATCHiTService extends AbstractService {
 	 */
 	public void cancel() {
 		try {
-			btSocket.close();
+			sApp.btSocket.close();
 		} catch (IOException e) { }
 	} 
+	
 	/**
 	 * Thread used for constantly listening to data receieved from bluetooth(WATCHiT).
 	 * @author oivindth

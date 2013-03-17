@@ -1,6 +1,9 @@
 package activities;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import listeners.LayersChangeListener;
 import listeners.LocationChangedListener;
 import parsing.GenericSensorData;
@@ -24,6 +27,8 @@ import de.imc.mirror.sdk.DataObjectListener;
 import dialogs.MapLayersDialog;
 import enums.SharedPreferencesNames;
 import enums.ValueType;
+import fragments.MoodFragment;
+import fragments.PersonDetailsFragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,9 +45,14 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 	private GoogleMap mMap;
 	private MainApplication sApp;
 	private SharedPreferences mapPreferences;
-
+	private PersonDetailsFragment personDetailsFragment;
+	private MoodFragment moodFragment;
+	private List<Marker> markers;
+	
 	DataObjectListener listernerfri;
 
+	
+	
 	private boolean moodLayerMode;
 	private boolean personLayerMode;
 
@@ -59,6 +69,8 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		moodLayerMode = mapPreferences.getBoolean("mood_layer", false);
 		personLayerMode = mapPreferences.getBoolean("person_layer", false);	
 
+		markers = new ArrayList<Marker>();
+		
 		handler = new Handler(Looper.getMainLooper());
 
 		listernerfri = new DataObjectListener() {
@@ -83,7 +95,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 							mMap.addMarker(new MarkerOptions()
 							.position(latlng)
 							.title("Person found"))
-							.setSnippet("User: " + data.getPublisher()   + " \n  " + data.getTimestamp() );
+							.setSnippet("User: " + data.getCreationInfo().getPerson()  + " \n  " + data.getTimestamp() );
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -103,7 +115,25 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 			@Override
 			public void onInfoWindowClick(Marker arg0) {
-				showToast("Here we go to new fragment that displays more info with quiz button etc....");
+				GenericSensorData data = null;
+				for (Marker marker : markers) {
+					if (arg0.equals(marker)) {
+						data = sApp.genericSensorDataObjects.get(markers.indexOf(marker));
+					}
+				}
+				
+				Bundle b = new Bundle();
+				b.putString("user", data.getCreationInfo().getPerson());
+				b.putString("time", data.getTimestamp());
+				b.putString("lat", data.getLocation().getLatitude());
+				b.putString("lng", data.getLocation().getLongitude());
+				
+				
+				//personDetailsFragment = new PersonDetailsFragment();
+				//personDetailsFragment.setArguments(b);
+				
+				//getSupportFragmentManager().beginTransaction().replace(android.R.id.content, personDetailsFragment).commit();
+				
 			}
 		});
 	}
@@ -170,21 +200,40 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		}
 	}
 
+	
 	@Override
 	public void onLayersChanged(boolean showPersons, boolean showMoods) {
 		mMap.clear();
+		markers.clear();
 		if (showPersons) {
 			Log.d("MapActivity", "size: " + sApp.genericSensorDataObjects.size());
 			for (GenericSensorData data : sApp.genericSensorDataObjects) {
 				Double lat = Double.parseDouble(data.getLocation().getLatitude());
 				Double lng = Double.parseDouble(data.getLocation().getLongitude());
 				LatLng latlng = new LatLng(lat, lng);
-				mMap.addMarker(new MarkerOptions()
+				
+				Marker marker = mMap.addMarker(new MarkerOptions()
 				.position(latlng)
-				.title("Person found"))
-				.setSnippet("User: " + data.getPublisher()   + " \n  " + data.getTimestamp() );
-			}
-		}	 
-	}
+				.title("Person found")
+				.snippet("User: " + data.getCreationInfo().getPerson()   + " \n  " + data.getTimestamp() ));
+				 
+				markers.add(marker);
 
+			}
+		}	
+		if (showMoods) {
+			//personDetailsFragment = new PersonDetailsFragment();
+			//personDetailsFragment.setArguments(b);
+			
+			moodFragment = new MoodFragment();
+			
+			getSupportFragmentManager().beginTransaction().replace(android.R.id.content, moodFragment).commit();
+			
+			
+	
+		}
+		if (!showMoods && moodFragment!= null) {
+			getSupportFragmentManager().beginTransaction().remove(moodFragment).commit();
+		}
+	}
 }

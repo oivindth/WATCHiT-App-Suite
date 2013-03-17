@@ -43,7 +43,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
         */
 		
       try {
-    	  MainApplication.getInstance().connectionHandler.connect();
+    	  sApp.connectionHandler.connect();
     	 
   		  //sApp.dataHandler.registerSpace("team#42");
 
@@ -70,6 +70,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 		} else {
 			mActivity.showToast("Failed to connect user" );
 			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");
+			sApp.OnlineMode = false;
 		}
 		new GetSpacesTask(mActivity).execute();
 	}

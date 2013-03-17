@@ -52,13 +52,13 @@ public class MainDashBoardActivity extends BaseActivity  {
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
+				Log.d("Main",  " username: " + sApp.getUserName() + "  password: " + sApp.getPassword());
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
 				
 			} else {
 				new GetSpacesTask(this).execute();
 				
 			}
-			
 			
 		} else {
 			new GetSpacesTask(this).execute();
@@ -137,13 +137,14 @@ public class MainDashBoardActivity extends BaseActivity  {
 				String objectId = dataObject.getId();
 				
 				Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
+				Log.d("dataobject: ", dataObject.toString());
 				try {
 					//sApp.dataObjects.add(dataObject);
 					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 					Log.d("data 2k", data.toString());
 					
 					sApp.genericSensorDataObjects.add(data);
-					Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
 				} catch (Exception e) {
 					e.printStackTrace();	
 				}

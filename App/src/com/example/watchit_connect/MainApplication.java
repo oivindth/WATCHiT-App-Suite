@@ -20,6 +20,7 @@ import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class MainApplication extends Application {
     private static MainApplication sInstance;
      
     public ServiceManager service, locationService;
-
+    public BluetoothSocket btSocket;
 
     public static MainApplication getInstance() {
       return sInstance;

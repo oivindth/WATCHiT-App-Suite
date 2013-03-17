@@ -41,9 +41,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 			Log.d("GETDATAFROMSPACETASK", "do in background");
 			try {
 			
-				  //app.spaceHandler.setMode(Mode.ONLINE);
-	      		  //app.dataHandler.setMode(Mode.ONLINE);
-	      		  //app.dataHandler.registerSpace("team#42");
+	      		  app.dataHandler.registerSpace(mSpaceId);
 				
 				app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 				app.dataObjects = app.dataHandler.retrieveDataObjects(mSpaceId);
