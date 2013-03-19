@@ -46,7 +46,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 				app.dataObjects = app.dataHandler.retrieveDataObjects(mSpaceId);
 
-			} catch (UnknownEntityException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -63,7 +63,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				mActivity.showToast("Size of data receieved from space " + app.dataObjects.size());
 				//Log.d("GETDATATASK", app.dataObjects.get(app.dataObjects.size()-1).toString());
 			} else {
-				mActivity.showToast("Size of data receieved from space");
+				mActivity.showToast("failed. Try to refresh..");
 				Log.d("GETDATATASK", "FAIL");
 			}
 		}

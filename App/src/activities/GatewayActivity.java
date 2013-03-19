@@ -2,6 +2,7 @@ package activities;
 
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
+import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import dialogs.ChooseBlueToothDeviceDialog.BlueToothSelectListener;
 import dialogs.ChooseEventDialog;
 import dialogs.LocationDialog;
@@ -38,6 +40,7 @@ import dialogs.LocationDialog.LocationDialogListener;
 import dialogs.ChooseBlueToothDeviceDialog;
 import dialogs.OnlineModeDialog;
 import dialogs.OnlineModeDialog.OnlineModeDialogListener;
+import enums.SharedPreferencesNames;
 import fragments.AppsFragment.OnAppItemSelectedListener;
 import fragments.ProfileFragment;
 import fragments.AppsFragment;
@@ -167,6 +170,17 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			}
 		};
 		sApp.addOnlineModeChangeListener(onlinemodeListener);
+		
+		
+		if (sApp.currentActiveSpace != null) {
+			try {
+				sApp.dataHandler.registerSpace(sApp.currentActiveSpace.getId());
+			} catch (UnknownEntityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 	
@@ -224,6 +238,10 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 		registerReceiver(mReceiver, filter2); // Don't forget to unregister during onDestroy
 		registerReceiver(mReceiver, filter3); // Don't forget to unregister during onDestroy
 		registerReceiver(mReceiver, filter4); // Don't forget to unregister during onDestroy
+		
+		
+	
+		
 	}
 
 	@Override
