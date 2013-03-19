@@ -37,6 +37,8 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 		//View view = inflater.inflate(R.layout.dialog_server_settings, null);
 		//builder.setView(view);
 		
+		
+		
 		 builder.setMultiChoiceItems(items, states, new DialogInterface.OnMultiChoiceClickListener(){
 		        public void onClick(DialogInterface dialogInterface, int item, boolean state) {
 		        	

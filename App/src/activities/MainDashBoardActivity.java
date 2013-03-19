@@ -1,17 +1,23 @@
 package activities;
 
-import listeners.LocationChangedListener;
+import listeners.LocationChangeListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
 import service.LocationService;
 import service.ServiceManager;
 import service.WATCHiTService;
 import Utilities.UtilityClass;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +33,6 @@ import com.actionbarsherlock.view.MenuItem;
 import no.ntnu.emergencyreflect.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.android.DataObject;
@@ -36,204 +41,20 @@ import de.imc.mirror.sdk.android.DataObject;
 public class MainDashBoardActivity extends BaseActivity  {
 
 	DataObjectListener myListener;
-	private LocationChangedListener locationListener;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dashboardlayout);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-		createAndHandleWATCHiTService();
-		createAndHandleLocationService();
-		setUpDashBoardGUI();
-		createDataObjectListener();
-		sApp.dataHandler.addDataObjectListener(myListener);
-		
-		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
-			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
-				Log.d("Main",  " username: " + sApp.getUserName() + "  password: " + sApp.getPassword());
-				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
-				
-			} else {
-				new GetSpacesTask(this).execute();
-				
-			}
-			
-		} else {
-			new GetSpacesTask(this).execute();
-		}
-		
+	private Handler handler;
 	
-	}
-
 	
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		// If phone doesen't have google play services installed user is prompted to install it.
-		// Or else he/she can't use the Google Maps.
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-		if (resultCode == ConnectionResult.SUCCESS) {
-			//proceed as normal
-		} else {
-			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
-		}
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
 
-	}
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
-		switch (item.getItemId()) {
 
-		case android.R.id.home:
-			// iff up instead of back:
-			//  intent = new Intent(this, MainActivity.class);
-			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// startActivity(intent);
-			//just back use only finish():
-			// finish();
-			showToast("Main");
-			return true;
 
-		case R.id.menu_logout:
-			SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			//Set "hasLoggedIn" to true
-			editor.putBoolean("hasLoggedIn", false);
-			//editor.putString("username", "");
-			//editor.putString("password", "");
-			// Commit the edits!
-			editor.commit();
-			//if (sApp.connectionHandler.getStatus() == ConnectionStatus.ONLINE) {
-			//sApp.connectionHandler.disconnect();
-			//}
-			intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			finish();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 
-	/**
-	 * add new dataobject to lists. 
-	 */
-	private void createDataObjectListener() {
-		myListener = new DataObjectListener() {
-			// implement this interface in a controller class of your application
-			@Override
-			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
-					String spaceId) {
-				String objectId = dataObject.getId();
-				
-				Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
-				Log.d("dataobject: ", dataObject.toString());
-				try {
-					//sApp.dataObjects.add(dataObject);
-					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
-					Log.d("data 2k", data.toString());
-					
-					sApp.genericSensorDataObjects.add(data);
-					//Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_SHORT).show();
-				} catch (Exception e) {
-					e.printStackTrace();	
-				}
-			}
-		};
-	}
 
-	/**
-	 * Set up the WATCHiT Service for communicating with WATCHiT
-	 */
-	private void createAndHandleWATCHiTService() {
 
-		// Create a service and handle incoming messages
-		//TODO: Make handler static to avoid (potential) leaks?
-		sApp.service = new ServiceManager(getBaseContext(), WATCHiTService.class, new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				// Receive message from service
-				switch (msg.what) {
-				/*
-				case WATCHiTService.MSG_CONNECTION_ESTABLISHED:
-					sApp.isWATChiTOn = true;
-					Log.d("MainActivity Handler ", "Connection established message receieved from service.");
-					showToast("Connection to WATCHiT established..");
-					sApp.broadcastConnectionChange(true);
-					
-					break;
-				case WATCHiTService.MSG_CONNECTION_FAILED:
-					//dismissProgress();
-					sApp.isWATChiTOn = false;
-					Log.d("MainDashBoardActivityHandler: ", " Connection failed");
-					showToast(" Failed to connect to WATCHiT....");
-					sApp.broadcastConnectionChange(false);
-					break;
-					*/
-				case WATCHiTService.MSG_CONNECTION_LOST:
-					Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
-					showToast("Warning: Lost connection with WATCHiT!");
-					sApp.isWATChiTOn = false;
-					sApp.broadcastConnectionChange(false);
-					break;
-				case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
-					String data = msg.getData().getString("watchitdata");
-					//textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
-					Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
-					String lat = String.valueOf(sApp.getLatitude());
-					String lot = String.valueOf(sApp.getLongitude());
-					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
-					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
-					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-					//new CreateSpaceTask().execute();
-					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
-					Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
-					Log.d("watchitdata:  ", data);
-					break;
-				default:
-					super.handleMessage(msg);
-				} 
-			}
-		});
-	}
 	
-	/**
-	 * Sets up the Location Service for GPS updates.
-	 */
-	private void createAndHandleLocationService() {
-		//LocationService.
-		sApp.locationService = new ServiceManager(getBaseContext(), LocationService.class, new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				// Receive message from service
-				switch (msg.what) {
-				case LocationService.MSG_UPDATE_LOCATION:
-					Log.d("MainDashBoardActivity", "receieved location update..");
-					double longitude = msg.getData().getDouble("longitude");
-					double latitude = msg.getData().getDouble("latitude");
-					sApp.setLongitude(longitude);
-					sApp.setLatitude(latitude);
-					
-					showToast("New location: " + " long:  " + longitude + " lat: " + latitude );
-					
-					//locationListener.onLocationChanged(latitude, longitude);
-					
-					break;
+	
 
-				} 
-			}
-		});
-	}
 	
 	/**
 	 * Set up the dashboard with buttins and onclick listeners etc.

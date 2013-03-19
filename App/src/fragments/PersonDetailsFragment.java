@@ -17,8 +17,9 @@ public class PersonDetailsFragment extends SherlockFragment {
 	private String user;
 	private LatLng latlng;
 	private String time;
+	private String value;
 
-	private TextView userNameTextView, timeTextView;
+	private TextView userNameTextView, timeTextView, textViewHeader;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class PersonDetailsFragment extends SherlockFragment {
 		
 		user = b.getString("user");
 		time = b.getString("time");
+		value = b.getString("value");
 		Log.d("PersonDetailsFragment", "user: " + user);
 		
 	}
@@ -42,6 +44,8 @@ public class PersonDetailsFragment extends SherlockFragment {
 		userNameTextView.setText(user);
 		timeTextView= (TextView) myFragmentView.findViewById(R.id.textViewTime);
 		timeTextView.setText(time);
+		textViewHeader = (TextView) myFragmentView.findViewById(R.id.textViewHeader);
+		//textViewHeader.setText(value);
 		
 		return myFragmentView;
 	}

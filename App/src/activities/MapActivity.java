@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import listeners.LayersChangeListener;
-import listeners.LocationChangedListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
 
@@ -16,8 +15,9 @@ import com.example.watchit_connect.MainApplication;
 import no.ntnu.emergencyreflect.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,7 +36,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 import asynctasks.PublishDataTask;
 
 
@@ -45,12 +44,15 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 	private GoogleMap mMap;
 	private MainApplication sApp;
 	private SharedPreferences mapPreferences;
-	private PersonDetailsFragment personDetailsFragment;
-	private MoodFragment moodFragment;
 	private List<Marker> markers;
+	private List<GenericSensorData> tempDataObjects;
+	
+	private List<GenericSensorData> moods;
+	private List<GenericSensorData> persons;
+	
 	
 	DataObjectListener listernerfri;
-
+	private MapActivity mActivity;
 	
 	
 	private boolean moodLayerMode;
@@ -68,41 +70,13 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
 		moodLayerMode = mapPreferences.getBoolean("mood_layer", false);
 		personLayerMode = mapPreferences.getBoolean("person_layer", false);	
-
+		mActivity = this;
+		
 		markers = new ArrayList<Marker>();
+		tempDataObjects = new ArrayList<GenericSensorData>();
 		
 		handler = new Handler(Looper.getMainLooper());
-
-		listernerfri = new DataObjectListener() {
-
-			@Override
-			public void handleDataObject(DataObject dataObject, String spaceId) {
-				Log.d("here", "here??");
-
-				data = Parser.buildSimpleXMLObject((de.imc.mirror.sdk.android.DataObject) dataObject);
-				Double lat = Double.parseDouble(data.getLocation().getLatitude());
-				Double lng = Double.parseDouble(data.getLocation().getLongitude());
-
-				Log.d("listener map22:", "  lat :" + lat + "  long : " + lng);
-
-				latlng = new LatLng(lat, lng);
-
-				handler.post(new Runnable(){
-
-					@Override
-					public void run() {
-						try {
-							mMap.addMarker(new MarkerOptions()
-							.position(latlng)
-							.title("Person found"))
-							.setSnippet("User: " + data.getCreationInfo().getPerson()  + " \n  " + data.getTimestamp() );
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}  
-				});
-			}
-		};
+		handleNewDataObjects();
 		sApp.dataHandler.addDataObjectListener(listernerfri);
 	}
 
@@ -118,27 +92,60 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 				GenericSensorData data = null;
 				for (Marker marker : markers) {
 					if (arg0.equals(marker)) {
-						data = sApp.genericSensorDataObjects.get(markers.indexOf(marker));
+						data = tempDataObjects.get(markers.indexOf(marker));
 					}
 				}
 				
-				Bundle b = new Bundle();
-				b.putString("user", data.getCreationInfo().getPerson());
-				b.putString("time", data.getTimestamp());
-				b.putString("lat", data.getLocation().getLatitude());
-				b.putString("lng", data.getLocation().getLongitude());
+				//String unit = data.getValue().getUnit();
+				String unit ="";
+				String value = data.getValue().getText();
+				if (value.equals("I rescued someone")) {
+					unit = "person";
+				} else {
+					unit = "mood";
+				}
 				
-				
-				//personDetailsFragment = new PersonDetailsFragment();
-				//personDetailsFragment.setArguments(b);
-				
-				//getSupportFragmentManager().beginTransaction().replace(android.R.id.content, personDetailsFragment).commit();
+				Intent intent = new Intent(mActivity, MapMarkerDetailsActivity.class);
+				intent.putExtra("unit", unit);
+				intent.putExtra("user", data.getCreationInfo().getPerson());
+				intent.putExtra("time", data.getTimestamp());
+				intent.putExtra("value", data.getValue().getText());
+				startActivity(intent);
 				
 			}
 		});
 	}
 
 
+	private void handleNewDataObjects () {
+		listernerfri = new DataObjectListener() {
+
+			@Override
+			public void handleDataObject(DataObject dataObject, String spaceId) {
+
+				data = Parser.buildSimpleXMLObject((de.imc.mirror.sdk.android.DataObject) dataObject);
+				Double lat = Double.parseDouble(data.getLocation().getLatitude());
+				Double lng = Double.parseDouble(data.getLocation().getLongitude());
+
+				Log.d("listener map:", "  lat :" + lat + "  long : " + lng);
+				latlng = new LatLng(lat, lng);
+				handler.post(new Runnable(){
+
+					@Override
+					public void run() {
+						try {
+							addMarker(data, " ");
+							tempDataObjects.add(data);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}  
+				});
+			}
+		};
+	}
+	
+	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -178,7 +185,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 
 		case R.id.menu_mock_watchit_data:
 			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
+					("I rescued someone", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
 					sApp.connectionHandler.getCurrentUser().getBareJID(), sApp.connectionHandler.getCurrentUser().getUsername());
 			new PublishDataTask(this, (de.imc.mirror.sdk.android.DataObject) dob, sApp.currentActiveSpace.getId()).execute();
 			return true;
@@ -200,40 +207,47 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		}
 	}
 
-	
 	@Override
 	public void onLayersChanged(boolean showPersons, boolean showMoods) {
 		mMap.clear();
 		markers.clear();
-		if (showPersons) {
+		tempDataObjects.clear();
 			Log.d("MapActivity", "size: " + sApp.genericSensorDataObjects.size());
 			for (GenericSensorData data : sApp.genericSensorDataObjects) {
-				Double lat = Double.parseDouble(data.getLocation().getLatitude());
-				Double lng = Double.parseDouble(data.getLocation().getLongitude());
-				LatLng latlng = new LatLng(lat, lng);
-				
-				Marker marker = mMap.addMarker(new MarkerOptions()
-				.position(latlng)
-				.title("Person found")
-				.snippet("User: " + data.getCreationInfo().getPerson()   + " \n  " + data.getTimestamp() ));
-				 
-				markers.add(marker);
-
+				String value = data.getValue().getText();
+				ValueType VALUETYPE = ValueType.getValue(value);
+				if (ValueType.PERSON == VALUETYPE && showPersons) {
+					addMarker(data, "person");
+					tempDataObjects.add(data);
+				}
+				if (ValueType.MOOD == VALUETYPE && showMoods)   {
+					addMarker(data, "mood");
+					tempDataObjects.add(data);
+				}
 			}
-		}	
-		if (showMoods) {
-			//personDetailsFragment = new PersonDetailsFragment();
-			//personDetailsFragment.setArguments(b);
-			
-			moodFragment = new MoodFragment();
-			
-			getSupportFragmentManager().beginTransaction().replace(android.R.id.content, moodFragment).commit();
-			
-			
-	
-		}
-		if (!showMoods && moodFragment!= null) {
-			getSupportFragmentManager().beginTransaction().remove(moodFragment).commit();
-		}
 	}
+
+	
+	private void addMarker(GenericSensorData data, String type) {
+		Double lat = Double.parseDouble(data.getLocation().getLatitude());
+		Double lng = Double.parseDouble(data.getLocation().getLongitude());
+		LatLng latlng = new LatLng(lat, lng);
+		BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker();
+		ValueType VALUETYPE = ValueType.getValue(data.getValue().getText());
+
+		if (VALUETYPE == ValueType.PERSON) icon  = BitmapDescriptorFactory.fromResource(R.drawable.ic_social_person);
+		if (VALUETYPE == ValueType.MOOD) icon = BitmapDescriptorFactory.fromResource(R.drawable.device_access_bightness_low_light);
+
+		Marker marker = mMap.addMarker(new MarkerOptions()
+		.position(latlng)
+		.title(data.getValue().getText())
+		.snippet("User: " + data.getCreationInfo().getPerson()).icon(icon) );
+
+		markers.add(marker);
+
+	}
+	
+	
+
+
 }

@@ -67,6 +67,7 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 			 sApp.spaceHandler.setMode(Mode.ONLINE);
 	  		  sApp.dataHandler.setMode(Mode.ONLINE);
 	  		  sApp.OnlineMode = true;
+	  		  sApp.broadCastOnlineModeChanged(true);
 		} else {
 			mActivity.showToast("Failed to connect user" );
 			Log.d("AUTHENTICATEUSERTASK", "failed to connect the user.");

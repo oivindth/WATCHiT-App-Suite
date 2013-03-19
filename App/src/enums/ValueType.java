@@ -8,9 +8,16 @@ package enums;
 public enum ValueType {
 	
 	
-	NOTE, MOOD, STRESS, FOUNDPERSON, STEP
+	MOOD, PERSON, SAD, HAPPY, NEUTRAL;
 	
 	
+	public static ValueType getValue(String value) {
+		
+		if (value.equals("I rescued someone")) return PERSON;
+		
+		return MOOD;
+		
+	}
 	
 	
 }

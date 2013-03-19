@@ -43,21 +43,34 @@ import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 	    		 // sApp.spaceHandler.setMode(Mode.ONLINE);
 	      		 // sApp.dataHandler.setMode(Mode.ONLINE);
 	      		 // sApp.dataHandler.registerSpace("team#42");
+	    		 Log.d("publish", "datahandler: " + sApp.dataHandler);
+	    		 Log.d("publish", "spaceid: " + mSpaceId);
 				  sApp.dataHandler.publishDataObject(mDataObject, mSpaceId);
-			} catch (UnknownEntityException e) {
+				  Log.d("publish", "dataobject: " + mDataObject.toString());
+				  Log.d("publish", "just published dataobject with id: " + mDataObject.getId());
+	    	 }
+				  catch (NullPointerException e) {
+					  e.printStackTrace();
+					  Log.d("ERROR:", "trying again...");
+					  new PublishDataTask(mDataObject, mSpaceId).execute();
+				  
+				  
+			} catch (Exception e) {
 				e.printStackTrace();
+				Log.d("ERROR:", "failed to publish dataobject with id: " + mDataObject.getId() );
 				return false;
 			}
 	    	 return true;
+		
 		}
 
 		protected void onPostExecute(final Boolean success) {
 		
 			if (success) {
-			Log.d("PUBLISHDATATASK", "data :");
+			Log.d("publish", "success");
 			} else {
-			Log.d("PUBLISHDATATASK", "Something went wrong");
-			mActivity.showToast("Failed to publish dataobject.....");
+			Log.d("ERROR:", "Something went wrong");
+			//mActivity.showToast("Failed to publish dataobject.....");
 			}
 		}
  	}

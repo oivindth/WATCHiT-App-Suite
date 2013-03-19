@@ -15,7 +15,6 @@ import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
-import fragments.SpacesFragment.OnSpaceItemSelectedListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -27,9 +26,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * {@link Deprecated}
+ * @author oivindth
+ *
+ */
 public class DataObjectsFragment extends ListFragment {
 	
-OnSpaceItemSelectedListener mListener;
 	
 	MainApplication app;
 	

@@ -1,25 +1,19 @@
 package asynctasks;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
-
-import org.xbill.DNS.MXRecord;
 
 import service.WATCHiTService;
 
 import activities.BaseActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
 import com.example.watchit_connect.MainApplication;
-
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 
 /**
  * Asynctask used for bluetooth connection. Since btSocket.connect() blocks until it is connected we need it in a thread(asynctask)
@@ -43,11 +37,14 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 		mActivity = activity;
 		position = blueToothDeviceposition;
 		sApp = MainApplication.getInstance();
+		Log.d("Bt", "constr");
 	}
 	
 	@Override
 	protected void onPreExecute() {
+		
 		super.onPreExecute();
+		Log.d("Bt", "pre");
 		mActivity.showProgress("Bluetooth", "establishing connection...");
 	}
 	
@@ -55,6 +52,7 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 	protected Boolean doInBackground(Void... params) {
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		//checkBTState();
+		Log.d("Bt", "in background");
 		Log.d("WATCHITSERVICE", ".... try connect...");
 
 		BluetoothDevice device = MainApplication.getInstance().bluetoothDevices.get(position);
@@ -112,10 +110,10 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 			sApp.sendMessageToService(message);
 			mActivity.showToast("Now waiting for bluetooth data");
 			sApp.isWATChiTOn = true;
-			sApp.broadcastConnectionChange(true);
+			sApp.broadcastWATCHiTConnectionChange(true);
 		} else {
 			sApp.isWATChiTOn = false;
-			sApp.broadcastConnectionChange(false);
+			sApp.broadcastWATCHiTConnectionChange(false);
 			mActivity.showToast("Failed to connect...");
 			
 			

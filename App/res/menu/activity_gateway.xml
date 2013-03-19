@@ -1,14 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
  
 
+    <item android:id="@+id/menu_logout"
+        android:title="Change User/Settings"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/device_access_new_account_light"  />
+    
+    
     <item android:id="@+id/menu_sync"
         android:title="@string/menu_event"
         android:icon="@drawable/ic_navigation_refresh"
         android:showAsAction="ifRoom|withText" />
 
-  
+
     <item android:id="@+id/menu_mock_watchit_data"
-        android:title="Publish mock watchit data(testing)"
+        android:title="Publish fake data"
         android:showAsAction="never" />
         
 </menu>

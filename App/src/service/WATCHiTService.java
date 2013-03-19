@@ -40,7 +40,6 @@ public class WATCHiTService extends AbstractService {
 
 	MainApplication sApp;
 	
-	
 	public static final int MSG_SET_INT_VALUE = 9993;
 	public static final int MSG_SET_STRING_VALUE =9994;
 	public static final int MSG_SET_STRING_VALUE_TO_ACTIVITY = 9995;
@@ -85,55 +84,6 @@ public class WATCHiTService extends AbstractService {
 			Log.d("WATCHITSERVICE", "Thread started.");
 		}
 		
-		/*
-		if (msg.what == MSG_DEVICE_NAME) {
-			msg.getData().getString("btDevice");
-			int pos = msg.getData().getInt("btdevicepos");
-			btAdapter = BluetoothAdapter.getDefaultAdapter();
-			//checkBTState();
-			Log.d("WATCHITSERVICE", ".... try connect...");
-
-			BluetoothDevice device = MainApplication.getInstance().bluetoothDevices.get(pos);
-
-
-			// Two things are needed to make a connection:
-			//   A MAC address, which we got above.
-			//   A Service ID or UUID.  In this case we are using the
-			//     UUID for SPP.
-			try {
-				btSocket = device.createRfcommSocketToServiceRecord(uuid);
-			} catch (IOException e) {
-				//errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
-				e.printStackTrace();
-			}
-
-			// Discovery is resource intensive.  Make sure it isn't going on
-			// when you attempt to connect and pass your message.
-			btAdapter.cancelDiscovery();
-
-			// Establish the connection.  This will block until it connects.
-			Log.d("WATCHITSERVICE ","...Connecting...");
-			try {
-				btSocket.connect();
-				// Create a data stream so we can talk to watchit(bluetooth)
-				Log.d("WATCHITSERVICE", "...Create Socket...");
-				
-
-				send(Message.obtain(null, this.MSG_CONNECTION_ESTABLISHED)); //Let acitvity know that a connection to watchit has been made.
-			} catch (IOException e) {
-				e.printStackTrace();
-				send(Message.obtain(null, this.MSG_CONNECTION_FAILED));
-				try {
-					btSocket.close();
-				} catch (IOException e2) {
-					//errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
-					e2.printStackTrace();
-				}
-			}
-
-		*/
-
-		//}
 	}
 
 	/**
@@ -191,6 +141,7 @@ public class WATCHiTService extends AbstractService {
 					sb.append(strIncom); 
 					//textView.setText(sb.toString());
 					//sb.delete(0, sb.length());
+					Log.d("watchit thread: ", "data: " + strIncom);
 					int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
 					if (endOfLineIndex > 0) {                                            // if end-of-line,
 						String sbprint = sb.substring(0, endOfLineIndex);               // extract string

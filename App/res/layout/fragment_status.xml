@@ -1,51 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context="fragments.StatusFragment" >
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/textViewLatest"
+            style="@style/textHoloBlueLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status:"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            style="@style/textHoloBlueLight"
-             />
+            android:text="Latest:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical" >
 
-        <RadioButton
-            android:id="@+id/radioButtonOnline"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:text="Online" />
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal" >
 
-        <RadioButton
-            android:id="@+id/radioButtonLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:text="Location" />
+            <TextView
+                android:id="@+id/textViewStatus"
+                style="@style/textHoloBlueLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
 
-        <RadioButton
-            android:id="@+id/radioButtonwatchit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:text="WATChiT" />
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButtonOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Online" />
+
+                <org.jraf.android.backport.switchwidget.Switch
+                android:id="@+id/switchOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                 />
+                 
+            
+            <ImageView
+                android:id="@+id/imageViewOnlineInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="29dp"
+                android:src="@drawable/action_about_dark" />
+
+        
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButtonLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Location" />
+			
+            <org.jraf.android.backport.switchwidget.Switch
+                android:id="@+id/switchLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                 />
+            
+            <ImageView
+                android:id="@+id/imageViewLocatiohInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/action_about_dark" />
+			
+      
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButtonwatchit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="WATChiT" />
+			
+             <org.jraf.android.backport.switchwidget.Switch
+                android:id="@+id/switchWATCHiT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="23dp"
+                 />
+            
+            <ImageView
+                android:id="@+id/imageViewWatchitInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/action_about_dark" />
+        </LinearLayout>
+        
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButtonEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Event" />
+			
+             <org.jraf.android.backport.switchwidget.Switch
+                android:id="@+id/switchEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="46dp"
+                 />
+            
+            <ImageView
+                android:id="@+id/imageViewEventInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="31dp"
+                android:src="@drawable/action_about_dark" />
+        </LinearLayout>
+        
     </LinearLayout>
 
     <LinearLayout
@@ -63,13 +178,12 @@
             android:textColor="#33B5E5" />
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/textViewEventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="20dp"
-  />
+        android:text="Event here"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </LinearLayout>

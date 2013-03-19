@@ -5,6 +5,7 @@ package com.example.watchit_connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import listeners.OnlineModeChangeListener;
 import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
@@ -12,6 +13,7 @@ import parsing.GenericSensorData;
 import service.ServiceManager;
 
 import de.imc.mirror.sdk.DataObjectListener;
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
@@ -47,17 +49,46 @@ public class MainApplication extends Application {
       sInstance = this;
     }
     
-    //public WATCHiTConnectionChangeListener wclistener;
+    /**
+     * Set handlers and application to online or offline mode.
+     * @param mode
+     */
+    public void setOnlineMode (Mode mode) {
+    	if (mode == Mode.OFFLINE) {
+    		OnlineMode = false;
+			dataHandler.setMode(Mode.OFFLINE);
+			spaceHandler.setMode(Mode.OFFLINE);
+    	} else 
+    		if(mode == Mode.ONLINE) {
+    			OnlineMode = true;
+    			dataHandler.setMode(Mode.ONLINE);
+    			spaceHandler.setMode(Mode.ONLINE);
+    		}
+    }
     
+    
+    /**
+     * Listeners:
+     */
     private List<WATCHiTConnectionChangeListener> wclisteners = new ArrayList<WATCHiTConnectionChangeListener>();
     public void addListener(WATCHiTConnectionChangeListener listener) {
     	if (!wclisteners.contains(listener)) wclisteners.add(listener);
     }
     
-    public void broadcastConnectionChange(boolean on) {
+    public void broadcastWATCHiTConnectionChange(boolean on) {
     	for (WATCHiTConnectionChangeListener listener : wclisteners) {
-    		Log.d("broadcasting ", " broadcasting connecting change");
-    		listener.onConnectionChanged(on);
+    		Log.d("broadcasting ", " broadcasting watchit connecting change");
+    		listener.onWATCHiTConnectionChanged(on);
+		}
+    }
+    
+    private List<OnlineModeChangeListener> onlineModeListeners = new ArrayList<OnlineModeChangeListener>();
+    public void addOnlineModeChangeListener (OnlineModeChangeListener listener) {
+    	if (!onlineModeListeners.contains(listener)) onlineModeListeners.add(listener);
+    }
+    public void broadCastOnlineModeChanged(boolean on) {
+    	for (OnlineModeChangeListener listener : onlineModeListeners) {
+			listener.onOnlineModeChanged(on);
 		}
     }
     
@@ -65,7 +96,7 @@ public class MainApplication extends Application {
     
     public DataObjectListener myListener;
     
-	public boolean OnlineMode, isLocationOn, isWATChiTOn = false; //TODO: Not best place to have this
+	public boolean OnlineMode, isLocationOn, isWATChiTOn, eventConnected = false; //TODO: Not best place to have this
 	
 	public List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 	

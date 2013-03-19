@@ -3,7 +3,8 @@
     
     
      <item android:id="@+id/menu_logout"
-        android:title="Switch User"
-        android:showAsAction="never" />
+        android:title="Change User/Settings"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/device_access_new_account"  />
 
 </menu>
