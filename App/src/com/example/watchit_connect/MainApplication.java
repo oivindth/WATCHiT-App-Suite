@@ -37,6 +37,8 @@ public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
      
+    
+	public String latest;
     public ServiceManager service, locationService;
     public BluetoothSocket btSocket;
 

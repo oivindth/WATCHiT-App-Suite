@@ -96,7 +96,10 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	private OnlineModeChangeListener onlinemodeListener;
 	private GatewayActivity mActivity;
 	private Handler handler;
+	private GenericSensorData gsdata;
+	
 
+	
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -110,7 +113,7 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 		profileFragment = new ProfileFragment();
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		arrayAdapter = new ArrayList<String>();
-
+	
 		ActionBar bar = getSupportActionBar();
 
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -184,10 +187,6 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	}
 	
 	
-	
-	
-	
-
 	private class MyTabListener implements ActionBar.TabListener
 	{
 		@Override
@@ -327,6 +326,8 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 					Log.d("data 2k", data.toString());
 					
+					gsdata = data;
+					
 					sApp.genericSensorDataObjects.add(data);
 					
 					handler.post(new Runnable(){
@@ -343,12 +344,16 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 							        r.play();
 								
 								Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_LONG).show();
+								sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
+								statusFragment.updateTextViewLatesInfo(sApp.latest);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}  
 					});
-			
+					
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();	
 				}
@@ -612,6 +617,7 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			
 		} else {
 			sApp.eventConnected = false;
+			sApp.currentActiveSpace = null;
 		}
 		statusFragment.updateEventView(sApp.eventConnected);
 	}

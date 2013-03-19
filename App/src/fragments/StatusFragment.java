@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class StatusFragment extends SherlockFragment {
 	
-	private TextView textViewEvent;
+	private TextView textViewEvent, textViewLatest;
 	private MainApplication sApp;
 	private RadioButton radioButtonOnline, radioButtonLocation, radioButtonWATCHiT, radioButtonEvent;
 	private Switch switchOnline, switchLocation, switchWATCHiT, switchEvent;
@@ -59,6 +59,7 @@ public class StatusFragment extends SherlockFragment {
 		
 		View myFragmentView = inflater.inflate(R.layout.fragment_status, container, false);
 		textViewEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventName);
+		textViewLatest = (TextView) myFragmentView.findViewById(R.id.textViewLatestInfo);
 		radioButtonOnline = (RadioButton) myFragmentView.findViewById(R.id.radioButtonOnline);
 		radioButtonLocation = (RadioButton) myFragmentView.findViewById(R.id.radioButtonLocation);
 		radioButtonWATCHiT = (RadioButton) myFragmentView.findViewById(R.id.radioButtonwatchit);
@@ -98,6 +99,8 @@ public class StatusFragment extends SherlockFragment {
 		switchWATCHiT.setChecked(sApp.isWATChiTOn);
 		switchEvent.setChecked(sApp.eventConnected);
 		
+		if (sApp.latest != null)
+		updateTextViewLatesInfo(sApp.latest);
 
 		
 		switchOnline.setOnClickListener(new OnClickListener() {
@@ -219,9 +222,16 @@ public class StatusFragment extends SherlockFragment {
 		radioButtonOnline.setChecked(on);
 		switchOnline.setChecked(on);
 	}
+	
 	public void updateEventView(boolean on) {
 		radioButtonEvent.setChecked(on);
 		switchEvent.setChecked(on);
+		if (sApp.currentActiveSpace == null) {
+			textViewEvent.setText("You have not registered to an event");
+		} else {
+			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
+			textViewEvent.setText(sApp.currentActiveSpace.getName());
+		}
 	}
 	
 
@@ -235,6 +245,10 @@ public class StatusFragment extends SherlockFragment {
 		
 		radioButtonWATCHiT.setChecked(watchit);
 		switchWATCHiT.setChecked(watchit);
+	}
+	
+	public void updateTextViewLatesInfo (String text) {
+		textViewLatest.setText(text);
 	}
 	
 	

@@ -33,7 +33,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	
 		@Override
 		protected void onPreExecute() {
-			//mActivity.showProgress("Sync", "Syncing event...");
+			mActivity.showProgress("Sync", "Syncing....");
 		}
 	
 		@Override
@@ -63,7 +63,8 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				mActivity.showToast("Size of data receieved from space " + app.dataObjects.size());
 				//Log.d("GETDATATASK", app.dataObjects.get(app.dataObjects.size()-1).toString());
 			} else {
-				mActivity.showToast("failed. Try to refresh..");
+				mActivity.showToast("failed. Trying again....");
+				new GetDataFromSpaceTask(mActivity, mSpaceId);
 				Log.d("GETDATATASK", "FAIL");
 			}
 		}
