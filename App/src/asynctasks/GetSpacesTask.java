@@ -44,7 +44,7 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 	
 			if (success) {
 				Log.d("GETSPACESTASK", "successfully fetched spaces");
-		
+				
 				
 				
 			} else {

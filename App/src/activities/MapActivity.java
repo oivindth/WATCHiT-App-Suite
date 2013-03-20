@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import listeners.LayersChangeListener;
+import listeners.SpaceChangeListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
 
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import de.imc.mirror.sdk.DataObject;
 import de.imc.mirror.sdk.DataObjectListener;
+import de.imc.mirror.sdk.Space;
+import dialogs.ChooseEventDialog;
 import dialogs.MapLayersDialog;
 import enums.SharedPreferencesNames;
 import enums.ValueType;
@@ -36,10 +39,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import asynctasks.GetDataFromSpaceTask;
+import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 
 
-public class MapActivity extends BaseActivity implements LayersChangeListener {
+public class MapActivity extends BaseActivity implements LayersChangeListener, SpaceChangeListener {
 
 	private GoogleMap mMap;
 	private MainApplication sApp;
@@ -55,8 +60,8 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 	private MapActivity mActivity;
 	
 	
-	private boolean moodLayerMode;
-	private boolean personLayerMode;
+	private boolean showMoods;
+	private boolean showPersons;
 
 	Handler handler;
 	GenericSensorData data;
@@ -67,9 +72,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_activity);
 		sApp = MainApplication.getInstance();
-		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
-		moodLayerMode = mapPreferences.getBoolean("mood_layer", false);
-		personLayerMode = mapPreferences.getBoolean("person_layer", false);	
+
 		mActivity = this;
 		
 		markers = new ArrayList<Marker>();
@@ -85,7 +88,12 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		super.onResume();
 		setUpMapIfNeeded();	
 		mMap.setMyLocationEnabled(true);
-
+		
+		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
+		showMoods = mapPreferences.getBoolean("mood_layer", false);
+		showPersons = mapPreferences.getBoolean("person_layer", false);	
+		this.onLayersChanged(showPersons, showMoods);
+		
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 			@Override
 			public void onInfoWindowClick(Marker arg0) {
@@ -95,7 +103,6 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 						data = tempDataObjects.get(markers.indexOf(marker));
 					}
 				}
-				
 				//String unit = data.getValue().getUnit();
 				String unit ="";
 				String value = data.getValue().getText();
@@ -104,14 +111,12 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 				} else {
 					unit = "mood";
 				}
-				
 				Intent intent = new Intent(mActivity, MapMarkerDetailsActivity.class);
 				intent.putExtra("unit", unit);
 				intent.putExtra("user", data.getCreationInfo().getPerson());
 				intent.putExtra("time", data.getTimestamp());
 				intent.putExtra("value", data.getValue().getText());
 				startActivity(intent);
-				
 			}
 		});
 	}
@@ -176,19 +181,30 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 			return true;
 
 		case R.id.menu_sync:
-			showToast("Sync it up");
+			if (sApp.currentActiveSpace == null) {
+				new GetSpacesTask(this).execute();
+				showToast("You must register with an event first..");
+				return true;
+			}
+			new GetSpacesTask(this).execute();
+			new GetDataFromSpaceTask(this, sApp.currentActiveSpace.getId()).execute();
 			return true;
 
 		case R.id.menu_layers:
 			new MapLayersDialog().show(getSupportFragmentManager(), "layersdialog");
 			return true;
-
+		
+		case R.id.menu_changeSpace:
+			new ChooseEventDialog().show(getSupportFragmentManager(), "chooseEventDialog");
+			return true;
+			
+			/*
 		case R.id.menu_mock_watchit_data:
 			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
 					("I rescued someone", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
 					sApp.connectionHandler.getCurrentUser().getBareJID(), sApp.connectionHandler.getCurrentUser().getUsername());
 			new PublishDataTask(this, (de.imc.mirror.sdk.android.DataObject) dob, sApp.currentActiveSpace.getId()).execute();
-			return true;
+			return true; */
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -220,7 +236,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 					addMarker(data, "person");
 					tempDataObjects.add(data);
 				}
-				if (ValueType.MOOD == VALUETYPE && showMoods)   {
+				if ( ( ValueType.MOOD_SAD == VALUETYPE || ValueType.MOOD_HAPPY == VALUETYPE || ValueType.MOOD_NEUTRAL == VALUETYPE) && showMoods)   {
 					addMarker(data, "mood");
 					tempDataObjects.add(data);
 				}
@@ -235,9 +251,14 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker();
 		ValueType VALUETYPE = ValueType.getValue(data.getValue().getText());
 
-		if (VALUETYPE == ValueType.PERSON) icon  = BitmapDescriptorFactory.fromResource(R.drawable.ic_social_person);
-		if (VALUETYPE == ValueType.MOOD) icon = BitmapDescriptorFactory.fromResource(R.drawable.device_access_bightness_low_light);
+		if (VALUETYPE == ValueType.PERSON) icon  = BitmapDescriptorFactory.fromResource(R.drawable.social_person_dark);
+		if (VALUETYPE == ValueType.MOOD_HAPPY) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_happy_icon);
+		if (VALUETYPE == ValueType.MOOD_SAD) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_mood_sad);
+		if (VALUETYPE == ValueType.MOOD_NEUTRAL) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_mood_neutral);
 
+		
+		Log.d("MapActivity", "Mood: " + VALUETYPE);
+		
 		Marker marker = mMap.addMarker(new MarkerOptions()
 		.position(latlng)
 		.title(data.getValue().getText())
@@ -246,8 +267,33 @@ public class MapActivity extends BaseActivity implements LayersChangeListener {
 		markers.add(marker);
 
 	}
-	
-	
 
+	@Override
+	public void onSpaceChanged(int position) {
+		Space space = sApp.spacesInHandler.get(position);
+		Log.d("MapActivity", "spaces in handler sieze: " + sApp.spacesInHandler.size());
+		sApp.currentActiveSpace = space;
+		new GetDataFromSpaceTask(this, space.getId()).execute();
+	}
 
+	@Override
+	public void onDataFetchedFromSpace() {
+		Log.d("MapActivity", "listener works");
+		
+		handler.post(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
+					showMoods = mapPreferences.getBoolean("mood_layer", false);
+					showPersons = mapPreferences.getBoolean("person_layer", false);	
+					onLayersChanged(showPersons, showMoods);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}  
+		});
+		
+	
+	}
 }

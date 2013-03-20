@@ -36,7 +36,6 @@ import android.util.Log;
 public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
-     
     
 	public String latest;
     public ServiceManager service, locationService;
@@ -94,11 +93,9 @@ public class MainApplication extends Application {
 		}
     }
     
-    
-    
     public DataObjectListener myListener;
     
-	public boolean OnlineMode, isLocationOn, isWATChiTOn, eventConnected = false; //TODO: Not best place to have this
+	public boolean OnlineMode, isLocationOn, isWATChiTOn; //TODO: Not best place to have this
 	
 	public List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 	
@@ -118,7 +115,6 @@ public class MainApplication extends Application {
 	
 	public List<GenericSensorData> genericSensorDataObjects = new ArrayList<GenericSensorData>();
 	
-	
 	public Space currentActiveSpace;
 	
 	private String userName;
@@ -127,7 +123,6 @@ public class MainApplication extends Application {
 	private double longitude;;
 	private double latitude; 
 
-	
 	public String getUserName() {
 		return userName;
 	}

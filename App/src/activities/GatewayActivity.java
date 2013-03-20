@@ -2,7 +2,6 @@ package activities;
 
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Set;
 
@@ -11,40 +10,29 @@ import listeners.SpaceChangeListener;
 import listeners.WATCHiTConnectionChangeListener;
 import parsing.GenericSensorData;
 import parsing.Parser;
-import service.LocationService;
-import service.ServiceManager;
-import service.WATCHiTService;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import no.ntnu.emergencyreflect.R;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
-import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
-import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import dialogs.ChooseBlueToothDeviceDialog.BlueToothSelectListener;
-import dialogs.ChooseEventDialog;
 import dialogs.LocationDialog;
 import dialogs.LocationDialog.LocationDialogListener;
 import dialogs.ChooseBlueToothDeviceDialog;
+import dialogs.ChooseEventDialog;
 import dialogs.OnlineModeDialog;
 import dialogs.OnlineModeDialog.OnlineModeDialogListener;
-import enums.SharedPreferencesNames;
-import fragments.AppsFragment.OnAppItemSelectedListener;
+import fragments.ConfigFragment.StatusChangeListener;
 import fragments.ProfileFragment;
-import fragments.AppsFragment;
-import fragments.StatusFragment.StatusChangeListener;
+import fragments.ConfigFragment;
 import fragments.StatusFragment;
 
 import Utilities.UtilityClass;
@@ -56,7 +44,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -64,7 +51,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.FragmentTransaction;
@@ -76,17 +62,16 @@ import asynctasks.AuthenticateUserTask;
 import asynctasks.ConnectToBluetoothTask;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
-import asynctasks.PublishDataTask;
 
 /**
  * Gateway application.
  * @author oivindth
  *
  */
-public class GatewayActivity extends BaseActivity implements OnAppItemSelectedListener, DataObjectListener, StatusChangeListener, OnlineModeDialogListener, LocationDialogListener, BlueToothSelectListener, SpaceChangeListener  {
+public class GatewayActivity extends BaseActivity implements DataObjectListener, StatusChangeListener, OnlineModeDialogListener, LocationDialogListener, BlueToothSelectListener, SpaceChangeListener  {
 
 	private StatusFragment statusFragment;
-	private AppsFragment spaceFragment;
+	private ConfigFragment configFragment;
 	private ProfileFragment profileFragment;
 	private BluetoothAdapter btAdapter;
 	private ArrayList<String> arrayAdapter;
@@ -97,19 +82,17 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	private GatewayActivity mActivity;
 	private Handler handler;
 	private GenericSensorData gsdata;
-	
 
-	
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		mActivity = this;
 		devices = new ArrayList<BluetoothDevice>();
 		statusFragment = new StatusFragment();
-		spaceFragment = new AppsFragment();
+		configFragment = new ConfigFragment();
 		profileFragment = new ProfileFragment();
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		arrayAdapter = new ArrayList<String>();
@@ -120,40 +103,22 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 
 		ActionBar.Tab tab1 = bar.newTab();
 		ActionBar.Tab tab2 = bar.newTab();
-		ActionBar.Tab tab3 = bar.newTab();
-		tab1.setText("Dashboard");
-		tab2.setText("Apps");
-		tab3.setText("Profile");
+		tab1.setText("Status");
+		tab2.setText("Set up");
 		tab1.setTabListener(new MyTabListener());
 		tab2.setTabListener(new MyTabListener());
-		tab3.setTabListener(new MyTabListener());
 		bar.addTab(tab1);
 		bar.addTab(tab2);
-		bar.addTab(tab3);
 		
 		
 		handler = new Handler(Looper.getMainLooper());
 		
-		createAndHandleWATCHiTService();
-		createAndHandleLocationService();
 		sApp.dataHandler.addDataObjectListener(this);
-		
-		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
-			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
-				Log.d("Main",  " username: " + sApp.getUserName() + "  password: " + sApp.getPassword());
-				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
-			} else {
-				new GetSpacesTask(this).execute();
-			}
-		} else {
-			new GetSpacesTask(this).execute();
-		}
-		
 		
 		wcListener = new WATCHiTConnectionChangeListener() {
 			@Override
 			public void onWATCHiTConnectionChanged(boolean on) {
-				statusFragment.updateView(sApp.OnlineMode, on, sApp.isLocationOn);
+				configFragment.updateView(sApp.OnlineMode, on, sApp.isLocationOn);
 				dismissProgress();
 			}
 		};
@@ -164,16 +129,13 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			@Override
 			public void onOnlineModeChanged(boolean on) {
 				try {
-					statusFragment.updateOnlineView(on);
+					configFragment.updateOnlineView(on);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
 			}
 		};
 		sApp.addOnlineModeChangeListener(onlinemodeListener);
-		
 		
 		if (sApp.currentActiveSpace != null) {
 			try {
@@ -183,10 +145,7 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 				e.printStackTrace();
 			}
 		}
-		
 	}
-	
-	
 	private class MyTabListener implements ActionBar.TabListener
 	{
 		@Override
@@ -197,7 +156,7 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 				ft.replace(android.R.id.content, statusFragment);
 				break;
 			case 1:
-				ft.replace(android.R.id.content, spaceFragment);
+				ft.replace(android.R.id.content, configFragment);
 				break;
 			case 2:
 				ft.replace(android.R.id.content, profileFragment);
@@ -219,15 +178,6 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	@Override
 	public void onResume() {
 		super.onResume();
-		// If phone doesen't have google play services installed user is prompted to install it.
-				// Or else he/she can't use the Google Maps.
-				int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-				if (resultCode == ConnectionResult.SUCCESS) {
-					//proceed as normal
-				} else {
-					GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
-				}
-		
 		// Register the BroadcastReceiver
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -237,10 +187,6 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 		registerReceiver(mReceiver, filter2); // Don't forget to unregister during onDestroy
 		registerReceiver(mReceiver, filter3); // Don't forget to unregister during onDestroy
 		registerReceiver(mReceiver, filter4); // Don't forget to unregister during onDestroy
-		
-		
-	
-		
 	}
 
 	@Override
@@ -261,29 +207,25 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// startActivity(intent);
 			//just back use only finish():
-			//finish();
+			finish();
 			return true;
 
 		case R.id.menu_sync:
 			if (sApp.currentActiveSpace == null) {
-			showToast("Please register with an event first...");
-			return true;
+				new GetSpacesTask(this).execute();
+				showToast("You must register with an event first..");
+				return true;
 			}
+			
+			new GetSpacesTask(this).execute();
 			new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
-			// new GetSpacesTask().
 			return true;
 			
-		case R.id.menu_logout:
-			SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-			SharedPreferences.Editor editor = settings.edit();
-			sApp.setOnlineMode(Mode.OFFLINE);
-			sApp.connectionHandler.disconnect();
-			editor.putBoolean("hasLoggedIn", false);
-			editor.commit();
-			intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			finish();
+			
+		case R.id.menu_changeSpace:
+			new ChooseEventDialog().show(getSupportFragmentManager(), "chooseEventDialog");
 			return true;
+/*
 		case R.id.menu_mock_watchit_data:
 			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
 					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
@@ -291,29 +233,21 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
 			return true;
 
+*/
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
 	@Override
 	public void onPause() {
 		super.onPause();
 	}
-
 	@Override
 	public void onDestroy () {
 		unregisterReceiver(mReceiver);
-		try {
-			sApp.service.unbind();
-			sApp.locationService.unbind();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		super.onDestroy();
 	}
-	
-
 			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 					String spaceId) {
 				String objectId = dataObject.getId();
@@ -325,13 +259,9 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 					//sApp.dataObjects.add(dataObject);
 					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 					Log.d("data 2k", data.toString());
-					
 					gsdata = data;
-					
 					sApp.genericSensorDataObjects.add(data);
-					
 					handler.post(new Runnable(){
-
 						@Override
 						public void run() {
 							try {
@@ -346,21 +276,16 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 								Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_LONG).show();
 								sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
 								statusFragment.updateTextViewLatesInfo(sApp.latest);
+								statusFragment.updateTextViewEvent("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}  
 					});
-					
-					
-					
 				} catch (Exception e) {
 					e.printStackTrace();	
 				}
-				
 			}
-		
-	
 
 	@Override
 	public void onlineModeClicked(boolean on) {
@@ -374,12 +299,18 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			sApp.setOnlineMode(Mode.OFFLINE);
 			sApp.connectionHandler.disconnect();
 		}
-		statusFragment.updateOnlineView(sApp.OnlineMode);
+		configFragment.updateOnlineView(sApp.OnlineMode);
 	}
 
 	@Override
 	public void WATCHiTSwitchClicked(boolean on) {
 		if (on) {
+			if (sApp.currentActiveSpace == null) {
+				showToast("Please register with an event first..");
+				configFragment.updateWATCHiTView(false);
+				return;
+			}
+			
 			if (!btAdapter.isEnabled()) {
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivity(enableBtIntent);
@@ -411,92 +342,10 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			showToast("Stopped WATCHiT sync...");
 			sApp.isWATChiTOn= false;
 		}
-		statusFragment.updateWATCHiTView(sApp.isWATChiTOn);
+		configFragment.updateWATCHiTView(sApp.isWATChiTOn);
 	}
 	
-	/**
-	 * Set up the WATCHiT Service for communicating with WATCHiT
-	 */
-	private void createAndHandleWATCHiTService() {
-
-		// Create a service and handle incoming messages
-		//TODO: Make handler static to avoid (potential) leaks?
-		sApp.service = new ServiceManager(getBaseContext(), WATCHiTService.class, new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				// Receive message from service
-				switch (msg.what) {
-				/*
-				case WATCHiTService.MSG_CONNECTION_ESTABLISHED:
-					sApp.isWATChiTOn = true;
-					Log.d("MainActivity Handler ", "Connection established message receieved from service.");
-					showToast("Connection to WATCHiT established..");
-					sApp.broadcastConnectionChange(true);
-					
-					break;
-				case WATCHiTService.MSG_CONNECTION_FAILED:
-					//dismissProgress();
-					sApp.isWATChiTOn = false;
-					Log.d("MainDashBoardActivityHandler: ", " Connection failed");
-					showToast(" Failed to connect to WATCHiT....");
-					sApp.broadcastConnectionChange(false);
-					break;
-					*/
-				case WATCHiTService.MSG_CONNECTION_LOST:
-					Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
-					showToast("Warning: Lost connection with WATCHiT!");
-					sApp.isWATChiTOn = false;
-					sApp.broadcastWATCHiTConnectionChange(false);
-					break;
-				case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
-					String data = msg.getData().getString("watchitdata");
-					//textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
-					Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
-					String lat = String.valueOf(sApp.getLatitude());
-					String lot = String.valueOf(sApp.getLongitude());
-					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
-					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
-					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-					//new CreateSpaceTask().execute();
-					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
-					Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
-					Log.d("watchitdata:  ", data);
-					break;
-				default:
-					super.handleMessage(msg);
-				} 
-			}
-		});
-	}
-
 	
-	/**
-	 * Sets up the Location Service for GPS updates.
-	 */
-	private void createAndHandleLocationService() {
-		//LocationService.
-		sApp.locationService = new ServiceManager(getBaseContext(), LocationService.class, new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				// Receive message from service
-				switch (msg.what) {
-				case LocationService.MSG_UPDATE_LOCATION:
-					Log.d("MainDashBoardActivity", "receieved location update..");
-					double longitude = msg.getData().getDouble("longitude");
-					double latitude = msg.getData().getDouble("latitude");
-					sApp.setLongitude(longitude);
-					sApp.setLatitude(latitude);
-					
-					showToast("New location: " + " long:  " + longitude + " lat: " + latitude );
-					
-					//locationListener.onLocationChanged(latitude, longitude);
-					
-					break;
-
-				} 
-			}
-		});
-	}
 
 	@Override
 	public void locationMode(boolean on) { 
@@ -517,7 +366,7 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 			showToast("Stopped location service...");
 			sApp.isLocationOn= false;
 		}
-		statusFragment.updateLocationView(sApp.isLocationOn);
+		configFragment.updateLocationView(sApp.isLocationOn);
 	}
 
 	@Override
@@ -547,11 +396,12 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	@Override
 	public void cancelBluetoothPairedDialog() {
 		sApp.isWATChiTOn = false;
-		statusFragment.updateWATCHiTView(false);
+		configFragment.updateWATCHiTView(false);
 		devices.clear();
 		sApp.bluetoothDevices.clear();
 		arrayAdapter.clear();
 	}
+	
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -602,54 +452,26 @@ public class GatewayActivity extends BaseActivity implements OnAppItemSelectedLi
 	};
 
 	@Override
-	public void eventChangeClick(boolean on) {
-		if (on) {
-			Bundle b = new Bundle();
-			ArrayList<String> arrayadapter = new ArrayList<String>();
-			for (Space space : sApp.spacesInHandler) {
-				arrayadapter.add(" " + space.getName());
-			}
-			b.putStringArrayList("adapter", arrayadapter);
-			ChooseEventDialog dialog = new ChooseEventDialog();
-			dialog.setArguments(b);
-			dialog.show(getSupportFragmentManager(), "choose_event_dialog");
-
-			
-		} else {
-			sApp.eventConnected = false;
-			sApp.currentActiveSpace = null;
-		}
-		statusFragment.updateEventView(sApp.eventConnected);
-	}
-
-	@Override
 	public void onSpaceChanged(int position) {
-		sApp.eventConnected = true;
-		showProgress("Event", "Syncing...");
 		Space space = sApp.spacesInHandler.get(position);
-		//switch space
 		sApp.currentActiveSpace = space;
-		//app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
-		new GetDataFromSpaceTask(this, space.getId()).execute(); //TODO: To heavy?
-		showToast("Noe registered to event: " + space.getName());
-		statusFragment.updateEventView(true);
+		
+		statusFragment.updateTextViewEventLed(space.getName());
+		statusFragment.updateEventLED(true);
+			
+		
+		
+		new GetDataFromSpaceTask(this, space.getId()).execute(); 
 	}
 
 	@Override
-	public void onAppItemSelected(int position) {
-		//getSupportFragmentManager().beginTransaction().replace(android.R.id.content, statusFragment).commit();
+	public void onDataFetchedFromSpace() {
+		Space space = sApp.currentActiveSpace;
 		
-		
-		Intent intent = new Intent(this, MapActivity.class);
-		startActivity(intent);
+		statusFragment.updateTextViewEvent("Members:  " + space.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
 		
 	}
 
-	@Override
-	public void onCancelChangeSpaceClicked() {
-		sApp.eventConnected = false;
-		statusFragment.updateEventView(false);
-		
-	}
+
 	
 }

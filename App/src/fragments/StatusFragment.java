@@ -6,6 +6,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.example.watchit_connect.MainApplication;
 
 import no.ntnu.emergencyreflect.R;
+import no.ntnu.emergencyreflect.R.drawable;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -23,20 +22,13 @@ import android.widget.Toast;
 
 public class StatusFragment extends SherlockFragment {
 	
-	private TextView textViewEvent, textViewLatest;
+	private TextView textViewEvent, textViewLatest, textViewLEDEvent;
 	private MainApplication sApp;
-	private RadioButton radioButtonOnline, radioButtonLocation, radioButtonWATCHiT, radioButtonEvent;
-	private Switch switchOnline, switchLocation, switchWATCHiT, switchEvent;
-	private StatusChangeListener mListener;
-	private ImageView onlineInfo, watchitInfo, locationInfo, eventInfo;
 	
-	//Container Activity must implement this interface
-	public interface StatusChangeListener {
-		public void onlineModeClicked(boolean on);
-		public void WATCHiTSwitchClicked(boolean on);
-		public void locationMode(boolean on);
-		public void eventChangeClick(boolean on);
-	}
+
+	private ImageView onlineLED, watchitLED, locationLED, eventLED;
+	
+
 	
 	@Override
 	/**
@@ -56,24 +48,15 @@ public class StatusFragment extends SherlockFragment {
 	 *  You can return null if the fragment does not provide a UI.
 	 */
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
 		View myFragmentView = inflater.inflate(R.layout.fragment_status, container, false);
 		textViewEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventName);
 		textViewLatest = (TextView) myFragmentView.findViewById(R.id.textViewLatestInfo);
-		radioButtonOnline = (RadioButton) myFragmentView.findViewById(R.id.radioButtonOnline);
-		radioButtonLocation = (RadioButton) myFragmentView.findViewById(R.id.radioButtonLocation);
-		radioButtonWATCHiT = (RadioButton) myFragmentView.findViewById(R.id.radioButtonwatchit);
-		radioButtonEvent = (RadioButton) myFragmentView.findViewById(R.id.radioButtonEvent);
+		textViewLEDEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventLedEvent);
 		
-		switchOnline = (Switch) myFragmentView.findViewById(R.id.switchOnline);
-		switchLocation = (Switch) myFragmentView.findViewById(R.id.switchLocation);
-		switchWATCHiT = (Switch) myFragmentView.findViewById(R.id.switchWATCHiT);
-		switchEvent = (Switch) myFragmentView.findViewById(R.id.switchEvent);
-		
-		onlineInfo = (ImageView) myFragmentView.findViewById(R.id.imageViewOnlineInfo);
-		watchitInfo = (ImageView) myFragmentView.findViewById(R.id.imageViewWatchitInfo);
-		locationInfo = (ImageView) myFragmentView.findViewById(R.id.imageViewLocatiohInfo);
-		eventInfo = (ImageView) myFragmentView.findViewById(R.id.imageViewEventInfo);
+		onlineLED = (ImageView) myFragmentView.findViewById(R.id.imageViewOnlineLED);
+		watchitLED = (ImageView) myFragmentView.findViewById(R.id.imageViewWatchitLED);
+		locationLED = (ImageView) myFragmentView.findViewById(R.id.imageViewLocatiohLED);
+		eventLED = (ImageView) myFragmentView.findViewById(R.id.imageViewEventLED);
 		
 		return  myFragmentView;
 	}
@@ -87,69 +70,29 @@ public class StatusFragment extends SherlockFragment {
 		} else {
 			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
 			textViewEvent.setText(sApp.currentActiveSpace.getName());
+			textViewLEDEvent.setText(sApp.currentActiveSpace.getName());
+			
+			textViewEvent.setText("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+			
+			
 		}
 		
-		radioButtonLocation.setChecked(sApp.isLocationOn);
-		radioButtonOnline.setChecked(sApp.OnlineMode);
-		radioButtonWATCHiT.setChecked(sApp.isWATChiTOn);
-		radioButtonEvent.setChecked(sApp.eventConnected);
 		
-		switchOnline.setChecked(sApp.OnlineMode);
-		switchLocation.setChecked(sApp.isLocationOn);
-		switchWATCHiT.setChecked(sApp.isWATChiTOn);
-		switchEvent.setChecked(sApp.eventConnected);
+		onlineLED.setImageResource(sApp.OnlineMode ? drawable.circle_green_light : drawable.circle_red_light);
+		locationLED.setImageResource(sApp.isLocationOn ? drawable.circle_green_light : drawable.circle_red_light);
+		watchitLED.setImageResource(sApp.isWATChiTOn ? drawable.circle_green_light : drawable.circle_red_light);
+		eventLED.setImageResource(sApp.currentActiveSpace != null ? drawable.circle_green_light : drawable.circle_red_light);
 		
 		if (sApp.latest != null)
 		updateTextViewLatesInfo(sApp.latest);
 
-		
-		switchOnline.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mListener.onlineModeClicked(switchOnline.isChecked());
-				
-			}
-		});
 
-		
-		switchLocation.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mListener.locationMode(switchLocation.isChecked());
-				
-			}
-		});
-		
-
-		
-		switchWATCHiT.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mListener.WATCHiTSwitchClicked(switchWATCHiT.isChecked());
-				
-			}
-		});
-		
-	
-		
-		switchEvent.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mListener.eventChangeClick(switchEvent.isChecked());	
-				
-			}
-		});
-		
-		
-		
+		/*
 		watchitInfo.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "WATCHiT can be enabled here." , Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getBaseContext(), "WATCHiT can be enabled here." , Toast.LENGTH_SHORT).show();
 				
 			}
 		});
@@ -158,7 +101,7 @@ public class StatusFragment extends SherlockFragment {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Enable online mode to sync with server and get updates from other users. " , Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getBaseContext(), "Enable online mode to sync with server and get updates from other users. " , Toast.LENGTH_SHORT).show();
 				
 			}
 		});
@@ -167,7 +110,7 @@ public class StatusFragment extends SherlockFragment {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Enable this to use your location. need network or GPS. Use GPS for more accurate estimates." , Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getBaseContext(), "Enable this to use your location. need network or GPS. Use GPS for more accurate estimates." , Toast.LENGTH_SHORT).show();
 				
 			}
 		});
@@ -176,14 +119,11 @@ public class StatusFragment extends SherlockFragment {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Connect to an event to share and compare data with other workers." , Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getBaseContext(), "Connect to an event to share and compare data with other workers." , Toast.LENGTH_SHORT).show();
 				
 			}
 		});
-		
-		
-		
-		
+		*/
 	}
 	
 	/**
@@ -198,34 +138,10 @@ public class StatusFragment extends SherlockFragment {
 	}
 	
 	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mListener = (StatusChangeListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement Listener");
-		}
-	}
+
 
 	
-	public void updateWATCHiTView(boolean on) {
-		radioButtonWATCHiT.setChecked(on);
-		switchWATCHiT.setChecked(on);
-	}
-	
-	public void updateLocationView(boolean on) {
-		radioButtonLocation.setChecked(on);
-		switchLocation.setChecked(on);
-	}
-	public void updateOnlineView(boolean on) {
-		radioButtonOnline.setChecked(on);
-		switchOnline.setChecked(on);
-	}
-	
 	public void updateEventView(boolean on) {
-		radioButtonEvent.setChecked(on);
-		switchEvent.setChecked(on);
 		if (sApp.currentActiveSpace == null) {
 			textViewEvent.setText("You have not registered to an event");
 		} else {
@@ -234,22 +150,28 @@ public class StatusFragment extends SherlockFragment {
 		}
 	}
 	
-
-	
-	public void updateView(boolean online, boolean watchit, boolean location) {
-		radioButtonLocation.setChecked(location);
-		switchLocation.setChecked(location);
-		
-		radioButtonOnline.setChecked(online);
-		switchOnline.setChecked(online);
-		
-		radioButtonWATCHiT.setChecked(watchit);
-		switchWATCHiT.setChecked(watchit);
-	}
-	
 	public void updateTextViewLatesInfo (String text) {
 		textViewLatest.setText(text);
 	}
+
+	public void  updateTextViewEvent(String name) {
+		textViewEvent.setText(name);
+		
+		
+	}
+	
+	public void updateEventLED(boolean on) {
+		eventLED.setImageResource(R.drawable.circle_green_light);
+	}
+
+	public void updateTextViewEventLed(String name) {
+		textViewLEDEvent.setText(name);
+		
+	}
+
+	
+	
+	
 	
 	
 }

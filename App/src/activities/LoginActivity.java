@@ -387,7 +387,7 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	  }
 	  
 	  private void startMainActivity() {
-		  Intent intent = new Intent(this, GatewayActivity.class);
+		  Intent intent = new Intent(this, MainActivity.class);
           //intent.setClass(LoginActivity.this, SpacesActivity.class);
           startActivity(intent);
           finish();

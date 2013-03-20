@@ -5,10 +5,15 @@
         android:title="@string/menu_event"
         android:icon="@drawable/ic_navigation_refresh"
         android:showAsAction="always" />
+    
+    <item android:id="@+id/menu_changeSpace"
+        android:title="Change Event"
+        android:icon="@drawable/collections_go_to_today"
+        android:showAsAction="ifRoom|withText" />
      
-            <item android:id="@+id/menu_mock_watchit_data"
+          <!--   <item android:id="@+id/menu_mock_watchit_data"
         android:title="Publish mock watchit data(testing)"
-        android:showAsAction="never" />
+        android:showAsAction="never" /> --> 
         
     <item android:id="@+id/menu_layers"
         android:title="Layers"

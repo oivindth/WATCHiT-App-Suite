@@ -4,35 +4,35 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:background="#33B5E5" >
+    android:background="@android:color/background_light" >
     
-    
-    <!--  Messages Button -->
+
     <Button
         android:id="@+id/btn_map"
         style="@style/DashboardButton"
-        android:drawableTop="@drawable/ic_location_map"
+        android:drawableTop="@drawable/location_map_dark"
         android:text="Map App" />
- 
-    <!--  Places Button -->
-    <Button
+    
+ <!--  <Button
         android:id="@+id/btn_app2"
         style="@style/DashboardButton"
-        android:drawableTop="@drawable/ic_hardware_gamepad"
-        android:text="App 2" />
+        android:drawableTop="@drawable/hardware_gamepad_dark"
+        android:text="   TP app" /> -->
+   
     
   
     <Button
         android:id="@+id/btn_gateway"
         style="@style/DashboardButton"
-        android:drawableTop="@drawable/ic_collections_view_as_grid"
+        android:drawableTop="@drawable/collections_view_as_grid_dark"
         android:text="Gateway" />
  
-    <Button
+    <!--     <Button
         android:id="@+id/btn_profile"
         style="@style/DashboardButton"
-        android:drawableTop="@drawable/ic_social_person"
-        android:text="Profile" />
+        android:drawableTop="@drawable/social_person_dark"
+        android:text="  Profile" /> -->
+
  
     
  

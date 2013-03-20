@@ -2,6 +2,8 @@ package asynctasks;
 
 import java.util.ArrayList;
 
+import listeners.SpaceChangeListener;
+
 import parsing.Parser;
 
 import com.example.watchit_connect.MainApplication;
@@ -9,14 +11,13 @@ import com.example.watchit_connect.MainApplication;
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 
 	
 	private String mSpaceId;
 	private BaseActivity mActivity;
-	
+	private SpaceChangeListener spacChangeListener;
 	
 	private MainApplication app;
 	
@@ -26,6 +27,8 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		mSpaceId = spaceId;
 		mActivity = activity;
 		app = MainApplication.getInstance();
+		
+		spacChangeListener = (SpaceChangeListener) activity;
 		
 		Log.d("spaceid: ", mSpaceId);
 		Log.d("mactivity", " " + mActivity);
@@ -60,10 +63,9 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
 				Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
 				Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
-				mActivity.showToast("Size of data receieved from space " + app.dataObjects.size());
-				//Log.d("GETDATATASK", app.dataObjects.get(app.dataObjects.size()-1).toString());
+				spacChangeListener.onDataFetchedFromSpace();
 			} else {
-				mActivity.showToast("failed. Trying again....");
+				mActivity.showToast("failed to fetch data. Trying again....");
 				new GetDataFromSpaceTask(mActivity, mSpaceId);
 				Log.d("GETDATATASK", "FAIL");
 			}

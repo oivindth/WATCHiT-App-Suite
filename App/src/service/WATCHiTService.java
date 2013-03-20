@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.example.watchit_connect.MainApplication;
 import no.ntnu.emergencyreflect.R;
-import activities.MainDashBoardActivity;
+import activities.MainActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

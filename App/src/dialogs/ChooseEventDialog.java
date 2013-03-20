@@ -1,6 +1,7 @@
 package dialogs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import listeners.SpaceChangeListener;
 import no.ntnu.emergencyreflect.R;
@@ -15,6 +16,8 @@ import android.widget.ListAdapter;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.example.watchit_connect.MainApplication;
+
+import de.imc.mirror.sdk.Space;
 
 import enums.SharedPreferencesNames;
 
@@ -32,28 +35,39 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		mApp = MainApplication.getInstance();
 		spacePreferences = getActivity().getSharedPreferences(SharedPreferencesNames.SPACE_PREFERENCES , 0 );
-		spacePreferences.getInt("checked", 0);
+		checkedItem = spacePreferences.getInt("checked", 0);
 		
-		Bundle b = getArguments();
-		ArrayList<String> events = b.getStringArrayList("adapter");
+		List<Space> spaces = mApp.spacesInHandler;
+		
+		//Bundle b = getArguments();
+		//ArrayList<String> events = b.getStringArrayList("adapter");
+		//adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, events);
+		List<String> events = new ArrayList<String>();
+		for (Space space : spaces) {
+			events.add(space.getName());
+		}
+		
+		
+		
 		adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, events);
+
+		
+		
+		String [] items = ( events.toArray(new String [events.size()]));
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
 
 		
-		
-		builder.setSingleChoiceItems(adapter, checkedItem, new DialogInterface.OnClickListener() {
-			
+		builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				checkedItem = which;
 				SharedPreferences.Editor ed = spacePreferences.edit();
 				ed.putInt("checked", checkedItem);
 				ed.commit();
-				
-				
 			}
 		});
+		
 		
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			
@@ -67,8 +81,6 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 
 		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				mApp.eventConnected = false;
-				mListener.onCancelChangeSpaceClicked();
 			}
 		});      
 

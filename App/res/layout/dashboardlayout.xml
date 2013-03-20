@@ -1,34 +1,7 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainDashBoardActivity" >
 
-    <!-- Progress View -->
-    <LinearLayout
-        android:id="@+id/dashboard_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone" >
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/dashboard_status_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/server_sync"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
     
-<LinearLayout
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dashboard_main"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -43,5 +16,3 @@
      <include layout="@layout/footer_layout"/>  
  
 </LinearLayout>
-
-</merge>

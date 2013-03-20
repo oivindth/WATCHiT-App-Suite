@@ -1,9 +1,15 @@
 package activities;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
+import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import fragments.MoodDetailsFragment;
 import fragments.PersonDetailsFragment;
 import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 public class MapMarkerDetailsActivity extends BaseActivity {
@@ -39,10 +45,26 @@ public class MapMarkerDetailsActivity extends BaseActivity {
 			 getSupportFragmentManager().beginTransaction()
 	         .add(R.id.fragment_container_person_activity, personDetailsFragment ,"persondetails").commit();
 		}
-		
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		//MenuInflater inflater = getSupportMenuInflater();
+		//inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu); 
+	}
 	
-				
-		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+
+		case android.R.id.home:
+			finish();
+			return true;
+	
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	
