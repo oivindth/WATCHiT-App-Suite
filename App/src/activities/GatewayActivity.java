@@ -30,6 +30,8 @@ import dialogs.ChooseBlueToothDeviceDialog;
 import dialogs.ChooseEventDialog;
 import dialogs.OnlineModeDialog;
 import dialogs.OnlineModeDialog.OnlineModeDialogListener;
+import enums.SharedPreferencesNames;
+import enums.ValueType;
 import fragments.ConfigFragment.StatusChangeListener;
 import fragments.ProfileFragment;
 import fragments.ConfigFragment;
@@ -44,6 +46,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -261,6 +264,8 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 					Log.d("data 2k", data.toString());
 					gsdata = data;
 					sApp.genericSensorDataObjects.add(data);
+					
+
 					handler.post(new Runnable(){
 						@Override
 						public void run() {

@@ -15,10 +15,17 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import de.imc.mirror.sdk.ConnectionStatus;
+import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
+import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
+import dialogs.ChooseAvatarDialog.ChooseAvatarListener;
+import enums.SharedPreferencesNames;
+import enums.ValueType;
 
 
 import Utilities.UtilityClass;
@@ -38,7 +45,7 @@ import fragments.DashboardFragment;
 import fragments.ProfileFragment;
 
 
-public class MainActivity extends BaseActivity implements ActionBar.TabListener  {
+public class MainActivity extends BaseActivity implements ActionBar.TabListener, ChooseAvatarListener, DataObjectListener  {
 
 
 	private DashboardFragment dashBoardFragment;
@@ -75,7 +82,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
 			new GetSpacesTask(this).execute();
 		}
 		
-		
+		sApp.dataHandler.addDataObjectListener(this);
 		createAndHandleWATCHiTService();
 		createAndHandleLocationService();
 		
@@ -241,6 +248,34 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener 
 				} 
 			}
 		});
+	}
+
+	@Override
+	public void avatarChosen(int which) {
+	
+		profileFragment.updateView(which);
+		
+	}
+
+	@Override
+	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
+			String spaceId) {
+		SharedPreferences profilePrefs = getSharedPreferences(SharedPreferencesNames.PROFILE_PREFERENCES, 0);
+		SharedPreferences.Editor ed = profilePrefs.edit();
+	
+		GenericSensorData gsdata = Parser.buildSimpleXMLObject((DataObject) dataObject);
+		
+		if (gsdata.getCreationInfo().getPerson().equals(sApp.connectionHandler.getCurrentUser().getUsername())) {
+			String value = gsdata.getValue().getText();
+			if (ValueType.getValue(value) == ValueType.PERSON) {
+				ed.putBoolean("medalBagde", true);
+				
+			} else if (ValueType.getValue(value) == ValueType.MOOD_HAPPY) {
+				ed.putBoolean("moodBagde", true);
+			}
+		}
+		ed.commit();
+		
 	}
 	
 }

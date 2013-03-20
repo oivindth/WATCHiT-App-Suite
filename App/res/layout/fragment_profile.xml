@@ -4,24 +4,95 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+ 
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginTop="5dp" >
         
-    </LinearLayout>
-
-    <LinearLayout
+           <TextView
+        android:id="@+id/textViewUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User:"
+        style="@style/textHoloBlueLight"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+           
+             <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/imageViewAvatar"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/avatar0" />
+
+    </LinearLayout>  
+           
+           
+                
+           <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Bagdes:"
+        style="@style/textHoloBlueLight"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+             
+                    
+             <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp" >
+	         
+           <TextView
+        android:id="@+id/textViewBagdes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have not earned any bagdes yet..:"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+
+    </LinearLayout> 
+    
+                  <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp" >
+	         
+           <ImageView
+               android:id="@+id/imageViewMoodBadge"
+               android:layout_width="88dp"
+               android:layout_height="match_parent"
+               android:layout_marginLeft="25dp"
+               android:visibility="invisible"
+               android:src="@drawable/mood_badge" />
+           
+           <ImageView
+               android:id="@+id/imageViewMedalBagde"
+               android:layout_width="88dp"
+               android:layout_height="match_parent"
+               android:visibility="invisible"
+               android:src="@drawable/orange_medal_bagde" />
+
+           <ImageView
+               android:id="@+id/imageViewNewestBadge"
+               android:layout_width="88dp"
+               android:layout_height="match_parent"
+               android:visibility="invisible"
+               android:src="@drawable/mood_badge" />
+
+    </LinearLayout> 
+           
     </LinearLayout>
     
 </LinearLayout>

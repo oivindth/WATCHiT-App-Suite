@@ -35,7 +35,8 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		mApp = MainApplication.getInstance();
 		spacePreferences = getActivity().getSharedPreferences(SharedPreferencesNames.SPACE_PREFERENCES , 0 );
-		checkedItem = spacePreferences.getInt("checked", 0);
+		checkedItem = spacePreferences.getInt("checked", -1);
+		if (mApp.currentActiveSpace == null) checkedItem = -1;
 		
 		List<Space> spaces = mApp.spacesInHandler;
 		
