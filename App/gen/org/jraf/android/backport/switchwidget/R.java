@@ -8,7 +8,7 @@ package org.jraf.android.backport.switchwidget;
 
 public final class R {
 	public static final class id {
-		public static final int switchWidget = 0x7f070060;
+		public static final int switchWidget = 0x7f070063;
 	}
 	public static final class style {
 		public static final int Widget_Holo_CompoundButton_Switch = 0x7f060000;
@@ -20,8 +20,8 @@ public final class R {
 		public static final int switch_on = 0x7f050000;
 	}
 	public static final class layout {
-		public static final int preference = 0x7f030025;
-		public static final int preference_widget_switch = 0x7f030026;
+		public static final int preference = 0x7f030026;
+		public static final int preference_widget_switch = 0x7f030027;
 	}
 	public static final class styleable {
 		public static final int Theme_switchStyle = 0;
@@ -52,24 +52,24 @@ public final class R {
 		public static final int SwitchPreference_summaryOff = 1;
 	}
 	public static final class drawable {
-		public static final int switch_bg_focused_holo_dark = 0x7f020096;
-		public static final int switch_inner_holo_light = 0x7f02009b;
-		public static final int switch_bg_holo_light = 0x7f020099;
-		public static final int switch_bg_holo_dark = 0x7f020098;
-		public static final int switch_track_holo_dark = 0x7f0200a4;
-		public static final int switch_thumb_disabled_holo_dark = 0x7f02009e;
-		public static final int switch_bg_disabled_holo_light = 0x7f020095;
-		public static final int switch_bg_disabled_holo_dark = 0x7f020094;
-		public static final int switch_bg_focused_holo_light = 0x7f020097;
-		public static final int switch_thumb_disabled_holo_light = 0x7f02009f;
-		public static final int switch_thumb_pressed_holo_dark = 0x7f0200a2;
-		public static final int switch_thumb_holo_dark = 0x7f0200a0;
-		public static final int switch_thumb_activated_holo_light = 0x7f02009d;
-		public static final int switch_thumb_activated_holo_dark = 0x7f02009c;
-		public static final int switch_track_holo_light = 0x7f0200a5;
-		public static final int switch_inner_holo_dark = 0x7f02009a;
-		public static final int switch_thumb_holo_light = 0x7f0200a1;
-		public static final int switch_thumb_pressed_holo_light = 0x7f0200a3;
+		public static final int switch_bg_focused_holo_dark = 0x7f020098;
+		public static final int switch_inner_holo_light = 0x7f02009d;
+		public static final int switch_bg_holo_light = 0x7f02009b;
+		public static final int switch_bg_holo_dark = 0x7f02009a;
+		public static final int switch_track_holo_dark = 0x7f0200a6;
+		public static final int switch_thumb_disabled_holo_dark = 0x7f0200a0;
+		public static final int switch_bg_disabled_holo_light = 0x7f020097;
+		public static final int switch_bg_disabled_holo_dark = 0x7f020096;
+		public static final int switch_bg_focused_holo_light = 0x7f020099;
+		public static final int switch_thumb_disabled_holo_light = 0x7f0200a1;
+		public static final int switch_thumb_pressed_holo_dark = 0x7f0200a4;
+		public static final int switch_thumb_holo_dark = 0x7f0200a2;
+		public static final int switch_thumb_activated_holo_light = 0x7f02009f;
+		public static final int switch_thumb_activated_holo_dark = 0x7f02009e;
+		public static final int switch_track_holo_light = 0x7f0200a7;
+		public static final int switch_inner_holo_dark = 0x7f02009c;
+		public static final int switch_thumb_holo_light = 0x7f0200a3;
+		public static final int switch_thumb_pressed_holo_light = 0x7f0200a5;
 	}
 	public static final class attr {
 		public static final int textOn = 0x7f010007;

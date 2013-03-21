@@ -1,11 +1,15 @@
 package fragments;
 
 import no.ntnu.emergencyreflect.R;
+import activities.QuizActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -20,6 +24,8 @@ public class PersonDetailsFragment extends SherlockFragment {
 	private String value;
 
 	private TextView userNameTextView, timeTextView, textViewHeader;
+	
+	private Button checkListButton;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,16 @@ public class PersonDetailsFragment extends SherlockFragment {
 		timeTextView.setText(time);
 		textViewHeader = (TextView) myFragmentView.findViewById(R.id.textViewHeader);
 		//textViewHeader.setText(value);
+		checkListButton = (Button) myFragmentView.findViewById(R.id.buttonCheckList);
+		
+		checkListButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent (getActivity(), QuizActivity.class);
+				startActivity(intent);
+				
+			}
+		});
 		
 		return myFragmentView;
 	}

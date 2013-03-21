@@ -51,6 +51,15 @@
             </intent-filter>
         </activity>
         
+         <activity
+            android:name="activities.QuizActivity"
+            android:label="@string/gateway_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
         
         
         <service android:name="service.WATCHiTService"></service>
