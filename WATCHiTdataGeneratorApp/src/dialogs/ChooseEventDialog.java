@@ -42,7 +42,6 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				checkedItem = which;
-				mListener.eventChosen(which);
 			}
 		});
 		
@@ -52,7 +51,7 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				//mListener.onSpaceChanged(checkedItem);
-				
+				mListener.eventChosen(checkedItem);
 			}
 		});
 

@@ -342,6 +342,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 
 		@Override
 		public void eventChosen(int which) {
+			showProgress("s", "s");
 			try {
 				dataHandler.registerSpace(spaces.get(which).getId());
 				currentActiveSpace = spaces.get(which);
@@ -350,6 +351,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			dismissProgress();
 			
 		}
 		
