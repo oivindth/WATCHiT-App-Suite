@@ -43,42 +43,10 @@ public class CheckListFragment extends SherlockFragment {
 		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, values);
 		
 		
-		
+		//TODO: oivind, test with htc device onchecklist button click now and see if it crashes..
 		checkList = (ListView) myFragmentView.findViewById(R.id.listViewCheckList);
 		checkList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		checkList.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			
-			@Override
-			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public void onDestroyActionMode(ActionMode mode) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position,
-					long id, boolean checked) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+	
 		//checkList.setItemChecked(0, true);
 		checkList.setAdapter(adapter);
 		

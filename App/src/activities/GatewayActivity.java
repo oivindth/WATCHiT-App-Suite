@@ -30,8 +30,6 @@ import dialogs.ChooseBlueToothDeviceDialog;
 import dialogs.ChooseEventDialog;
 import dialogs.OnlineModeDialog;
 import dialogs.OnlineModeDialog.OnlineModeDialogListener;
-import enums.SharedPreferencesNames;
-import enums.ValueType;
 import fragments.ConfigFragment.StatusChangeListener;
 import fragments.ProfileFragment;
 import fragments.ConfigFragment;
@@ -46,7 +44,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -315,7 +312,6 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				configFragment.updateWATCHiTView(false);
 				return;
 			}
-			
 			if (!btAdapter.isEnabled()) {
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivity(enableBtIntent);
@@ -354,6 +350,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 
 	@Override
 	public void locationMode(boolean on) { 
+		Log.d("locationMode", "boolean: " + on);
 		LocationManager locationManager =
 				(LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -361,6 +358,9 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		if (on) {
 			if (!gpsEnabled || !networkEnabled) {
 				new LocationDialog().show(getSupportFragmentManager(), "locationdialog");
+				Log.d("locationMode", "dialog: updating view: " + sApp.isLocationOn);
+				configFragment.updateLocationView(false);
+				sApp.isLocationOn = false;
 			} else {
 				if (!sApp.locationService.isRunning()) sApp.locationService.start();
 				sApp.isLocationOn = true;
@@ -371,7 +371,8 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			showToast("Stopped location service...");
 			sApp.isLocationOn= false;
 		}
-		configFragment.updateLocationView(sApp.isLocationOn);
+		Log.d("locationMode", "updating view: " + sApp.isLocationOn);
+		  configFragment.updateLocationView(sApp.isLocationOn);
 	}
 
 	@Override
@@ -458,6 +459,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 
 	@Override
 	public void onSpaceChanged(int position) {
+		if (position == -1) return;
 		Space space = sApp.spacesInHandler.get(position);
 		sApp.currentActiveSpace = space;
 		
@@ -474,6 +476,13 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		Space space = sApp.currentActiveSpace;
 		
 		statusFragment.updateTextViewEvent("Members:  " + space.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+		
+	}
+
+	@Override
+	public void onCancelLocationDialogClick() {
+		configFragment.updateLocationView(false);
+		sApp.isLocationOn = false;
 		
 	}
 

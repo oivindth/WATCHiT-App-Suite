@@ -32,13 +32,13 @@ public class LocationService extends AbstractService {
 		        mLocationManager.getProvider(LocationManager.GPS_PROVIDER);
 		
 		if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, listener);
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 0, listener);
 		}
 		
 		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-			        10000,          // 10-second interval.
-			        10,             // 10 meters.
+			        500,          // 0.5-second interval.
+			        0,             // 0 meters.
 			        listener);
 		}
 		

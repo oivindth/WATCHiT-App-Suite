@@ -59,7 +59,7 @@ import android.widget.CompoundButton;
 public class Switch extends CompoundButton {
     private static final int TOUCH_MODE_IDLE = 0;
     private static final int TOUCH_MODE_DOWN = 1;
-    private static final int TOUCH_MODE_DRAGGING = 2;
+    //private static final int TOUCH_MODE_DRAGGING = 2;
 
     // Enum for the "typeface" XML parameter.
     private static final int SANS = 1;
@@ -417,7 +417,7 @@ public class Switch extends CompoundButton {
                         final float x = ev.getX();
                         final float y = ev.getY();
                         if (Math.abs(x - mTouchX) > mTouchSlop || Math.abs(y - mTouchY) > mTouchSlop) {
-                            mTouchMode = TOUCH_MODE_DRAGGING;
+                            //mTouchMode = TOUCH_MODE_DRAGGING;
                             getParent().requestDisallowInterceptTouchEvent(true);
                             mTouchX = x;
                             mTouchY = y;
@@ -425,7 +425,8 @@ public class Switch extends CompoundButton {
                         }
                         break;
                     }
-
+                    
+/*
                     case TOUCH_MODE_DRAGGING: {
                         final float x = ev.getX();
                         final float dx = x - mTouchX;
@@ -437,16 +438,19 @@ public class Switch extends CompoundButton {
                         }
                         return true;
                     }
+                    */
                 }
+                
+                invalidate();
                 break;
             }
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
-                if (mTouchMode == TOUCH_MODE_DRAGGING) {
-                    stopDrag(ev);
-                    return true;
-                }
+                //if (mTouchMode == TOUCH_MODE_DRAGGING) {
+                  //  stopDrag(ev);
+                    //return true;
+                //}
                 mTouchMode = TOUCH_MODE_IDLE;
                 mVelocityTracker.clear();
                 break;

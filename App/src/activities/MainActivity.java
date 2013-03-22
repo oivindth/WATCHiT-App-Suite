@@ -239,8 +239,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					sApp.setLongitude(longitude);
 					sApp.setLatitude(latitude);
 					
-					showToast("New location: " + " long:  " + longitude + " lat: " + latitude );
-					
 					//locationListener.onLocationChanged(latitude, longitude);
 					
 					break;

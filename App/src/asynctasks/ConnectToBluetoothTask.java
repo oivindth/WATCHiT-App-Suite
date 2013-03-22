@@ -28,7 +28,6 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 	private int position;
 	
 	
-
 	private BluetoothAdapter btAdapter;
 	
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");

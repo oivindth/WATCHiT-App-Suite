@@ -20,6 +20,8 @@ private LocationDialogListener mListener;
 	//Container Activity must implement this interface
 		public interface LocationDialogListener {
 			public void onOKChooseNetworkForLocationClick();
+			public void onCancelLocationDialogClick();
+			//public void onCancelButtonClicked();
 		}
 
 		@Override
