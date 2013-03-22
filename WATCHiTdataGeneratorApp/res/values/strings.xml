@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WATCHiT</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="application_id">WDGApp</string>
+    <string name="domain">mirror-server-ntnu</string>
+    <string name="host">129.241.103.122</string>
+    <string name="cancel">Cancel</string>
+ 
+
+</resources>
