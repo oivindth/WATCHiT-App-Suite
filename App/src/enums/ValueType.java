@@ -8,7 +8,7 @@ package enums;
 public enum ValueType {
 	
 	
-	MOOD, PERSON, MOOD_SAD, MOOD_HAPPY, MOOD_NEUTRAL;
+	MOOD, PERSON, MOOD_SAD, MOOD_HAPPY, MOOD_NEUTRAL, NOTES;
 	
 	
 	public static ValueType getValue(String value) {
@@ -21,7 +21,7 @@ public enum ValueType {
 		
 		if (value.equals("I'm so and so")) return MOOD_NEUTRAL;
 		
-		return MOOD;
+		return NOTES;
 		
 	}
 	

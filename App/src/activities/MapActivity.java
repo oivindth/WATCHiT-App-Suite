@@ -30,9 +30,6 @@ import dialogs.ChooseEventDialog;
 import dialogs.MapLayersDialog;
 import enums.SharedPreferencesNames;
 import enums.ValueType;
-import fragments.MoodFragment;
-import fragments.PersonDetailsFragment;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,7 +38,6 @@ import android.os.Looper;
 import android.util.Log;
 import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
-import asynctasks.PublishDataTask;
 
 
 public class MapActivity extends BaseActivity implements LayersChangeListener, SpaceChangeListener {
@@ -62,6 +58,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 	
 	private boolean showMoods;
 	private boolean showPersons;
+	private boolean showNotes;
 
 	Handler handler;
 	GenericSensorData data;
@@ -80,7 +77,16 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		
 		handler = new Handler(Looper.getMainLooper());
 		handleNewDataObjects();
-		sApp.dataHandler.addDataObjectListener(listernerfri);
+		
+		try {
+			Log.d("frack", "datahandler: " + sApp.dataHandler);
+			Log.d("frack", "listenerfri: " + listernerfri);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//TODO: Crashing here. dataHandler is null?
+		sApp.dataHandler.addDataObjectListener(listernerfri); //why is it crashing here?
 	}
 
 	@Override
@@ -92,7 +98,9 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
 		showMoods = mapPreferences.getBoolean("mood_layer", false);
 		showPersons = mapPreferences.getBoolean("person_layer", false);	
-		this.onLayersChanged(showPersons, showMoods);
+		showNotes = mapPreferences.getBoolean("notes_layer", false);
+		
+		this.onLayersChanged(showPersons, showMoods, showNotes);
 		
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 			@Override
@@ -106,8 +114,11 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 				//String unit = data.getValue().getUnit();
 				String unit ="";
 				String value = data.getValue().getText();
-				if (value.equals("I rescued someone")) {
+				ValueType VALUETYPE = ValueType.getValue(value);
+				if (VALUETYPE == ValueType.PERSON) {
 					unit = "person";
+				} else if (VALUETYPE == ValueType.NOTES) {
+					unit = "notes";
 				} else {
 					unit = "mood";
 				}
@@ -224,12 +235,13 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 	}
 
 	@Override
-	public void onLayersChanged(boolean showPersons, boolean showMoods) {
+	public void onLayersChanged(boolean showPersons, boolean showMoods, boolean notes) {
 		mMap.clear();
 		markers.clear();
 		tempDataObjects.clear();
 			Log.d("MapActivity", "size: " + sApp.genericSensorDataObjects.size());
 			for (GenericSensorData data : sApp.genericSensorDataObjects) {
+				Log.d("MapActivity", "data ipubl: :" + data.getPublisher()+ "value: " + data.getValue());
 				String value = data.getValue().getText();
 				ValueType VALUETYPE = ValueType.getValue(value);
 				if (ValueType.PERSON == VALUETYPE && showPersons) {
@@ -240,6 +252,11 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 					addMarker(data, "mood");
 					tempDataObjects.add(data);
 				}
+				if (ValueType.NOTES == VALUETYPE && notes) {
+					addMarker(data, "notes");
+					tempDataObjects.add(data);
+				}
+				
 			}
 	}
 
@@ -255,7 +272,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		if (VALUETYPE == ValueType.MOOD_HAPPY) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_happy_icon);
 		if (VALUETYPE == ValueType.MOOD_SAD) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_mood_sad);
 		if (VALUETYPE == ValueType.MOOD_NEUTRAL) icon = BitmapDescriptorFactory.fromResource(R.drawable.orange_mood_neutral);
-
+		if (VALUETYPE == ValueType.NOTES) icon = BitmapDescriptorFactory.fromResource(R.drawable.note_icon);
 		
 		Log.d("MapActivity", "Mood: " + VALUETYPE);
 		
@@ -287,7 +304,8 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 					mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
 					showMoods = mapPreferences.getBoolean("mood_layer", false);
 					showPersons = mapPreferences.getBoolean("person_layer", false);	
-					onLayersChanged(showPersons, showMoods);
+					showNotes = mapPreferences.getBoolean("notes_layer", false);
+					onLayersChanged(showPersons, showMoods, showNotes);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -296,4 +314,11 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		
 	
 	}
+	
+	@Override
+	public void onDestroy () {
+		super.onDestroy();
+		sApp.dataHandler.removeDataObjectListener(listernerfri);	
+	}
+	
 }

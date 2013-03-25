@@ -10,4 +10,10 @@
         android:icon="@drawable/collections_go_to_today"
         android:showAsAction="ifRoom|withText" />
 
+         
+    <item android:id="@+id/menu_location"
+        android:title="Location settings"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/device_access_location_found_light" />
+         
 </menu>

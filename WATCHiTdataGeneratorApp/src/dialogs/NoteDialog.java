@@ -51,7 +51,7 @@ public class NoteDialog extends SherlockDialogFragment {
 	           builder.setPositiveButton("Share", new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
-	                   mListener.onShareNoteButtonClicked(editNotes.getText().toString());
+	                   mListener.onShareNoteButtonClicked(" " + editNotes.getText().toString());
 	               }
 	           });
 	           builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

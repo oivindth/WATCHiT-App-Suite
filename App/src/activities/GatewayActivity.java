@@ -113,6 +113,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		
 		handler = new Handler(Looper.getMainLooper());
 		
+		
 		sApp.dataHandler.addDataObjectListener(this);
 		
 		wcListener = new WATCHiTConnectionChangeListener() {
@@ -244,15 +245,16 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	}
 	@Override
 	public void onDestroy () {
-		unregisterReceiver(mReceiver);
-		
 		super.onDestroy();
+		unregisterReceiver(mReceiver);
+		sApp.dataHandler.removeDataObjectListener(this);	
+		
 	}
 			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 					String spaceId) {
 				String objectId = dataObject.getId();
 				//Looper.prepare();
-				
+				//TODO: Move this method to MainActivity. Velly impoltant.
 				Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
 				Log.d("dataobject: ", dataObject.toString());
 				try {
@@ -260,22 +262,11 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 					Log.d("data 2k", data.toString());
 					gsdata = data;
-					sApp.genericSensorDataObjects.add(data);
-					
 
 					handler.post(new Runnable(){
 						@Override
 						public void run() {
 							try {
-								//TODO: Notification..
-								 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-								  v.vibrate(300); 
-								  
-								    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-							        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-							        r.play();
-								
-								Toast.makeText(getApplicationContext(), "Object receieved", Toast.LENGTH_LONG).show();
 								sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
 								statusFragment.updateTextViewLatesInfo(sApp.latest);
 								statusFragment.updateTextViewEvent("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
@@ -377,7 +368,15 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 
 	@Override
 	public void onOKChooseOnlineSourceDialogButtonClick() {
-		enableSettings(Settings.ACTION_DATA_ROAMING_SETTINGS);
+		//enableSettings(Settings.ACTION_DATA_ROAMING_SETTINGS);
+		try {
+			enableSettings(Settings.ACTION_WIRELESS_SETTINGS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			showToast("Enable wireless settings in phone settings.");
+		}
+		
+		
 	}
 
 	@Override
@@ -485,6 +484,10 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		sApp.isLocationOn = false;
 		
 	}
+	
+
+
+	
 
 
 	

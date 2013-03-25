@@ -29,11 +29,17 @@ import enums.ValueType;
 
 
 import Utilities.UtilityClass;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
@@ -50,6 +56,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 
 	private DashboardFragment dashBoardFragment;
 	private ProfileFragment profileFragment;
+	private Handler handler;
+	private GenericSensorData data;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +78,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		tab2.setTabListener(this);
 		bar.addTab(tab1);
 		bar.addTab(tab2);
+		
+		handler = new Handler(Looper.getMainLooper());
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
@@ -133,6 +143,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		sApp.dataHandler.removeDataObjectListener(this);
 	}
 	
 	@Override
@@ -258,6 +269,42 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 	@Override
 	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 			String spaceId) {
+		
+		String objectId = dataObject.getId();
+		//Looper.prepare();
+		//TODO: Move this method to MainActivity. Velly impoltant.
+		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
+		Log.d("dataobject: ", dataObject.toString());
+		try {
+			//sApp.dataObjects.add(dataObject);
+			data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+			Log.d("data 2k", data.toString());
+			sApp.genericSensorDataObjects.add(data);
+			
+
+			handler.post(new Runnable(){
+				@Override
+				public void run() {
+					try {
+						//TODO: Notification..
+						 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+						  v.vibrate(300); 
+						  
+						    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+					        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+					        r.play();
+						
+						Toast.makeText(getApplicationContext(), "New data published in event: \n " + sApp.currentActiveSpace.getName() + " by: \n " + data.getCreationInfo().getPerson() , Toast.LENGTH_LONG).show();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}  
+			});
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
+		
 		SharedPreferences profilePrefs = getSharedPreferences(SharedPreferencesNames.PROFILE_PREFERENCES, 0);
 		SharedPreferences.Editor ed = profilePrefs.edit();
 	
@@ -275,5 +322,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		ed.commit();
 		
 	}
+	
+
 	
 }

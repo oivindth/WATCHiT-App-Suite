@@ -6,6 +6,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import fragments.MoodDetailsFragment;
+import fragments.NoteDetailsFragment;
 import fragments.PersonDetailsFragment;
 import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
@@ -37,13 +38,19 @@ public class MapMarkerDetailsActivity extends BaseActivity {
 			moodDetailsFragment.setArguments(b);
 			 getSupportFragmentManager().beginTransaction()
 	         .add(R.id.fragment_container_person_activity, moodDetailsFragment ,"mood_details").commit();
-		} 
+		} else
 		
 		if (intent.getStringExtra("unit").equals("person")) {
 			personDetailsFragment = new PersonDetailsFragment();
 			personDetailsFragment.setArguments(b);
 			 getSupportFragmentManager().beginTransaction()
 	         .add(R.id.fragment_container_person_activity, personDetailsFragment ,"persondetails").commit();
+		} else
+		if (intent.getStringExtra("unit").equals("notes")) {
+			NoteDetailsFragment notedetailsfrag = new NoteDetailsFragment();
+			notedetailsfrag.setArguments(b);
+			getSupportFragmentManager().beginTransaction()
+	         .add(R.id.fragment_container_person_activity, notedetailsfrag ,"notedetails").commit();
 		}
 	}
 	@Override

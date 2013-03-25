@@ -16,8 +16,8 @@ import enums.SharedPreferencesNames;
 
 public class MapLayersDialog extends SherlockDialogFragment  {
 
-	final CharSequence[] items = {"Persons", "Mood"};
-    private boolean[] states = {false, false};
+	final CharSequence[] items = {"Persons", "Mood", "Notes"};
+    private boolean[] states = {false, false, false};
     private SharedPreferences mapPreferences;
     
     LayersChangeListener mListener;
@@ -27,6 +27,7 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		mapPreferences = getActivity().getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , 0 );
+		states[2] = mapPreferences.getBoolean("notes_layer", false);
 		states[1] = mapPreferences.getBoolean("mood_layer", false);
 	    states[0] = mapPreferences.getBoolean("person_layer", false);	
 		
@@ -52,14 +53,16 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 		    {
 				SharedPreferences.Editor ed = mapPreferences.edit();
 		        SparseBooleanArray checked = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
+		        boolean notes = checked.get(2);
 		        boolean moods = checked.get(1);
 		        boolean person = checked.get(0);
 		        
+		        ed.putBoolean("notes_layer", notes);
 		        ed.putBoolean("person_layer", person);
 		        ed.putBoolean("mood_layer", moods);
 		        ed.commit();
 		        
-		        mListener.onLayersChanged(person, moods);
+		        mListener.onLayersChanged(person, moods, notes);
  
 		    }
 		});

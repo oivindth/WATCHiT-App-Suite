@@ -65,8 +65,8 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
 				spacChangeListener.onDataFetchedFromSpace();
 			} else {
-				mActivity.showToast("failed to fetch data. Trying again....");
-				new GetDataFromSpaceTask(mActivity, mSpaceId);
+				mActivity.showToast("failed to fetch data. Try again!");
+				//new GetDataFromSpaceTask(mActivity, mSpaceId);
 				Log.d("GETDATATASK", "FAIL");
 			}
 		}

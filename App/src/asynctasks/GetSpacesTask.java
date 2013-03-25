@@ -39,7 +39,7 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 		}
 
 		protected void onPostExecute(final Boolean success) {
-			mActivity.dismissProgress();
+			//mActivity.dismissProgress();
 			
 	
 			if (success) {
