@@ -8,6 +8,8 @@ import parsing.Parser;
 
 import com.example.watchit_connect.MainApplication;
 
+import de.imc.mirror.sdk.exceptions.UnknownEntityException;
+
 import activities.BaseActivity;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -33,29 +35,25 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		Log.d("spaceid: ", mSpaceId);
 		Log.d("mactivity", " " + mActivity);
 	}
-	
 		@Override
 		protected void onPreExecute() {
 			mActivity.showProgress("Sync", "Syncing....");
 		}
-	
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.d("GETDATAFROMSPACETASK", "do in background");
-			try {
+
 			
-	      		  app.dataHandler.registerSpace(mSpaceId);
-				
+			try {
+				app.dataHandler.registerSpace(mSpaceId);
 				app.dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
 				app.dataObjects = app.dataHandler.retrieveDataObjects(mSpaceId);
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
 			return true;
 		}
-		
 		protected void onPostExecute(final Boolean success) {
 			mActivity.dismissProgress();
 			if (success) {
@@ -70,5 +68,4 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				Log.d("GETDATATASK", "FAIL");
 			}
 		}
-	
 }

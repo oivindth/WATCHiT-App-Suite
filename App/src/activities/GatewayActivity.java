@@ -98,24 +98,19 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		arrayAdapter = new ArrayList<String>();
 	
 		ActionBar bar = getSupportActionBar();
-
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		ActionBar.Tab tab1 = bar.newTab();
 		ActionBar.Tab tab2 = bar.newTab();
-		tab1.setText("Status");
-		tab2.setText("Set up");
+		tab1.setText(getString(R.string.gateway_tab_status));
+		tab2.setText(getString(R.string.gateway_name));
 		tab1.setTabListener(new MyTabListener());
 		tab2.setTabListener(new MyTabListener());
 		bar.addTab(tab1);
 		bar.addTab(tab2);
 		
-		
 		handler = new Handler(Looper.getMainLooper());
-		
-		
 		sApp.dataHandler.addDataObjectListener(this);
-		
 		wcListener = new WATCHiTConnectionChangeListener() {
 			@Override
 			public void onWATCHiTConnectionChanged(boolean on) {
@@ -125,8 +120,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		};
 		sApp.addListener(wcListener);
 		
-		onlinemodeListener = new OnlineModeChangeListener() {
-			
+		onlinemodeListener = new OnlineModeChangeListener() {	
 			@Override
 			public void onOnlineModeChanged(boolean on) {
 				try {
@@ -136,8 +130,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				}
 			}
 		};
-		sApp.addOnlineModeChangeListener(onlinemodeListener);
-		
+		sApp.addOnlineModeChangeListener(onlinemodeListener);	
 		if (sApp.currentActiveSpace != null) {
 			try {
 				sApp.dataHandler.registerSpace(sApp.currentActiveSpace.getId());
@@ -199,42 +192,22 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
 		switch (item.getItemId()) {
-
 		case android.R.id.home:
-			// iff up instead of back:
-			//  intent = new Intent(this, MainActivity.class);
-			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// startActivity(intent);
-			//just back use only finish():
 			finish();
 			return true;
-
 		case R.id.menu_sync:
 			if (sApp.currentActiveSpace == null) {
 				new GetSpacesTask(this).execute();
 				showToast("You must register with an event first..");
 				return true;
 			}
-			
 			new GetSpacesTask(this).execute();
 			new GetDataFromSpaceTask(this , sApp.currentActiveSpace.getId()).execute();
 			return true;
-			
-			
 		case R.id.menu_changeSpace:
 			new ChooseEventDialog().show(getSupportFragmentManager(), "chooseEventDialog");
 			return true;
-/*
-		case R.id.menu_mock_watchit_data:
-			DataObject dob =  Parser.buildDataObjectFromSimpleXMl(Parser.buildSimpleXMLObject
-					("Person found!", String.valueOf(sApp.getLatitude()) , String.valueOf(sApp.getLongitude()) ), 
-					sApp.connectionHandler.getCurrentUser().getBareJID(), sApp.connectionHandler.getCurrentUser().getUsername());
-			new PublishDataTask(this, dob, sApp.currentActiveSpace.getId()).execute();
-			return true;
-
-*/
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -250,35 +223,39 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		sApp.dataHandler.removeDataObjectListener(this);	
 		
 	}
-			public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
-					String spaceId) {
-				String objectId = dataObject.getId();
-				//Looper.prepare();
-				//TODO: Move this method to MainActivity. Velly impoltant.
-				Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
-				Log.d("dataobject: ", dataObject.toString());
-				try {
-					//sApp.dataObjects.add(dataObject);
-					GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
-					Log.d("data 2k", data.toString());
-					gsdata = data;
-
-					handler.post(new Runnable(){
-						@Override
-						public void run() {
-							try {
-								sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
-								statusFragment.updateTextViewLatesInfo(sApp.latest);
-								statusFragment.updateTextViewEvent("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}  
-					});
-				} catch (Exception e) {
-					e.printStackTrace();	
-				}
-			}
+	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
+			String spaceId) {
+		String objectId = dataObject.getId();
+		
+		//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
+				//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
+						if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
+						if (sApp.lastDataObject!= null) {
+							if (sApp.lastDataObject.equals(dataObject)) return;
+						}
+		
+		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
+		Log.d("dataobject: ", dataObject.toString());
+		try {
+			//sApp.dataObjects.add(dataObject);
+			GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);
+			gsdata = data;
+			handler.post(new Runnable(){
+				@Override
+				public void run() {
+					try {
+						sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
+						statusFragment.updateTextViewLatesInfo(sApp.latest);
+						statusFragment.updateTextViewEvent("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}  
+			});
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
+	}
 
 	@Override
 	public void onlineModeClicked(boolean on) {
@@ -331,14 +308,12 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		}
 		if (!on) {
 			if (sApp.service.isRunning()) sApp.service.stop();
-			showToast("Stopped WATCHiT sync...");
+			showToast(getString(R.string.toast_stopped_watchit_service));
 			sApp.isWATChiTOn= false;
 		}
 		configFragment.updateWATCHiTView(sApp.isWATChiTOn);
 	}
 	
-	
-
 	@Override
 	public void locationMode(boolean on) { 
 		Log.d("locationMode", "boolean: " + on);
@@ -359,7 +334,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			}
 		} else {
 			if (sApp.locationService.isRunning()) sApp.locationService.stop();
-			showToast("Stopped location service...");
+			showToast(getString(R.string.toast_stopped_location_service));
 			sApp.isLocationOn= false;
 		}
 		Log.d("locationMode", "updating view: " + sApp.isLocationOn);
@@ -373,7 +348,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			enableSettings(Settings.ACTION_WIRELESS_SETTINGS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			showToast("Enable wireless settings in phone settings.");
+			showToast(getString(R.string.toast_enable_wireless));
 		}
 		
 		
@@ -386,7 +361,6 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 
 	@Override
 	public void blueToothDeviceSelected(int which) {
-		Log.d("frack", "bluetoothdevice frack frack frack");
 		new ConnectToBluetoothTask(this, which).execute();
 	}
 
@@ -425,12 +399,12 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				int i = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0 );
 				if (i == BluetoothAdapter.STATE_ON) {
 					Log.d("BLUETOOTH", "bluetooth on");	
-					showToast("Bluetooth is now enabled. You can now sync with WATCHiT");
+					showToast(getString(R.string.toast_bluetooth_enabled));
 				}
 			}
 			if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 				Log.d("discovery", "started searching");
-				showProgress("BlueTooth" , "Scanning for devices..");
+				showProgress(getString(R.string.progress_title_bluetooth) , getString(R.string.progress_message_bluetooth));
 			}
 			if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 				btAdapter.cancelDiscovery();
@@ -442,7 +416,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, arrayAdapter);
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				// Set other dialog properties
-				builder.setTitle("Choose Device");
+				builder.setTitle(getString(R.string.choose_device_dialog_title));
 				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -459,14 +433,16 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	@Override
 	public void onSpaceChanged(int position) {
 		if (position == -1) return;
+		if (sApp.dataHandler.getHandledSpaces().contains(sApp.currentActiveSpace)) {
+			sApp.dataHandler.removeSpace(sApp.currentActiveSpace.getId());
+		}
+		
 		Space space = sApp.spacesInHandler.get(position);
 		sApp.currentActiveSpace = space;
-		
+	
 		statusFragment.updateTextViewEventLed(space.getName());
 		statusFragment.updateEventLED(true);
 			
-		
-		
 		new GetDataFromSpaceTask(this, space.getId()).execute(); 
 	}
 

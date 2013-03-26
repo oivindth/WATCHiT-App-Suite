@@ -32,7 +32,6 @@ public class MapMarkerDetailsActivity extends BaseActivity {
 		//b.putString("lat", data.getLocation().getLatitude());
 		//b.putString("lng", data.getLocation().getLongitude());
 		
-		
 		if (intent.getStringExtra("unit").equals("mood") ) {
 			moodDetailsFragment = new MoodDetailsFragment();
 			moodDetailsFragment.setArguments(b);
@@ -59,20 +58,15 @@ public class MapMarkerDetailsActivity extends BaseActivity {
 		//inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
 		switch (item.getItemId()) {
-
 		case android.R.id.home:
 			finish();
 			return true;
-	
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	
+
 }

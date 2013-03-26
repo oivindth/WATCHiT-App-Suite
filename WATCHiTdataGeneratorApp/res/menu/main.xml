@@ -15,5 +15,27 @@
         android:title="Location settings"
         android:showAsAction="ifRoom|withText"
         android:icon="@drawable/device_access_location_found_light" />
+    
+    
+    <item android:id="@+id/menu_refresh"
+        android:title="Refresh"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/navigation_refresh" />
+    
+    <item android:id="@+id/menu_refresh"
+        android:title="Refresh"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/navigation_refresh" />
+    
+    <item android:id="@+id/menu_refresh"
+        android:title="Refresh"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/navigation_refresh" />
+    
+    <item android:id="@+id/menu_refresh"
+        android:title="Refresh"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/navigation_refresh" />
+    
          
 </menu>

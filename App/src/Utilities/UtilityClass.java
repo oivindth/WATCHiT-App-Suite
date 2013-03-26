@@ -60,6 +60,17 @@ public class UtilityClass {
 	}
 	
 	
+	public static String parseTimeStampToTimeAndDate (String timeStamp) {
+		timeStamp = timeStamp.replace('T', '-');
+		return timeStamp.substring(0, 19);
+	}
+	
+	public static String parseTimeStampToTimeOnly(String timeStamp) {
+		timeStamp = timeStamp.replace('T', '-');
+		return timeStamp.substring(11, 16);
+	}
+	
+	
 	 
 	
 }

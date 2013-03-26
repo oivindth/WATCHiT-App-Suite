@@ -12,6 +12,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         style="@style/textHoloBlueLight" />
 
+    <ImageView
+        android:id="@+id/imageViewMood"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/happy_tag" />
+
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

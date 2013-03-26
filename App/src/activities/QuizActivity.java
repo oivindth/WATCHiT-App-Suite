@@ -43,8 +43,8 @@ public class QuizActivity extends BaseActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+		//MenuInflater inflater = getSupportMenuInflater();
+		//inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
 	

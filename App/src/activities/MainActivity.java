@@ -72,8 +72,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		ActionBar.Tab tab1 = bar.newTab();
 		ActionBar.Tab tab2 = bar.newTab();
-		tab1.setText("Dashboard");
-		tab2.setText("Profile");
+		tab1.setText(getString(R.string.main_activity_tab_dasboard));
+		tab2.setText(R.string.main_ativity_tab_profile);
 		tab1.setTabListener(this);
 		tab2.setTabListener(this);
 		bar.addTab(tab1);
@@ -133,7 +133,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
 		}
 	}
-	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -152,7 +151,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
@@ -224,7 +222,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
 					//new CreateSpaceTask().execute();
 					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
-					Toast.makeText(getBaseContext(), "WATCHiT Dat: " + data, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
 					Log.d("watchitdata:  ", data);
 					break;
 				default:
@@ -258,30 +256,29 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			}
 		});
 	}
-
 	@Override
 	public void avatarChosen(int which) {
-	
 		profileFragment.updateView(which);
-		
 	}
 
 	@Override
 	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 			String spaceId) {
-		
 		String objectId = dataObject.getId();
-		//Looper.prepare();
-		//TODO: Move this method to MainActivity. Velly impoltant.
 		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
 		Log.d("dataobject: ", dataObject.toString());
+		//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
+		//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
+				if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
+				if (sApp.lastDataObject!= null) {
+					if (sApp.lastDataObject.equals(dataObject)) return;
+				}
+				sApp.lastDataObject = dataObject;
+				
 		try {
-			//sApp.dataObjects.add(dataObject);
 			data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 			Log.d("data 2k", data.toString());
 			sApp.genericSensorDataObjects.add(data);
-			
-
 			handler.post(new Runnable(){
 				@Override
 				public void run() {
@@ -293,9 +290,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 						    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 					        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 					        r.play();
-						
 						Toast.makeText(getApplicationContext(), "New data published in event: \n " + sApp.currentActiveSpace.getName() + " by: \n " + data.getCreationInfo().getPerson() , Toast.LENGTH_LONG).show();
-
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

@@ -19,6 +19,7 @@ import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
+import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
@@ -36,6 +37,9 @@ import android.util.Log;
 public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
+    
+    
+    public de.imc.mirror.sdk.DataObject lastDataObject; //hackzor sdk
     
 	public String latest;
     public ServiceManager service, locationService;

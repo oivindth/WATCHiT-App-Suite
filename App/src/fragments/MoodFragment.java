@@ -26,16 +26,11 @@ public class MoodFragment extends SherlockFragment {
 			Bundle savedInstanceState) {
 
 		View myFragmentView = inflater.inflate(R.layout.mood_fragment, container, false);
-		
-
-		
 		return myFragmentView;
 	}
 	
-
 	@Override
 	public void onResume() {
 		super.onResume();
 	}
-	
 }

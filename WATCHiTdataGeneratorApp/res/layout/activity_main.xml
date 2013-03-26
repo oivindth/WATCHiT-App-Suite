@@ -1,7 +1,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical" >
 
      
@@ -16,7 +16,7 @@
                        android:id="@+id/imageViewRescue"
                        android:layout_width="100dp"
                        android:layout_height="100dp"
-                       android:src="@drawable/rescue_icon"
+                       android:src="@drawable/rescue_tag"
                         />
                           
                                   <ImageView
@@ -41,7 +41,7 @@
                        android:id="@+id/imageViewHappy"
                        android:layout_width="100dp"
                        android:layout_height="100dp"
-                       android:src="@drawable/happy_blue" />
+                       android:src="@drawable/happy_tag" />
 
                 
 
@@ -49,13 +49,13 @@
                 android:id="@+id/imageViewNeutral"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/neutral_blue" />
+                android:src="@drawable/neutral_tag" />
             
                <ImageView
                    android:id="@+id/imageViewSad"
                    android:layout_width="100dp"
                    android:layout_height="100dp"
-                   android:src="@drawable/sad_blue" />
+                   android:src="@drawable/sad_tag" />
                 
     </LinearLayout>
 

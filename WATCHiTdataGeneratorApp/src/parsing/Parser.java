@@ -59,6 +59,7 @@ public class Parser {
 		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
 		Date date = new Date();
 		
+		
 		dataObjectBuilder.addCDTCreationInfo(date, userName, null);
 		CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_1_0);
 		cdmDataBuilder.setPublisher(userJID);

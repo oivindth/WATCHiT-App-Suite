@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/imageViewAmbulance"
-            android:layout_width="154dp"
-            android:layout_height="154dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:src="@drawable/note" />
 
         <LinearLayout

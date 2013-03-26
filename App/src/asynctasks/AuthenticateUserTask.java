@@ -17,7 +17,6 @@ public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private BaseActivity mActivity;
 	private MainApplication sApp;
-	List l;
 	
 	public AuthenticateUserTask (BaseActivity activity ,String userName, String password) {
 		Log.d("AuthenticateUserTask", "in constructor");

@@ -111,6 +111,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
    
         
         happyButton = (ImageView) findViewById(R.id.imageViewHappy);
+        
         neutralButton = (ImageView) findViewById(R.id.imageViewNeutral);
         sadButton = (ImageView) findViewById(R.id.imageViewSad);
         rescueButton = (ImageView) findViewById(R.id.imageViewRescue);
@@ -148,20 +149,13 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
     	    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()
     	                    || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
     	    	
-    	    	
     	    	 new UserLoginTask().execute();
     	    } else {
     	    	new GetSpacesTask().execute();
     	    }
             }
     	
-  
-        
-			
-	    
-	    
 			mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-			
 			
 			String locationProvider = LocationManager.NETWORK_PROVIDER;
 			String gpsLocationProvider = LocationManager.GPS_PROVIDER;
@@ -176,11 +170,9 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				        2000,          // 2-second interval.
-				        0,             // 1 meters.
+				        0,             // 0 meters.
 				        listener);
 			}
-       
-        
     }
 
 	@Override
@@ -191,22 +183,22 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 		switch (v.getId()) {
 		case R.id.imageViewHappy:
 			happyButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.drawable.image_click));			
-			dialog.setArguments(setDataAndGetBundle("I'm happy", R.drawable.happy_blue));
+			dialog.setArguments(setDataAndGetBundle("I'm happy", R.drawable.happy_tag));
 			dialog.show(getSupportFragmentManager(), "shareDialog");
 			break;
 		case R.id.imageViewNeutral:
 			neutralButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.drawable.image_click));
-			dialog.setArguments(setDataAndGetBundle("I'm so and so", R.drawable.neutral_blue));
+			dialog.setArguments(setDataAndGetBundle("I'm so and so", R.drawable.neutral_tag));
 			dialog.show(getSupportFragmentManager(), "shareDialog");
 			break;
 		case R.id.imageViewSad:
 			sadButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.drawable.image_click));
-			dialog.setArguments(setDataAndGetBundle("I'm sad", R.drawable.sad_blue));
+			dialog.setArguments(setDataAndGetBundle("I'm sad", R.drawable.sad_tag));
 			dialog.show(getSupportFragmentManager(), "shareDialog");
 			break;
 		case R.id.imageViewRescue:
 			rescueButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.drawable.image_click));
-			dialog.setArguments(setDataAndGetBundle("I rescued someone", R.drawable.rescue_icon));
+			dialog.setArguments(setDataAndGetBundle("I rescued someone", R.drawable.rescue_tag));
 			dialog.show(getSupportFragmentManager(), "shareDialog");
 			break;
 		case R.id.imageViewNote:
@@ -430,7 +422,8 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 
 		@Override
 		public void eventChosen(int which) {
-				
+				Log.d("which", "integer: " + which);
+				if (which == -1) return;
 				currentActiveSpace = spaces.get(which);
 				checkedEvent = which;
 
@@ -462,15 +455,12 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 					  Log.d("publishWDGA", "dataobject: " + mDataObject.toString());
 					  Log.d("publishWDGA", "just published dataobject with id: " + mDataObject.getId());
 
-	  
-					  
 				} catch (Exception e) {
 					e.printStackTrace();
 					Log.d("ERROR:", "failed to publish dataobject with id: " + mDataObject.getId() );
 					return false;
 				}
 		    	 return true;
-			
 			}
 
 			protected void onPostExecute(final Boolean success) {

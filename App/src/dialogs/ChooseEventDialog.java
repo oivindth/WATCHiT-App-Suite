@@ -45,15 +45,11 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 		//adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, events);
 		List<String> events = new ArrayList<String>();
 		for (Space space : spaces) {
+			
 			events.add(space.getName());
 		}
 		
-		
-		
 		adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, events);
-
-		
-		
 		String [] items = ( events.toArray(new String [events.size()]));
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
