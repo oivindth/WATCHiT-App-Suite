@@ -59,6 +59,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 	private Handler handler;
 	private GenericSensorData data;
 	
+	private de.imc.mirror.sdk.DataObject lastDataObject;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,6 +82,12 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		bar.addTab(tab2);
 		
 		handler = new Handler(Looper.getMainLooper());
+		
+		
+		
+		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
+		
+		
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
@@ -112,7 +120,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			break;
 		}
 	}
-
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
@@ -267,17 +274,17 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		String objectId = dataObject.getId();
 		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
 		Log.d("dataobject: ", dataObject.toString());
-		//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
-		//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
+		if (lastDataObject != null) Log.d("dataObject ", " equal?:  " + lastDataObject.equals(dataObject));
+		//hack because of sdk bug. We don't want a notification from a space we currently are not registered to. 
 				if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
-				if (sApp.lastDataObject!= null) {
-					if (sApp.lastDataObject.equals(dataObject)) return;
+				//hack because dataobjectlistener in sdk is not working as expected.
+				if (lastDataObject!= null) {
+					if (lastDataObject.getId().equals(dataObject.getId()) ) return;
 				}
-				sApp.lastDataObject = dataObject;
+				lastDataObject = dataObject;
 				
 		try {
 			data = Parser.buildSimpleXMLObject((DataObject) dataObject);
-			Log.d("data 2k", data.toString());
 			sApp.genericSensorDataObjects.add(data);
 			handler.post(new Runnable(){
 				@Override
@@ -290,7 +297,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 						    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 					        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 					        r.play();
-						Toast.makeText(getApplicationContext(), "New data published in event: \n " + sApp.currentActiveSpace.getName() + " by: \n " + data.getCreationInfo().getPerson() , Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.toast_new_data_published) + ": \n " + sApp.currentActiveSpace.getName() + " \n " + data.getCreationInfo().getPerson() , Toast.LENGTH_LONG).show();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

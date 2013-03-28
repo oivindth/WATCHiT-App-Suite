@@ -82,6 +82,8 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	private GatewayActivity mActivity;
 	private Handler handler;
 	private GenericSensorData gsdata;
+	
+	private de.imc.mirror.sdk.DataObject lastDataObject;
 
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
@@ -108,6 +110,8 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		tab2.setTabListener(new MyTabListener());
 		bar.addTab(tab1);
 		bar.addTab(tab2);
+		
+		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
 		
 		handler = new Handler(Looper.getMainLooper());
 		sApp.dataHandler.addDataObjectListener(this);
@@ -199,7 +203,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		case R.id.menu_sync:
 			if (sApp.currentActiveSpace == null) {
 				new GetSpacesTask(this).execute();
-				showToast("You must register with an event first..");
+				showToast(getString(R.string.toast_event_first));
 				return true;
 			}
 			new GetSpacesTask(this).execute();
@@ -226,16 +230,16 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 			String spaceId) {
 		String objectId = dataObject.getId();
-		
+		Log.d("dataObjectGateWay: ", "Received object " + objectId + " from space " + spaceId);
 		//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
-				//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
+				//also need a hack because the datahandler is running wild.
 						if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
-						if (sApp.lastDataObject!= null) {
-							if (sApp.lastDataObject.equals(dataObject)) return;
+						if (lastDataObject!= null) {
+							if (lastDataObject.getId().equals(dataObject.getId()) ) return;
 						}
+		lastDataObject = dataObject;
 		
-		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
-		Log.d("dataobject: ", dataObject.toString());
+		//Log.d("dataobject: ", dataObject.toString());
 		try {
 			//sApp.dataObjects.add(dataObject);
 			GenericSensorData data = Parser.buildSimpleXMLObject((DataObject) dataObject);

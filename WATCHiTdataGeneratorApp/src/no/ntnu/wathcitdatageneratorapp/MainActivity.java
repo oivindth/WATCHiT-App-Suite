@@ -13,6 +13,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.ConnectionConfiguration;
@@ -107,8 +108,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-   
         
         happyButton = (ImageView) findViewById(R.id.imageViewHappy);
         
@@ -243,8 +242,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	
 		case R.id.menu_logout:
 			new SettingsDialog().show(getSupportFragmentManager(), "settings");
-		
-			
 			return true;
 			
 		case R.id.menu_changeSpace:
@@ -267,7 +264,20 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			updateLocationProviders();
 			Toast.makeText(getBaseContext(), "Location providers updated.", Toast.LENGTH_SHORT).show();
 			return true;
-			
+		case R.id.menu_refresh:
+		    ConnectivityManager connectivityManager= (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+    	    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()
+    	                    || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {	
+    	    	if (connectionHandler.getStatus() != ConnectionStatus.ONLINE) {
+    	    		Log.d("status", "status: " + connectionHandler.getStatus());
+    	    		 new UserLoginTask().execute();
+    	    	} else {
+    	    		new GetSpacesTask().execute();
+    	    	}
+    	    } else {
+    	    	new GetSpacesTask().execute();
+    	    }
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -283,16 +293,13 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			Toast.makeText(getBaseContext(), "Need a location fix first...", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
 		else {
 			String stringLat = String.valueOf(latitude);
 			String stringLong = String.valueOf(longitude);
 			GenericSensorData gsd = Parser.buildSimpleXMLObject(currentText, stringLat, stringLong);
 			DataObject md = Parser.buildDataObjectFromSimpleXMl(gsd, connectionHandler.getCurrentUser().getFullJID(), connectionHandler.getCurrentUser().getUsername());
 			new PublishDataTask(md, currentActiveSpace.getId()).execute();
-			
 		}
-		
 	}
 
 	@Override
@@ -301,7 +308,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			Toast.makeText(getBaseContext(), "Need a location fix first...", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
 		if (currentActiveSpace == null) {
 			Toast.makeText(getBaseContext(), "Choose event first", Toast.LENGTH_SHORT).show();
 			return;
@@ -312,7 +318,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			DataObject md = Parser.buildDataObjectFromSimpleXMl(gsd, connectionHandler.getCurrentUser().getFullJID(), connectionHandler.getCurrentUser().getUsername());
 			new PublishDataTask(md, currentActiveSpace.getId()).execute();
 	}
-
 	@Override
 	public void saveSettingsButtonClick() {
 		 SharedPreferences settings = getSharedPreferences("Settings", 0);
@@ -366,14 +371,12 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				dataHandler.setMode(Mode.ONLINE);
 				new GetSpacesTask().execute();
 			} else {
-				Toast.makeText(getBaseContext(), "Something went wrong. Is the server settings and/or username/password correct?/Are you connected to the internet?", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getBaseContext(), "Something went wrong. Is the server settings and/or username/password correct?/Are you connected to the internet?", Toast.LENGTH_LONG).show();
 				new GetSpacesTask().execute();
 			}
 		}
 
 	}
-
-
 	   public void showProgress(String title, String msg) {
 	    	if (mProgressDialog != null && mProgressDialog.isShowing())
 	    		            dismissProgress();
@@ -385,13 +388,11 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	            mProgressDialog = null;
 	        }
 	    }
-	    
 	    private class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {    		
 	    		@Override
 	    		public void onPreExecute() {
 	    			super.onPreExecute();
 	    			showProgress("Syncing", "Syncing....");
-	    			
 	    		}
 	    		protected Boolean doInBackground(Void...params) {
 	    			try {
@@ -419,7 +420,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	    		}
 	    }
 
-
 		@Override
 		public void eventChosen(int which) {
 				Log.d("which", "integer: " + which);
@@ -440,7 +440,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				mDataObject = dataObject;
 				mSpaceId = spaceId;
 			}
-			
 		      @Override
 		        protected void onPreExecute() {
 		        	super.onPreExecute();
@@ -469,7 +468,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				Log.d("publish", "success");
 				} else {
 				Log.d("ERROR:", "Something went wrong");
-				Toast.makeText(getBaseContext(), "Failed to send data. Try again!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "Failed to send data. Resending..", Toast.LENGTH_SHORT).show();
 				//mActivity.showToast("Failed to publish dataobject.....");
 				//new PublishDataTask(mDataObject, mSpaceId).execute();
 				}
@@ -508,7 +507,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			}
 		    
 		};
-		private static final int ONE_MINUTE = 1000 * 60 * 1;
+		private static final int ONE_HALF_MINUTE = 1000 * 30 * 1;
 
 		/** Determines whether one Location reading is better than the current Location fix
 		  * @param location  The new Location that you want to evaluate
@@ -524,8 +523,8 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 
 		    // Check whether the new location fix is newer or older
 		    long timeDelta = location.getTime() - currentBestLocation.getTime();
-		    boolean isSignificantlyNewer = timeDelta > ONE_MINUTE;
-		    boolean isSignificantlyOlder = timeDelta < -ONE_MINUTE;
+		    boolean isSignificantlyNewer = timeDelta > ONE_HALF_MINUTE;
+		    boolean isSignificantlyOlder = timeDelta < ONE_HALF_MINUTE;
 		    boolean isNewer = timeDelta > 0;
 
 		    // If it's been more than two minutes since the current location, use the new location

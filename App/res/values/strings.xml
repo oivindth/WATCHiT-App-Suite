@@ -13,33 +13,32 @@
     <string name= "title_activity_event">Events</string>
     <string name = "title_activity_config">Configure</string>
     
+    
+    
     <!-- TABS -->
     <string name ="gateway_tab_status">Status</string>
     <string name ="gateqay_tab_config">Set Up</string>
     <string name="main_activity_tab_dasboard">Dashboard</string>
     <string name="main_ativity_tab_profile">Profile</string>
-    
     <!-- Progress dialogs -->
     <string name ="progress_title_bluetooth">Bluetooth</string>
     <string name="progress_message_bluetooth">Scanning for devices</string>
-    
     <!-- Dialogs -->
     <string name ="choose_device_dialog_title">Choose device</string>
-    
     <!-- Toasts -->
     <string name="toast_enable_wireless">Enable wireless settings in phone settingd</string>
     <string name="toast_bluetooth_enabled">Bluetooth is now enabled. You can now sync with WATCHiT</string>
-    
     <string name="toast_stopped_location_service">Stopped location service</string>
     <string name="toast_stopped_watchit_service">WATCHiT is no longer being synced.</string>
-    
+    <string name="toast_new_data_published">Ned data published in event:</string>
+    <string name ="toast_event_first">You must register with an event first</string>
     <!-- Status strings -->
    <string name="watchit_service_started"> WATCHiT connected and running. </string>
    <string name="watchit_service_stopped"> WATCHiT no longer connected.</string>
-   
    <string name="server_sync"> Syncing with server.. </string>
    <string name="status">Status</string>
    <string name ="save">Save</string>
+   <string name="event_not_registered">No event chosen</string>
    
    <!-- Menu strings -->
     <string name="menu_settings">Settings</string>
@@ -49,18 +48,16 @@
     <string name="menu_home">Home</string>
     <string name="menu_map">Map</string>
     <string name="menu_dashboard">Dashboard</string>
-    <string name="menu_logout">Switch User</string>
-    <string name="menu_event" > Event</string>
-
+    <string name="menu_logout">Switch User/Server</string>
+    <string name="menu_event">Event</string>
     <string name= "cancel">Cancel</string>
     
-    
-    <!-- App configurations: -->
+    <!-- App (default) configurations: -->
     <string name="host">129.241.103.122</string>
     <string name="port">5222</string>
     <string name="domain">mirror-server-ntnu</string>
     <string name="application_id">watchIt_Reflection_App</string>
-    <string name ="sdkcache">sdkcache</string>
+    <string name ="sdkcache">emergencyreflectcache</string>
     
 
 

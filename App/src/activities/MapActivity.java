@@ -54,6 +54,7 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 	private DataObjectListener dataObjectListener;
 	private MapActivity mActivity;
 	
+	private DataObject lastDataObject;
 	
 	private boolean showMoods;
 	private boolean showPersons;
@@ -70,6 +71,8 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		setContentView(R.layout.map_activity);
 		sApp = MainApplication.getInstance();
 
+		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
+		
 		mActivity = this;
 		
 		markers = new ArrayList<Marker>();
@@ -140,13 +143,11 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 				//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
 				//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
 						if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
-						if (sApp.lastDataObject!= null) {
-							if (sApp.lastDataObject.equals(dataObject)) return;
+						if (lastDataObject!= null) {
+							if (lastDataObject.getId().equals(dataObject.getId()) ) return;
 						}
+						lastDataObject = dataObject;
 						
-						
-				
-				
 				data = Parser.buildSimpleXMLObject((de.imc.mirror.sdk.android.DataObject) dataObject);
 				Double lat = Double.parseDouble(data.getLocation().getLatitude());
 				Double lng = Double.parseDouble(data.getLocation().getLongitude());

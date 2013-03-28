@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 public class StatusFragment extends SherlockFragment {
 	
-	private TextView textViewEvent, textViewLatest, textViewLEDEvent;
+	private TextView textViewEvent, textViewEventName, textViewLatest, textViewLEDEvent;
 	private MainApplication sApp;
 	
 
@@ -50,6 +50,7 @@ public class StatusFragment extends SherlockFragment {
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View myFragmentView = inflater.inflate(R.layout.fragment_status, container, false);
 		textViewEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventName);
+		textViewEventName = (TextView) myFragmentView.findViewById(R.id.textViewEvent);
 		textViewLatest = (TextView) myFragmentView.findViewById(R.id.textViewLatestInfo);
 		textViewLEDEvent = (TextView) myFragmentView.findViewById(R.id.textViewEventLedEvent);
 		
@@ -66,14 +67,13 @@ public class StatusFragment extends SherlockFragment {
 		super.onResume();
 		
 		if (sApp.currentActiveSpace == null) {
-			textViewEvent.setText("You have not registered to an event");
+			textViewEvent.setText(getString(R.string.event_not_registered));
 		} else {
 			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
 			textViewEvent.setText(sApp.currentActiveSpace.getName());
 			textViewLEDEvent.setText(sApp.currentActiveSpace.getName());
-			
+			textViewEventName.setText(sApp.currentActiveSpace.getName());
 			textViewEvent.setText("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
-			
 			
 		}
 		
@@ -87,43 +87,7 @@ public class StatusFragment extends SherlockFragment {
 		updateTextViewLatesInfo(sApp.latest);
 
 
-		/*
-		watchitInfo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "WATCHiT can be enabled here." , Toast.LENGTH_SHORT).show();
-				
-			}
-		});
-		
-		onlineInfo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Enable online mode to sync with server and get updates from other users. " , Toast.LENGTH_SHORT).show();
-				
-			}
-		});
-		
-		locationInfo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Enable this to use your location. need network or GPS. Use GPS for more accurate estimates." , Toast.LENGTH_SHORT).show();
-				
-			}
-		});
-		
-	eventInfo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "Connect to an event to share and compare data with other workers." , Toast.LENGTH_SHORT).show();
-				
-			}
-		});
-		*/
+
 	}
 	
 	/**
@@ -143,10 +107,10 @@ public class StatusFragment extends SherlockFragment {
 	
 	public void updateEventView(boolean on) {
 		if (sApp.currentActiveSpace == null) {
-			textViewEvent.setText("You have not registered to an event");
+			textViewEvent.setText(getString(R.string.event_not_registered));
 		} else {
-			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
 			textViewEvent.setText(sApp.currentActiveSpace.getName());
+			textViewEventName.setText(sApp.currentActiveSpace.getName());
 		}
 	}
 	
@@ -155,9 +119,7 @@ public class StatusFragment extends SherlockFragment {
 	}
 
 	public void  updateTextViewEvent(String name) {
-		textViewEvent.setText(name);
-		
-		
+		textViewEvent.setText(name);		
 	}
 	
 	public void updateEventLED(boolean on) {

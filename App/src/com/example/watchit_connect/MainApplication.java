@@ -5,6 +5,8 @@ package com.example.watchit_connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.ntnu.emergencyreflect.R;
+
 import listeners.OnlineModeChangeListener;
 import listeners.WATCHiTConnectionChangeListener;
 
@@ -21,9 +23,11 @@ import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
+import activities.LoginActivity;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.SharedPreferences;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
@@ -37,9 +41,6 @@ import android.util.Log;
 public class MainApplication extends Application {
 	
     private static MainApplication sInstance;
-    
-    
-    public de.imc.mirror.sdk.DataObject lastDataObject; //hackzor sdk
     
 	public String latest;
     public ServiceManager service, locationService;
@@ -113,6 +114,44 @@ public class MainApplication extends Application {
 	public String dbName = "sdkcache2"; 
 	public DataHandler dataHandler;
 
+	
+	public boolean needsRecreation() {
+		
+		if (connectionHandler == null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void reênitializeHandlers () {
+		
+		// Get host and domain from sharedpreferences or use default values(mirror-server-ntnu) if they are not set.
+        SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        String host = settings.getString("host", getString(R.string.host));
+    	String domain = settings.getString("domain", getString(R.string.domain));
+    	String applicationId = getString(R.string.application_id);
+    	int port = settings.getInt("port", 5222); //5222 is standard port.
+    	
+    	 userName = settings.getString("username", "");
+    	 password = settings.getString("password", "");
+		
+		 //Configure connection
+		connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain,applicationId);
+        connectionConfigurationBuilder.setHost(host);
+        connectionConfigurationBuilder.setPort(port);
+        connectionConfig = connectionConfigurationBuilder.build();
+        connectionHandler = new ConnectionHandler(userName, password, connectionConfig);
+        
+        spaceHandler = new SpaceHandler(getApplicationContext(), connectionHandler, "databasett");
+	    dataHandler = new DataHandler(connectionHandler, spaceHandler);
+	    
+	    spaceHandler.setMode(Mode.ONLINE);
+	    dataHandler.setMode(Mode.ONLINE);
+        
+        
+        
+	}
+	
 	
 	public List<Space> spacesInHandler = new ArrayList<Space>();
 	public List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();
