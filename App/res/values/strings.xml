@@ -30,7 +30,7 @@
     <string name="toast_bluetooth_enabled">Bluetooth is now enabled. You can now sync with WATCHiT</string>
     <string name="toast_stopped_location_service">Stopped location service</string>
     <string name="toast_stopped_watchit_service">WATCHiT is no longer being synced.</string>
-    <string name="toast_new_data_published">Ned data published in event:</string>
+    <string name="toast_new_data_published">New data published in event:</string>
     <string name ="toast_event_first">You must register with an event first</string>
     <!-- Status strings -->
    <string name="watchit_service_started"> WATCHiT connected and running. </string>
@@ -53,9 +53,9 @@
     <string name= "cancel">Cancel</string>
     
     <!-- App (default) configurations: -->
-    <string name="host">129.241.103.122</string>
+    <string name="host">sandbox.idi.ntnu.no</string>
     <string name="port">5222</string>
-    <string name="domain">mirror-server-ntnu</string>
+    <string name="domain">sandbox</string>
     <string name="application_id">watchIt_Reflection_App</string>
     <string name ="sdkcache">sdkcache20</string>
     
