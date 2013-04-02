@@ -46,8 +46,8 @@ public class ProfileFragment extends SherlockFragment {
 		textViewUser = (TextView) myFragmentView.findViewById(R.id.textViewUser);
 		textViewUser.setText("User:  " + mApp.connectionHandler.getCurrentUser().getUsername());
 		imageAvatar = (ImageView) myFragmentView.findViewById(R.id.imageViewAvatar);
-		imageMoodBagde = (ImageView) myFragmentView.findViewById(R.id.imageViewMoodBadge);
-		imageMedalBagde = (ImageView) myFragmentView.findViewById(R.id.imageViewMedalBagde);
+		//imageMoodBagde = (ImageView) myFragmentView.findViewById(R.id.imageViewMoodBadge);
+		//imageMedalBagde = (ImageView) myFragmentView.findViewById(R.id.imageViewMedalBagde);
 		textViewBagdes = (TextView) myFragmentView.findViewById(R.id.textViewBagdes);
 		
 		return myFragmentView;
@@ -70,29 +70,8 @@ public class ProfileFragment extends SherlockFragment {
 			}
 		});
 		
-		imageMedalBagde.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "You earned a medal for rescuing someone.", Toast.LENGTH_SHORT).show();
-			}
-		});
-		imageMoodBagde.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity().getBaseContext(), "You earned a bagde for sharing happy mood :)", Toast.LENGTH_SHORT).show();
-				
-			}
-		});
 		
-		
-		boolean moodBagde = profilePrefs.getBoolean("moodBagde", false);
-		boolean medalBagde = profilePrefs.getBoolean("medalBagde", false);
-		if (moodBagde) imageMoodBagde.setVisibility(ImageView.VISIBLE);
-		if (medalBagde) imageMedalBagde.setVisibility(ImageView.VISIBLE);
-		if (moodBagde || medalBagde) textViewBagdes.setText("You have earnt theese bagdes:");
-		
-		
+
 	}
 	
 	public void updateView(int which) {

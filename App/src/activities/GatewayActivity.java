@@ -111,7 +111,13 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		bar.addTab(tab1);
 		bar.addTab(tab2);
 		
-		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
+		if (sApp.needsRecreation()) {
+			//sApp.reênitializeHandlers();
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+		}
+			
 		
 		handler = new Handler(Looper.getMainLooper());
 		sApp.dataHandler.addDataObjectListener(this);
@@ -437,9 +443,9 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	@Override
 	public void onSpaceChanged(int position) {
 		if (position == -1) return;
-		if (sApp.dataHandler.getHandledSpaces().contains(sApp.currentActiveSpace)) {
-			sApp.dataHandler.removeSpace(sApp.currentActiveSpace.getId());
-		}
+		//if (sApp.dataHandler.getHandledSpaces().contains(sApp.currentActiveSpace)) {
+			//sApp.dataHandler.removeSpace(sApp.currentActiveSpace.getId());
+		//}
 		
 		Space space = sApp.spacesInHandler.get(position);
 		sApp.currentActiveSpace = space;
@@ -453,8 +459,10 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	@Override
 	public void onDataFetchedFromSpace() {
 		Space space = sApp.currentActiveSpace;
-		
-		statusFragment.updateTextViewEvent("Members:  " + space.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+		//TODO: Too heavy, Put in statistics page in profile:
+		String toDisplay = UtilityClass.getStringDataFromDataObjects(sApp.genericSensorDataObjects);
+		statusFragment.updateTextViewEvent("Members:  " + space.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size() + 
+				"\n " );
 		
 	}
 

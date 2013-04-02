@@ -85,12 +85,18 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		
 		
 		
-		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
+		if (sApp.needsRecreation()) {
+			//sApp.reênitializeHandlers();
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		
 		
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
+				sApp.OnlineMode = false;
 				Log.d("Main",  " username: " + sApp.getUserName() + "  password: " + sApp.getPassword());
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
 			} else {
@@ -307,6 +313,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			e.printStackTrace();	
 		}
 		
+		/*
 		SharedPreferences profilePrefs = getSharedPreferences(SharedPreferencesNames.PROFILE_PREFERENCES, 0);
 		SharedPreferences.Editor ed = profilePrefs.edit();
 	
@@ -322,7 +329,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			}
 		}
 		ed.commit();
-		
+		*/
 	}
 	
 

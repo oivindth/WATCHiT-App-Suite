@@ -16,6 +16,8 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.MainApplication;
 import no.ntnu.emergencyreflect.R;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -29,12 +31,15 @@ import de.imc.mirror.sdk.DataObject;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.Space;
 import dialogs.ChooseEventDialog;
+import dialogs.ChooseMapTypeDialog;
+import dialogs.ChooseMapTypeDialog.MapTypeChangeListener;
 import dialogs.MapLayersDialog;
 import enums.SharedPreferencesNames;
 import enums.ValueType;
 import Utilities.UtilityClass;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,7 +48,7 @@ import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 
 
-public class MapActivity extends BaseActivity implements LayersChangeListener, SpaceChangeListener {
+public class MapActivity extends BaseActivity implements LayersChangeListener, SpaceChangeListener, MapTypeChangeListener {
 
 	private GoogleMap mMap;
 	private MainApplication sApp;
@@ -71,9 +76,15 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		setContentView(R.layout.map_activity);
 		sApp = MainApplication.getInstance();
 
-		if (sApp.needsRecreation()) sApp.reênitializeHandlers();
+		if (sApp.needsRecreation()) {
+			//sApp.reênitializeHandlers();
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		
 		mActivity = this;
+		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , 0 );
 		
 		markers = new ArrayList<Marker>();
 		tempDataObjects = new ArrayList<GenericSensorData>();
@@ -81,7 +92,6 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		handler = new Handler(Looper.getMainLooper());
 		handleNewDataObjects();
 		
-		//TODO: Crashing here. dataHandler is null?
 		sApp.dataHandler.addDataObjectListener(dataObjectListener);
 	}
 
@@ -90,6 +100,15 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		super.onResume();
 		setUpMapIfNeeded();	
 		mMap.setMyLocationEnabled(true);
+		
+		int checkedItem = mapPreferences.getInt("mapTypePos", 0);
+		onMapTypeChanged(checkedItem);
+	
+		
+		Location l = mMap.getMyLocation();
+		LatLng latlgn = new LatLng(44.606113, 7.844238);
+		
+		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlgn, 8));
 		
 		mapPreferences = getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , MODE_PRIVATE );
 		showMoods = mapPreferences.getBoolean("mood_layer", false);
@@ -207,6 +226,11 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		case R.id.menu_changeSpace:
 			new ChooseEventDialog().show(getSupportFragmentManager(), "chooseEventDialog");
 			return true;
+			
+		case R.id.menu_maptype_layers:
+			new ChooseMapTypeDialog().show(getSupportFragmentManager(), "chooseMapDialog");
+			return true;
+			
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -328,6 +352,16 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 	public void onDestroy () {
 		super.onDestroy();
 		sApp.dataHandler.removeDataObjectListener(dataObjectListener);	
+	}
+
+	@Override
+	public void onMapTypeChanged(int which) {
+		
+		if (which == 0) mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+		if (which == 1) mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		if (which == 2) mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+		if (which == 3) mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		
 	}
 	
 }

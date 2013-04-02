@@ -3,6 +3,10 @@ package Utilities;
 import java.util.List;
 import java.util.Set;
 
+import enums.ValueType;
+
+import parsing.GenericSensorData;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -71,6 +75,21 @@ public class UtilityClass {
 	}
 	
 	
-	 
+	
+	public static String getStringDataFromDataObjects (List<GenericSensorData> datas) {
+		int moods= 0;
+		int persons =0;
+		int notes= 0;
+		int me=0;
+		for (GenericSensorData genericSensorData : datas) {
+			ValueType valueType = ValueType.getValue(genericSensorData.getValue().getText());
+			if (valueType == ValueType.MOOD_HAPPY || valueType == ValueType.MOOD_NEUTRAL || valueType == ValueType.MOOD_SAD) moods++;
+			if (valueType == ValueType.PERSON) persons++;
+			if (valueType == ValueType.NOTES) notes++;
+		}
+		
+		String s = "Data size: " + datas.size() + "\n moods registered: " + moods + "\n persons found: " + persons + "\n Notes: " + notes;
+		return s;
+	}
 	
 }

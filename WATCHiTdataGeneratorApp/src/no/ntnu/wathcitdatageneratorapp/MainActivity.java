@@ -33,7 +33,6 @@ import dialogs.ChooseEventDialog.ChooseEventDialogListener;
 import dialogs.NoteDialog.NoteDialogListener;
 import dialogs.ShareDialog.ShareDialogListener;
 
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -68,6 +67,8 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	private ShareDialog dialog;
 	private NoteDialog noteDialog;
 
+	private UserLoginTask mAuthTask = null;
+	
 	private Double latitude, longitude;
 	
 	private String host, domain, applicationId, username, password;
@@ -148,7 +149,10 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
     	    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()
     	                    || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
     	    	
-    	    	 new UserLoginTask().execute();
+    	    	 //new UserLoginTask().execute();
+    	    	 if (mAuthTask != null) return;
+    		        mAuthTask = new UserLoginTask();
+    				mAuthTask.execute((Void) null);
     	    } else {
     	    	new GetSpacesTask().execute();
     	    }
@@ -162,7 +166,9 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			provider =
 			        mLocationManager.getProvider(LocationManager.GPS_PROVIDER);
 			
+			
 			if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				Log.d("network", "network enabled");
 				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, listener);
 			}
 			
@@ -337,7 +343,12 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	        spaceHandler = new SpaceHandler(getBaseContext(), connectionHandler, dbName);
 	        dataHandler = new DataHandler(connectionHandler, spaceHandler);
 	        
-	        new UserLoginTask().execute();
+	        
+	        if (mAuthTask != null) return;
+	        mAuthTask = new UserLoginTask();
+			mAuthTask.execute((Void) null);
+	        
+	        //new UserLoginTask().execute();
 	}
 	
 	/**
@@ -363,6 +374,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
+			mAuthTask = null;
 			dismissProgress();
 
 			if (success) {
@@ -371,16 +383,31 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				dataHandler.setMode(Mode.ONLINE);
 				new GetSpacesTask().execute();
 			} else {
-				//Toast.makeText(getBaseContext(), "Something went wrong. Is the server settings and/or username/password correct?/Are you connected to the internet?", Toast.LENGTH_LONG).show();
+				Toast.makeText(getBaseContext(), "Failed to connect. Check server settings", Toast.LENGTH_SHORT).show();
 				new GetSpacesTask().execute();
 			}
 		}
+		
+
+			@Override
+			protected void onCancelled() {
+				mAuthTask = null;
+				dismissProgress();
+				Toast.makeText(getBaseContext(), "Failed to connect. Check server settings", Toast.LENGTH_SHORT).show();
+			}
+		
 
 	}
 	   public void showProgress(String title, String msg) {
 	    	if (mProgressDialog != null && mProgressDialog.isShowing())
 	    		            dismissProgress();
-	    		        mProgressDialog = ProgressDialog.show(this, title, msg);
+	    		        mProgressDialog =  new ProgressDialog(this);
+	    		        mProgressDialog.setTitle(title);
+	    		        mProgressDialog.setMessage(msg);
+	    		        mProgressDialog.setCancelable(true);
+	    		        mProgressDialog.show();
+	    		        
+	    		        //ProgressDialog.show(this, title, msg).setCancelable(true);
 	    		    }
 	    public void dismissProgress() {
 	        if (mProgressDialog != null) {
@@ -468,7 +495,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 				Log.d("publish", "success");
 				} else {
 				Log.d("ERROR:", "Something went wrong");
-				Toast.makeText(getBaseContext(), "Failed to send data. Resending..", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "Failed to send data. Try again..", Toast.LENGTH_SHORT).show();
 				//mActivity.showToast("Failed to publish dataobject.....");
 				//new PublishDataTask(mDataObject, mSpaceId).execute();
 				}

@@ -41,7 +41,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Bagdes:"
+        android:text="My Stats:"
         style="@style/textHoloBlueLight"
         android:layout_marginTop="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -57,7 +57,7 @@
         android:id="@+id/textViewBagdes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You have not earned any bagdes yet..:"
+        android:text=".:"
         android:textAppearance="?android:attr/textAppearanceSmall" />
         
 
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp" >
-	         
+	         <!--  
            <ImageView
                android:id="@+id/imageViewMoodBadge"
                android:layout_width="88dp"
@@ -90,9 +90,30 @@
                android:layout_height="match_parent"
                android:visibility="invisible"
                android:src="@drawable/mood_badge" />
+-->
+
+                    
 
     </LinearLayout> 
            
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewMoods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textViewPersons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textViewNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
     
 </LinearLayout>

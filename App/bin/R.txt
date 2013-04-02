@@ -499,10 +499,7 @@ int id imageViewAvatar 0x7f070049
 int id imageViewEventLED 0x7f070053
 int id imageViewLocatiohInfo 0x7f070042
 int id imageViewLocatiohLED 0x7f070051
-int id imageViewMedalBagde 0x7f07004c
 int id imageViewMood 0x7f070058
-int id imageViewMoodBadge 0x7f07004b
-int id imageViewNewestBadge 0x7f07004d
 int id imageViewOnlineInfo 0x7f070040
 int id imageViewOnlineLED 0x7f070050
 int id imageViewWatchitInfo 0x7f070045
@@ -515,8 +512,9 @@ int id login_status 0x7f07002c
 int id login_status_message 0x7f07002d
 int id map 0x7f070057
 int id menu_changeSpace 0x7f070066
-int id menu_layers 0x7f07006a
+int id menu_layers 0x7f07006b
 int id menu_logout 0x7f070069
+int id menu_maptype_layers 0x7f07006a
 int id menu_server_settings 0x7f070068
 int id menu_sync 0x7f070067
 int id none 0x7f070010
@@ -549,6 +547,9 @@ int id textViewLatest 0x7f07004e
 int id textViewLatestInfo 0x7f07004f
 int id textViewMood 0x7f07005c
 int id textViewMoodActual 0x7f07005d
+int id textViewMoods 0x7f07004b
+int id textViewNotes 0x7f07004d
+int id textViewPersons 0x7f07004c
 int id textViewStatus 0x7f07003e
 int id textViewTime 0x7f07005a
 int id textViewTimeActual 0x7f07005b

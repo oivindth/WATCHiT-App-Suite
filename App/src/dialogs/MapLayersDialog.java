@@ -66,7 +66,7 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 			}
 		});      
 
-		builder.setTitle("Layer");
+		builder.setTitle("DataPoints");
 		return builder.create();
 
 	}

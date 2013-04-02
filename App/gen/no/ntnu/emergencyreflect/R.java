@@ -1292,10 +1292,7 @@ containing a value of this type.
         public static final int imageViewEventLED=0x7f070053;
         public static final int imageViewLocatiohInfo=0x7f070042;
         public static final int imageViewLocatiohLED=0x7f070051;
-        public static final int imageViewMedalBagde=0x7f07004c;
         public static final int imageViewMood=0x7f070058;
-        public static final int imageViewMoodBadge=0x7f07004b;
-        public static final int imageViewNewestBadge=0x7f07004d;
         public static final int imageViewOnlineInfo=0x7f070040;
         public static final int imageViewOnlineLED=0x7f070050;
         public static final int imageViewWatchitInfo=0x7f070045;
@@ -1308,8 +1305,9 @@ containing a value of this type.
         public static final int login_status_message=0x7f07002d;
         public static final int map=0x7f070057;
         public static final int menu_changeSpace=0x7f070066;
-        public static final int menu_layers=0x7f07006a;
+        public static final int menu_layers=0x7f07006b;
         public static final int menu_logout=0x7f070069;
+        public static final int menu_maptype_layers=0x7f07006a;
         public static final int menu_server_settings=0x7f070068;
         public static final int menu_sync=0x7f070067;
         public static final int none=0x7f070010;
@@ -1342,6 +1340,9 @@ containing a value of this type.
         public static final int textViewLatestInfo=0x7f07004f;
         public static final int textViewMood=0x7f07005c;
         public static final int textViewMoodActual=0x7f07005d;
+        public static final int textViewMoods=0x7f07004b;
+        public static final int textViewNotes=0x7f07004d;
+        public static final int textViewPersons=0x7f07004c;
         public static final int textViewStatus=0x7f07003e;
         public static final int textViewTime=0x7f07005a;
         public static final int textViewTimeActual=0x7f07005b;

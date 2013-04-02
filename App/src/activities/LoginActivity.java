@@ -372,7 +372,7 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 		  app.connectionConfigurationBuilder = connectionConfigurationBuilder;
 		  app.connectionConfig = connectionConfig;
 		  app.connectionHandler = connectionHandler;
-		  app.spaceHandler = new SpaceHandler(getApplicationContext(), app.connectionHandler, "databasett");
+		  app.spaceHandler = new SpaceHandler(getApplicationContext(), app.connectionHandler, getString(R.string.sdkcache));
 	      app.dataHandler = new DataHandler(app.connectionHandler, app.spaceHandler);
 		  
 		  if (connected) {

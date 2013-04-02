@@ -57,7 +57,7 @@
     <string name="port">5222</string>
     <string name="domain">mirror-server-ntnu</string>
     <string name="application_id">watchIt_Reflection_App</string>
-    <string name ="sdkcache">emergencyreflectcache</string>
+    <string name ="sdkcache">sdkcache20</string>
     
 
 

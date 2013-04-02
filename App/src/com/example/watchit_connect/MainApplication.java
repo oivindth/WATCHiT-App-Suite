@@ -111,7 +111,7 @@ public class MainApplication extends Application {
 	public ConnectionConfiguration connectionConfig; 
 	public ConnectionHandler connectionHandler; 
 	public SpaceHandler spaceHandler; 
-	public String dbName = "sdkcache2"; 
+	public String dbName = "sdkcache20"; 
 	public DataHandler dataHandler;
 
 	
