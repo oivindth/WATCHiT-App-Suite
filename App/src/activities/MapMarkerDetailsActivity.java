@@ -1,16 +1,13 @@
 package activities;
 
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import fragments.MoodDetailsFragment;
 import fragments.NoteDetailsFragment;
 import fragments.PersonDetailsFragment;
 import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 public class MapMarkerDetailsActivity extends BaseActivity {
@@ -22,7 +19,6 @@ public class MapMarkerDetailsActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.person_found_activity);
-		
 		
 		Intent intent = getIntent();
 		Bundle b = new Bundle();

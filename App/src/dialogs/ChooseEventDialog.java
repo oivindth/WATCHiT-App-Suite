@@ -73,7 +73,7 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 		});
 		
 		
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton( getString(R.string.ok), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
@@ -83,12 +83,12 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 		});
 
 
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(getString( R.string.cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 			}
 		});      
 
-		builder.setTitle("Select event");
+		builder.setTitle(getString(R.string.select_event));
 		return builder.create();
 
 	}

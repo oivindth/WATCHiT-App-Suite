@@ -3,25 +3,15 @@ package dialogs;
 import java.util.ArrayList;
 
 import no.ntnu.emergencyreflect.R;
-import activities.LoginActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListAdapter;
-import asynctasks.ConnectToBluetoothTask;
-
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.example.watchit_connect.MainApplication;
-
-import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
 
 public class ChooseBlueToothDeviceDialog extends SherlockDialogFragment {
 	
@@ -51,14 +41,13 @@ public class ChooseBlueToothDeviceDialog extends SherlockDialogFragment {
 		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Log.d("frack", "does it work?");
 				mListener.blueToothDeviceSelected(which);
 			}
 		});
 	    
-	    builder.setTitle("Choose paired device: ");
+	    builder.setTitle(getString(R.string.bluetooth_choose_paired_devices));
 	  
-	           builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+	           builder.setPositiveButton(getString(R.string.search), new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
 	                   // Update new server info
@@ -73,7 +62,7 @@ public class ChooseBlueToothDeviceDialog extends SherlockDialogFragment {
 	               }
 	           });      
 	    
-	    builder.setTitle("Bluetooth");
+	    builder.setTitle(getString(R.string.bluetooth));
 	    
 	    return builder.create();
 	

@@ -17,7 +17,6 @@ import de.imc.mirror.sdk.android.SpaceHandler;
 import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
 import dialogs.ServerSettingsDialog;
 import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
-import Utilities.UtilityClass;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -27,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -114,9 +112,9 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 	    	mUserNameView.setText(username);
 	    	mPasswordView.setText(password);
 	    	
-	    	Log.d("LoginActivity ", "host " + host);
-	    	Log.d("LoginActivity ", "port " + port);
-	    	Log.d("LoginActivity ", "domain " + domain);
+	    	//Log.d("LoginActivity ", "host " + host);
+	    	//Log.d("LoginActivity ", "port " + port);
+	    	//Log.d("LoginActivity ", "domain " + domain);
 	    	
 	    	hasLoggedIn =   settings.getBoolean("hasLoggedIn", false);
 	    	if(hasLoggedIn) {
@@ -305,10 +303,9 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 					username = mUserName;
 					password = mPassword;
 				}
-					
-				
-			Log.d("LoginActivity", "username: " + username);
-			Log.d("LoginActivity", " password : " + password);
+
+			//Log.d("LoginActivity", "username: " + username);
+			//Log.d("LoginActivity", " password : " + password);
 				
 		        //Configure connection
 				connectionConfigurationBuilder = new ConnectionConfigurationBuilder(domain,applicationId);

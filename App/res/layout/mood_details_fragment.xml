@@ -8,7 +8,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mood"
+        android:text="@string/mood"
         android:textAppearance="?android:attr/textAppearanceLarge"
         style="@style/textHoloBlueLight" />
 
@@ -27,13 +27,13 @@
         android:id="@+id/textViewUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User:  "
+        android:text="@string/user"
         android:textAppearance="?android:attr/textAppearanceMedium" />
             <TextView
         android:id="@+id/textViewUserActual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text=" "
         android:textAppearance="?android:attr/textAppearanceMedium" />
             
     </LinearLayout>
@@ -47,7 +47,7 @@
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time:  "
+        android:text="@string/time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
            
          <TextView
@@ -68,7 +68,7 @@
         android:id="@+id/textViewMood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mood:  "
+        android:text="@string/mood"
         android:textAppearance="?android:attr/textAppearanceMedium" />
         
          <TextView

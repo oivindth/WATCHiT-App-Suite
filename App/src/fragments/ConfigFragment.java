@@ -8,18 +8,13 @@ import no.ntnu.emergencyreflect.R;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnDragListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 
 public class ConfigFragment extends SherlockFragment implements OnCheckedChangeListener, OnClickListener  {
 	

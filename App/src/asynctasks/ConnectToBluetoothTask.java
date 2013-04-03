@@ -3,6 +3,8 @@ package asynctasks;
 import java.io.IOException;
 import java.util.UUID;
 
+import no.ntnu.emergencyreflect.R;
+
 import service.WATCHiTService;
 
 import activities.BaseActivity;
@@ -11,7 +13,6 @@ import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 
 import com.example.watchit_connect.MainApplication;
 
@@ -27,7 +28,6 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 	private MainApplication sApp;
 	private int position;
 	
-	
 	private BluetoothAdapter btAdapter;
 	
 	private final static UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
@@ -36,27 +36,16 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 		mActivity = activity;
 		position = blueToothDeviceposition;
 		sApp = MainApplication.getInstance();
-		Log.d("Bt", "constr");
 	}
-	
 	@Override
 	protected void onPreExecute() {
-		
 		super.onPreExecute();
-		Log.d("Bt", "pre");
-		mActivity.showProgress("Bluetooth", "establishing connection...");
+		mActivity.showProgress(mActivity.getString(R.string.bluetooth), mActivity.getString( R.string.bluetooth_connecting));
 	}
-	
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
-		//checkBTState();
-		Log.d("Bt", "in background");
-		Log.d("WATCHITSERVICE", ".... try connect...");
-
 		BluetoothDevice device = MainApplication.getInstance().bluetoothDevices.get(position);
-
-
 		// Two things are needed to make a connection:
 		//   A MAC address, which we got above.
 		//   A Service ID or UUID.  In this case we are using the
@@ -73,11 +62,10 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 		btAdapter.cancelDiscovery();
 
 		// Establish the connection.  This will block until it connects.
-		Log.d("WATCHITSERVICE ","...Connecting...");
 		try {
 			sApp.btSocket.connect();
 			// Create a data stream so we can talk to watchit(bluetooth)
-			Log.d("WATCHITSERVICE", "...Create Socket...");
+			//Log.d("WATCHITSERVICE", "...Create Socket...");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -107,13 +95,13 @@ public class ConnectToBluetoothTask extends AsyncTask<Void, Void, Boolean> {
 			b.putInt("btdevicepos", position);
 			message.setData(b);
 			sApp.sendMessageToService(message);
-			mActivity.showToast("Now waiting for bluetooth data");
+			mActivity.showToast(mActivity.getString(R.string.bluetooth_ready_data));
 			sApp.isWATChiTOn = true;
 			sApp.broadcastWATCHiTConnectionChange(true);
 		} else {
 			sApp.isWATChiTOn = false;
 			sApp.broadcastWATCHiTConnectionChange(false);
-			mActivity.showToast("Failed to connect...");
+			mActivity.showToast(mActivity.getString(R.string.bluetooth_connection_failed));
 			
 			
 		}

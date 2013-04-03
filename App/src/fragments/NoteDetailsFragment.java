@@ -19,13 +19,10 @@ public class NoteDetailsFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		Bundle b = this.getArguments();
-		
 		user = b.getString("user");
 		time = b.getString("time");
 		value = b.getString("value");
-		
 	}
 	
 	@Override

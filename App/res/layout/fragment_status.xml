@@ -22,7 +22,7 @@
             style="@style/textHoloBlueLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Latest:"
+            android:text="@string/latest"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         
         
@@ -30,7 +30,7 @@
         android:id="@+id/textViewLatestInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No News..."
+        android:text="@string/no_news"
         android:layout_marginTop="5dp" />
         
     </LinearLayout>
@@ -53,7 +53,7 @@
                 style="@style/textHoloBlueLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status:"
+                android:text="@string/status"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
@@ -73,7 +73,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Online mode"
+                    android:text="@string/online_mode"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
         
         </LinearLayout>
@@ -94,7 +94,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location Mode:"
+                    android:text="@string/location_data"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
       
         </LinearLayout>
@@ -115,7 +115,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="WATCHiT status"
+                    android:text="WATCHiT"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             
         </LinearLayout>
@@ -136,7 +136,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Event:"
+                    android:text="@string/menu_event"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             
             <TextView
@@ -162,7 +162,7 @@
             android:id="@+id/textViewEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Event:"
+            android:text="@string/menu_event"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#33B5E5" />
     </LinearLayout>
@@ -172,7 +172,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Event here"
+        android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

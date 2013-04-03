@@ -37,11 +37,11 @@ public class MoodDetailsFragment extends SherlockFragment {
 
 		View myFragmentView = inflater.inflate(R.layout.mood_details_fragment, container, false);
 		userNameTextView = (TextView) myFragmentView.findViewById(R.id.textViewUserActual);
-		userNameTextView.setText(user);
+		userNameTextView.setText(" :" + user);
 		timeTextView= (TextView) myFragmentView.findViewById(R.id.textViewTimeActual);
-		timeTextView.setText(time);
+		timeTextView.setText(" :" +time);
 		valueTextView = (TextView) myFragmentView.findViewById(R.id.textViewMoodActual);
-		valueTextView.setText(value);
+		valueTextView.setText(" :" + value);
 		
 		moodImage = (ImageView) myFragmentView.findViewById(R.id.imageViewMood);
 		moodImage.setImageResource(getImageResource(value));

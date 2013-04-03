@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -55,8 +54,6 @@ public class ServerSettingsDialog extends SherlockDialogFragment {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
 	                   // Update new server info
-	            	   
-	            	   Log.d("dialog", portView.getText().toString());
 	            		String stringport = portView.getText().toString();
 	             	   int portint = Integer.parseInt(stringport);
 	             	   SharedPreferences settings = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, 0);
@@ -76,7 +73,7 @@ public class ServerSettingsDialog extends SherlockDialogFragment {
 	               }
 	           });      
 	    
-	    builder.setTitle("Server");
+	    builder.setTitle(getString(R.string.server));
 	    
 	    return builder.create();
 	

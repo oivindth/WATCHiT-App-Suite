@@ -2,18 +2,16 @@ package asynctasks;
 
 import java.util.ArrayList;
 
+import no.ntnu.emergencyreflect.R;
+
 import listeners.SpaceChangeListener;
 
 import parsing.Parser;
 
 import com.example.watchit_connect.MainApplication;
 
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
-
 import activities.BaseActivity;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -25,26 +23,19 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 	private MainApplication app;
 	
 	public GetDataFromSpaceTask(BaseActivity activity, String spaceId) {
-		Log.d("GETDATAFROMSPACETASK", "constructor");
-		
 		mSpaceId = spaceId;
 		mActivity = activity;
 		app = MainApplication.getInstance();
-		
 		spacChangeListener = (SpaceChangeListener) activity;
-		
-		Log.d("spaceid: ", mSpaceId);
-		Log.d("mactivity", " " + mActivity);
+		//Log.d("spaceid: ", mSpaceId);
+		//Log.d("mactivity", " " + mActivity);
 	}
 		@Override
 		protected void onPreExecute() {
-			mActivity.showProgress("Sync", "Syncing....");
+			mActivity.showProgress(mActivity.getString(R.string.sync), mActivity.getString(R.string.syncing));
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Log.d("GETDATAFROMSPACETASK", "do in background");
-
-			
 			try {
 				//app.dataHandler.setMode(Mode.ONLINE);
 				app.dataHandler.registerSpace(mSpaceId);
@@ -60,14 +51,14 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 			mActivity.dismissProgress();
 			if (success) {
 				app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
-				Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
-				Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
-				Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
+				//Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
+				//Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
+				//Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
 				spacChangeListener.onDataFetchedFromSpace();
 			} else {
-				mActivity.showToast("failed to fetch data. Try again!");
+				mActivity.showToast(mActivity.getString(R.string.data_sync_failed));
 				//new GetDataFromSpaceTask(mActivity, mSpaceId);
-				Log.d("GETDATATASK", "FAIL");
+				//Log.d("GETDATATASK", "FAIL");
 			}
 		}
 }

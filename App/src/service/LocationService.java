@@ -7,7 +7,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 
 public class LocationService extends AbstractService {
 
@@ -21,7 +20,7 @@ public class LocationService extends AbstractService {
 	
 	@Override
 	public void onStartService() {
-		Log.d("LocationService", "Location Service started....");
+		//Log.d("LocationService", "Location Service started....");
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		
 		
@@ -68,8 +67,6 @@ public class LocationService extends AbstractService {
 	    		location = currentBestLocation;
 	    	}
 	    	
-	    	Log.d("LocationService", "Location: " + " latitude: " + location.getLatitude() + " longitude: " + location.getLongitude());
-	    	
 	    	Bundle b = new Bundle();
 			b.putDouble("longitude",  location.getLongitude());
 			b.putDouble("latitude", location.getLatitude());
@@ -101,7 +98,7 @@ public class LocationService extends AbstractService {
 	};
 
 	
-	private static final int ONE_MINUTE = 1000 * 60 * 1;
+	private static final int ONE_MINUTE = 1000 * 30 * 1;
 
 	/** Determines whether one Location reading is better than the current Location fix
 	  * @param location  The new Location that you want to evaluate

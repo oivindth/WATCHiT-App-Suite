@@ -1,8 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    
+
+    <!-- Main Strings -->    
+    <string name="app_name">Emergency Reflect</string>
+    <string name ="gateway_name">Porta</string> 
+    <string name = "dashboard_name">Cruscotto</string>
+    <string name ="map_name">Mappa</string>
+
     <string name="title_activity_main">Cruscotto</string>
     <string name ="title_activity_settings">Impostare</string>
+    <string name ="title_activity_map">Mappa app</string>
+    <string name= "title_activity_event">Eventi</string>
+    <string name = "title_activity_config">Configurare</string>
+    <string name ="title_checklist">Lista di controllo</string>
+    
+    <string name ="checklist_info">Rivedere la procedura da eseguire quando infortunato si trova</string>
+    <!-- Checklist -->
+    <string name ="checklist_step_1">Scena sondaggio</string>
+    <string name ="checklist_step_2">valutazione primaria</string>
+    <string name ="checklist_step_3">Indagine secondaria</string>
+    <string name ="checklist_step_4">Casualty Cura corso</string>
+    
+    <string name="checklist_step_1_elaborated">Prendi il controllo della scena e scoprire cosa è successo prima di aiutare le vittime. </string>
+    <string name ="checklist_step_2_elaborated">Valutare ogni sinistro per ferite mortali o malattie e dare salvavita di primo soccorso.</string>
+    <string name ="checklist_step_3_elaborated">Durante questa fase il soccorritore esegue un controllo più approfondito per gli infortuni e le malattie che non sono stati rivelati nel sondaggio primario.</string>
+    <string name="checklist_step_4_elaborated">Resta con la vittima fino a quando il medico arriva e prende il sopravvento.</string>
+    
+    <!-- TABS -->
+    <string name ="gateway_tab_status">Stato</string>
+    <string name ="gateway_tab_config">Impostare</string>
+    <string name="main_activity_tab_dasboard">Cruscotto</string>
+    <string name="main_ativity_tab_profile">Profilo</string>
+    <!-- Progress dialogs -->
+    <string name ="progress_title_bluetooth">Bluetooth</string>
+    <string name="progress_message_bluetooth">scansione per dispositivi</string>
+    <!-- Dialogs -->
+    <string name ="choose_device_dialog_title">Scegli dispositivo</string>
+    <!-- Toasts -->
+    <string name="toast_enable_wireless">Abilita impostazioni wireless in impostazioni del telefono</string>
+    <string name="toast_bluetooth_enabled">Bluetooth è ora abilitata. È ora possibile eseguire la sincronizzazione con watchit</string>
+    <string name="toast_stopped_location_service">Centro di assistenza Arrestato</string>
+    <string name="toast_stopped_watchit_service">Watchit non è più in fase di sincronizzazione.</string>
+    <string name="toast_new_data_published">I nuovi dati pubblicati nel caso:</string>
+    <string name ="toast_event_first">E \'necessario registrarsi con un primo evento</string>
+    <string name="toast_watchit_connection_lost">Perdita di connessione con watchit</string>
+    
+    <!-- Status strings -->
+   <string name="watchit_service_started"> Watchit collegato e funzionante. </string>
+   <string name="watchit_service_stopped"> Watchit più connesso.</string>
+   <string name="server_sync"> La sincronizzazione con il server .. </string>
+   <string name="status">Stato</string>
+   <string name ="save">Salvare</string>
+   <string name="event_not_registered">Nessun evento scelto</string>
+   <string name="log_in_failed">Impossibile connettersi</string>
+   <string name="sync">Sincronizzare</string>
+   <string name="syncing">sincronizzazione</string>
+   <string name="data_sync_failed">Impossibile sincronizzare i dati. Prova ancora!</string>
+   
+   <!-- Menu strings -->
+    <string name="menu_settings">Impostazioni</string>
+    <string name="menu_spaces">Spazi</string>
+    <string name="menu_sync">Sincronizzazione</string>
+    <string name="menu_config">Configurazione</string>
+    <string name="menu_home">Casa</string>
+    <string name="menu_map">Mappa</string>
+    <string name="menu_dashboard">Cruscotto</string>
+    <string name="menu_logout">Cambia utente/Server</string>
+    <string name="menu_event">Evento</string>
+    <string name= "menu_change_event">Cambiare Evento</string>
+    <string name="menu_map_type_layer">Tipo de mappa</string>
+    <string name ="menu_map_layers">Punti dati</string>
+    
+    <string name= "cancel">Annullare</string>
+    
+    <!-- App (default) configurations: -->
+    <string name="host">sandbox.idi.ntnu.no</string>
+    <string name="port">5222</string>
+    <string name="domain">sandbox</string>
+    <string name="application_id">watchIt_Reflection_App</string>
+    <string name ="sdkcache">sdkcache20</string>
+    
+	<!-- General strings -->
+    <string name="online_mode">Modalità online</string>
+    <string name="location_data">Posizione dei dati</string>
+    <string name="location">Posizione</string>
+    <string name="location_enable_sensors">Abilita sensori di posizione. GPS è più preciso</string>
+    <string name="user">Utente</string>
+    <string name="my_stats">le mie statistiche</string>
+    <string name="internet">Internet</string>
+    <string name="mood">Stato d\'animo</string>
+    <string name="time">Tempo</string>
+    <string name="notes">Note</string>
+    <string name="person_rescued">Persona soccorsa</string>
+    <string name="checklist">lista di controllo</string>
+    <string name="server">Server</string>
+    <string name="event">Evento</string>
+    
+    <!-- Gateway activity -->
+    <string name="members">Membri</string>
+    <string name="data">Dati</string>
+    <string name="name">Nome</string>
+    <string name="adress">Indirizzo</string>
+    <string name="location_enabled">Posizione abilitata ..</string>
+    <string name="register_event_first">Si prega di registrarsi con un primo evento</string>
+    
+    <string name ="user_logged_in">Accesso effettuato</string>
+    
+    <string name="ok">Bene</string>
+    <string name="search">Ricerca</string>
+    
+    <!-- fragment status -->
+    <string name="latest">Ultimo</string>
+    <string name="no_news">nessuna notizia</string>
+    
+    
+    <string name="select_event">Selezionare l\'evento</string>
+    
+    
+	<!-- Bluetooth -->
+	<string name="bluetooth">Bluetooth</string>
+	<string name="bluetooth_connecting">Collegamento bluetooth</string>
+	<string name="bluetooth_ready_data">Pronti per receieve dati</string>
+	<string name="bluetooth_connection_failed">Impossibile connettersi</string>
+    <string name="bluetooth_choose_paired_devices">Scegliere dispositivo associato o la ricerca</string>
+    
+    <!-- MapType -->
+    <string name="map_type">Tipo di mappa</string>
+    <string name="map_type_normal">Normale</string>
+    <string name ="map_type_sattelite">Satellite</string>
+    <string name= "map_type_terrain">Terreno</string>
+    <string name="map_type_hybrid">Ibrido</string>
+    
+    <!-- MapLayers DataPoints -->
+    <string name="datapoints">Punti dati</string>
+    <string name="persons">Persone</string>
+    <string name="moods">Capricci</string>
+    <string name ="only_me">Solo io</string>
+    
+    <!-- Stats -->
+    <string name ="moods">Capricci</string>
+    <string name ="persons_i_rescued">Persone I salvati</string>
+    
     
 </resources>

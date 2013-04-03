@@ -7,17 +7,10 @@ import java.util.UUID;
 
 import com.example.watchit_connect.MainApplication;
 import no.ntnu.emergencyreflect.R;
-import activities.MainActivity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
+
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 
 /**
  * Service class for communicating with WATCHiT. Runs a thread so it can always receieve data when paired and connected to WATCHiT device.
@@ -51,13 +44,12 @@ public class WATCHiTService extends AbstractService {
 
 	@Override
 	public void onStartService() {
-		Log.i("WATCHiTService", "We are now in service");
 		sApp = MainApplication.getInstance();
 	}
 
 	@Override
 	public void onStopService() {
-		Log.d("TAG", "...In onPause()...");
+		//Log.d("TAG", "...In onPause()...");
 		try     {
 			sApp.btSocket.close();
 		} catch (Exception e2) {
@@ -74,14 +66,14 @@ public class WATCHiTService extends AbstractService {
 	 */
 	public void onReceiveMessage(Message msg) {
 		if (msg.what == MSG_SET_STRING_VALUE) {
-			Log.d("WATCHiTService", " writing data to watchit. Data: " + msg.getData().getString("watchitdata"));
+			//Log.d("WATCHiTService", " writing data to watchit. Data: " + msg.getData().getString("watchitdata"));
 			mConnectedThread.write(msg.getData().getString("watchitdata"));
 		}
 		
 		if (msg.what == START_CONNECT_THREAD) {
 			mConnectedThread = new ConnectedThread(sApp.btSocket);
 			mConnectedThread.start();
-			Log.d("WATCHITSERVICE", "Thread started.");
+			//Log.d("WATCHITSERVICE", "Thread started.");
 		}
 		
 	}
@@ -108,7 +100,7 @@ public class WATCHiTService extends AbstractService {
 
 		
 		public ConnectedThread(BluetoothSocket socket) {
-			Log.d("ConnectTHREAD", "In thread");
+			//Log.d("ConnectTHREAD", "In thread");
 			mmSocket = socket;
 			InputStream tmpIn = null;
 			OutputStream tmpOut = null;
@@ -131,22 +123,22 @@ public class WATCHiTService extends AbstractService {
 			// Keep listening to the InputStream until an exception occurs
 			while (true) {
 
-				Log.d("in loop", "waiting for data");
+				//Log.d("in loop", "waiting for data");
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-					Log.d("Service.Thread.Run(): ", " bytes:  " + bytes);
+					//Log.d("Service.Thread.Run(): ", " bytes:  " + bytes);
 					
 					String strIncom = new String(buffer, 0, bytes);                 // create string from bytes array
 					sb.append(strIncom); 
 					//textView.setText(sb.toString());
 					//sb.delete(0, sb.length());
-					Log.d("watchit thread: ", "data: " + strIncom);
+					//Log.d("watchit thread: ", "data: " + strIncom);
 					int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
 					if (endOfLineIndex > 0) {                                            // if end-of-line,
 						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
 						sb.delete(0, sb.length());  //clear
-						Log.d("low level:  ", sbprint);
+						//Log.d("low level:  ", sbprint);
 						
 						//Send data to Activity
 						Bundle b = new Bundle();
@@ -161,7 +153,7 @@ public class WATCHiTService extends AbstractService {
 					e.printStackTrace();
 					Message messageToActivity = Message.obtain(null, MSG_CONNECTION_LOST);
 					send(messageToActivity);
-					Log.d("thread RUN", "error:  " + e);
+					//Log.d("thread RUN", "error:  " + e);
 					break;
 				}
 			}
@@ -170,12 +162,12 @@ public class WATCHiTService extends AbstractService {
 		 *  Send data to WATChiT
 		 **/
 		public void write(String message) {
-			Log.d("TAG", "...Data to send: " + message + "...");
+			//Log.d("TAG", "...Data to send: " + message + "...");
 			byte[] msgBuffer = message.getBytes();
 			try {
 				mmOutStream.write(msgBuffer);
 			} catch (IOException e) {
-				Log.d("TAG", "...Error data send: " + e.getMessage() + "...");     
+				//Log.d("TAG", "...Error data send: " + e.getMessage() + "...");     
 			}
 		}
 

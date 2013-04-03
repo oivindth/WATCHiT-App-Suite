@@ -1,35 +1,24 @@
 package fragments;
 
-import org.jraf.android.backport.switchwidget.Switch;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.example.watchit_connect.MainApplication;
-
 import no.ntnu.emergencyreflect.R;
 import no.ntnu.emergencyreflect.R.drawable;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class StatusFragment extends SherlockFragment {
 	
 	private TextView textViewEvent, textViewEventName, textViewLatest, textViewLEDEvent;
-	private MainApplication sApp;
-	
-
+	private MainApplication sApp;	
 	private ImageView onlineLED, watchitLED, locationLED, eventLED;
-	
 
-	
 	@Override
 	/**
 	 * The system calls this when creating the fragment. Within your implementation, 
@@ -38,7 +27,6 @@ public class StatusFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sApp = MainApplication.getInstance();
-		
 	}
 	
 	@Override
@@ -71,9 +59,9 @@ public class StatusFragment extends SherlockFragment {
 		} else {
 			Log.d("currentspace", "currentspace: " + sApp.currentActiveSpace);
 			textViewEvent.setText(sApp.currentActiveSpace.getName());
-			textViewLEDEvent.setText(sApp.currentActiveSpace.getName());
+			textViewLEDEvent.setText(": " + sApp.currentActiveSpace.getName());
 			textViewEventName.setText(sApp.currentActiveSpace.getName());
-			textViewEvent.setText("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+			textViewEvent.setText(getString(R.string.members) + "  :" + sApp.currentActiveSpace.getMembers().size() + "\n" +getString(R.string.data) + "  :" + sApp.genericSensorDataObjects.size());
 			
 		}
 		
@@ -127,7 +115,7 @@ public class StatusFragment extends SherlockFragment {
 	}
 
 	public void updateTextViewEventLed(String name) {
-		textViewLEDEvent.setText(name);
+		textViewLEDEvent.setText(": " +name);
 		
 	}
 

@@ -5,7 +5,9 @@
   android:layout_height="match_parent"
   class="com.google.android.gms.maps.SupportMapFragment"
 
-  map:cameraZoom="13"
+  map:cameraTargetLat="44.606113"
+  map:cameraTargetLng="7.844238"
+  map:cameraZoom="8"
   map:mapType="normal"
   map:uiCompass="false"
   map:uiRotateGestures="true"

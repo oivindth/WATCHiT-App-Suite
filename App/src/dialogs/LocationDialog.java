@@ -6,8 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
+
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
@@ -29,19 +28,19 @@ private LocationDialogListener mListener;
 
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());		
-			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					mListener.onOKChooseNetworkForLocationClick(); 
 				}
 			});
-			builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					// Do nothing, just return.
 				}
 			});      
-			builder.setMessage("You need to enable location sensors. GPS is most accurate.");
-			builder.setTitle("Location");
+			builder.setMessage(getString(R.string.location_enable_sensors));
+			builder.setTitle(getString(R.string.location));
 
 			return builder.create();
 	

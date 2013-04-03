@@ -2,20 +2,12 @@ package dialogs;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
-import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
-
 import no.ntnu.emergencyreflect.R;
-import activities.LoginActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 
 public class OnlineModeDialog extends SherlockDialogFragment {
 	
@@ -31,19 +23,19 @@ public class OnlineModeDialog extends SherlockDialogFragment {
 
  		
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());		
-	           builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	           builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
 	                   mListener.onOKChooseOnlineSourceDialogButtonClick();  
 	               }
 	           });
-	           builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	           builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int id) {
 	                   // Do nothing, just return.
 	               }
 	           });      
 	    
-	    builder.setTitle("Internet");
+	    builder.setTitle(getString(R.string.internet));
 	    
 	    return builder.create();
 	

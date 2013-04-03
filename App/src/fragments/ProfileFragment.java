@@ -9,30 +9,21 @@ import dialogs.ChooseAvatarDialog;
 import enums.SharedPreferencesNames;
 import enums.ValueType;
 import no.ntnu.emergencyreflect.R;
-import activities.GatewayActivity;
-import activities.MapActivity;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class ProfileFragment extends SherlockFragment {
 
 
 	private MainApplication mApp;
 	private TextView textViewUser, textViewBagdes, textViewMoods, textViewNotes, textViewPersons;
-	private ImageView imageAvatar, imageMoodBagde, imageMedalBagde;
+	private ImageView imageAvatar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,10 +48,10 @@ public class ProfileFragment extends SherlockFragment {
 		textViewPersons = (TextView) myFragmentView.findViewById(R.id.textViewPersons);
 		textViewBagdes = (TextView) myFragmentView.findViewById(R.id.textViewBagdes);
 		
-		textViewMoods.setText("Moods:");
-		textViewNotes.setText("Notes:");
-		textViewPersons.setText("Persons I rescued:");
-		textViewBagdes.setText("Event:");
+		textViewMoods.setText(getString(R.string.moods) + " :");
+		textViewNotes.setText(getString(R.string.notes) + " :");
+		textViewPersons.setText(getString(R.string.persons_i_rescued) + " :");
+		textViewBagdes.setText(getString(R.string.event) + ": ");
 		
 		return myFragmentView;
 	}
@@ -110,9 +101,9 @@ public class ProfileFragment extends SherlockFragment {
 				
 			}	
 		}
-		textViewMoods.setText("Moods: " + moods);
-		textViewNotes.setText("Notes: " + notes);
-		textViewPersons.setText("Persons I rescued: " + persons);
+		textViewMoods.setText(getString(R.string.moods) + ": " + moods);
+		textViewNotes.setText(getString(R.string.notes) + ": " + notes);
+		textViewPersons.setText(getString(R.string.persons_i_rescued) + ": " + persons);
 		
 	}
 	

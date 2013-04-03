@@ -2,17 +2,16 @@
 <resources>
 
     <!-- Strings related to login -->
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in_register"><b>Sign in</b></string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="menu_forgot_password">Recover lost password</string>
-    <string name="login_progress_signing_in">Signing in&#8230;</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_incorrect_user">Is your username correct?</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">Is this the correct password?</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="prompt_username">nome utente</string>
+    <string name="prompt_password">password</string>
+    <string name="action_sign_in_register"><b>Accedi</b></string>
+    <string name="action_sign_in_short">Accedi</string>
+    <string name="login_progress_signing_in">l\'accesso&#8230;</string>
+    <string name="error_invalid_email">mail non valido</string>
+    <string name="error_incorrect_user">nome utente corretto?</string>
+    <string name="error_invalid_password">questa password è troppo breve</string>
+    <string name="error_incorrect_password">è questa la password corretta</string>
+    <string name="error_field_required">Questo campo è obbligatorio</string>
 
     
 </resources>

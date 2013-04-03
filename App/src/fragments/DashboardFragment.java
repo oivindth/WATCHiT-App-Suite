@@ -21,8 +21,6 @@ public class DashboardFragment extends SherlockFragment {
 		super.onCreate(savedInstanceState);
 	}
 
-
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

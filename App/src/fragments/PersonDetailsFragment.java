@@ -4,7 +4,6 @@ import no.ntnu.emergencyreflect.R;
 import activities.QuizActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,6 @@ public class PersonDetailsFragment extends SherlockFragment {
 		user = b.getString("user");
 		time = b.getString("time");
 		value = b.getString("value");
-		Log.d("PersonDetailsFragment", "user: " + user);
 		
 	}
 	
@@ -47,9 +45,9 @@ public class PersonDetailsFragment extends SherlockFragment {
 		View myFragmentView = inflater.inflate(R.layout.person_details_fragment, container, false);
 		
 		userNameTextView = (TextView) myFragmentView.findViewById(R.id.textViewUserName);
-		userNameTextView.setText(user);
+		userNameTextView.setText(" : " +user);
 		timeTextView= (TextView) myFragmentView.findViewById(R.id.textViewTime);
-		timeTextView.setText(time);
+		timeTextView.setText(" : " +time);
 		textViewHeader = (TextView) myFragmentView.findViewById(R.id.textViewHeader);
 		//textViewHeader.setText(value);
 		checkListButton = (Button) myFragmentView.findViewById(R.id.buttonCheckList);

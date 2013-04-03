@@ -41,12 +41,14 @@
     <!-- Dialogs -->
     <string name ="choose_device_dialog_title">Choose device</string>
     <!-- Toasts -->
-    <string name="toast_enable_wireless">Enable wireless settings in phone settingd</string>
+    <string name="toast_enable_wireless">Enable wireless settings in phone settings</string>
     <string name="toast_bluetooth_enabled">Bluetooth is now enabled. You can now sync with WATCHiT</string>
     <string name="toast_stopped_location_service">Stopped location service</string>
     <string name="toast_stopped_watchit_service">WATCHiT is no longer being synced.</string>
     <string name="toast_new_data_published">New data published in event:</string>
     <string name ="toast_event_first">You must register with an event first</string>
+    <string name="toast_watchit_connection_lost">Lost connection with WATCHiT</string>
+    
     <!-- Status strings -->
    <string name="watchit_service_started"> WATCHiT connected and running. </string>
    <string name="watchit_service_stopped"> WATCHiT no longer connected.</string>
@@ -54,6 +56,10 @@
    <string name="status">Status</string>
    <string name ="save">Save</string>
    <string name="event_not_registered">No event chosen</string>
+   <string name="log_in_failed">Failed to connect</string>
+   <string name="sync">Sync</string>
+   <string name="syncing">Syncing</string>
+   <string name="data_sync_failed">Failed to sync data. Try again!</string>
    
    <!-- Menu strings -->
     <string name="menu_settings">Settings</string>
@@ -65,6 +71,10 @@
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_logout">Switch User/Server</string>
     <string name="menu_event">Event</string>
+    <string name= "menu_change_event">Change Event</string>
+    <string name="menu_map_type_layer">Mat Type</string>
+    <string name ="menu_map_layers">Data Points</string>
+    
     <string name= "cancel">Cancel</string>
     
     <!-- App (default) configurations: -->
@@ -74,8 +84,67 @@
     <string name="application_id">watchIt_Reflection_App</string>
     <string name ="sdkcache">sdkcache20</string>
     
-
-
+	<!-- General strings -->
+    <string name="online_mode">Online mode</string>
+    <string name="location_data">Location data</string>
+    <string name="location">Location</string>
+    <string name="location_enable_sensors">Enable location sensors. GPS is most accurate</string>
+    <string name="user">User</string>
+    <string name="my_stats">My stats</string>
+    <string name="internet">Internet</string>
+    <string name="mood">Mood</string>
+    <string name="time">Time</string>
+    <string name="notes">Notes</string>
+    <string name="person_rescued">Person Rescued</string>
+    <string name="checklist">Checklist</string>
+    <string name="server">Server</string>
+    <string name="event">Event</string>
+    
+    <!-- Gateway activity -->
+    <string name="members">Members </string>
+    <string name="data">Data </string>
+    <string name="name">Name</string>
+    <string name="adress">Address</string>
+    <string name="location_enabled">Location enabled..</string>
+    <string name="register_event_first">Please register with an event first</string>
+    
+    <string name ="user_logged_in">Logged in</string>
+    
+    <string name="ok">OK</string>
+    <string name="search">Search</string>
+    
+    <!-- fragment status -->
+    <string name="latest">Latest</string>
+    <string name="no_news">No News</string>
+    
+    
+    <string name="select_event">Select event</string>
+    
+    
+	<!-- Bluetooth -->
+	<string name="bluetooth">Bluetooth</string>
+	<string name="bluetooth_connecting">Connecting to bluetooth</string>
+	<string name="bluetooth_ready_data">Ready to receieve data</string>
+	<string name="bluetooth_connection_failed">Failed to connect</string>
+    <string name="bluetooth_choose_paired_devices">Choose paired device or search</string>
+    
+    <!-- MapType -->
+    <string name="map_type">Map Type</string>
+    <string name="map_type_normal">Normal</string>
+    <string name ="map_type_sattelite">Satellite</string>
+    <string name= "map_type_terrain">Terrain</string>
+    <string name="map_type_hybrid">Hybrid</string>
+    
+    <!-- MapLayers DataPoints -->
+    <string name="datapoints">DataPoints</string>
+    <string name="persons">Persons</string>
+    <string name="moods">Moods</string>
+    <string name ="only_me">Only me</string>
+    
+    <!-- Stats -->
+    <string name ="moods">Moods</string>
+    <string name ="persons_i_rescued">Persons I rescued</string>
+    
     
 
 </resources>

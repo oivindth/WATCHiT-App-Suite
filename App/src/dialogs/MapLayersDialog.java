@@ -9,14 +9,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
 import enums.SharedPreferencesNames;
 
 public class MapLayersDialog extends SherlockDialogFragment  {
 
-	final CharSequence[] items = {"Persons", "Mood", "Notes", "Only me"};
+	private CharSequence[] items;
     private boolean[] states = {false, false, false,false};
     private SharedPreferences mapPreferences;
     
@@ -25,7 +24,9 @@ public class MapLayersDialog extends SherlockDialogFragment  {
     
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+		
+		items = new CharSequence [] {getString(R.string.persons), getString(R.string.moods), getString(R.string.notes), getString(R.string.only_me)};
+		
 		mapPreferences = getActivity().getSharedPreferences(SharedPreferencesNames.MAP_PREFERENCES , 0 );
 		states[3] = mapPreferences.getBoolean("user_layer", false);
 		states[2] = mapPreferences.getBoolean("notes_layer", false);
@@ -65,8 +66,7 @@ public class MapLayersDialog extends SherlockDialogFragment  {
 				// Do nothing...
 			}
 		});      
-
-		builder.setTitle("DataPoints");
+		builder.setTitle(getString(R.string.datapoints));
 		return builder.create();
 
 	}

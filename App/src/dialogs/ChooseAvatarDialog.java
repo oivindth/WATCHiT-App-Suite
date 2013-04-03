@@ -3,7 +3,6 @@ package dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import listeners.SpaceChangeListener;
 import no.ntnu.emergencyreflect.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,13 +10,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.example.watchit_connect.MainApplication;
-
-import de.imc.mirror.sdk.Space;
-import dialogs.ServerSettingsDialog.ServerSettingsDialogListener;
 import enums.SharedPreferencesNames;
 
 public class ChooseAvatarDialog extends SherlockDialogFragment {

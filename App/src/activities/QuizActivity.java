@@ -1,18 +1,9 @@
 package activities;
 
 import no.ntnu.emergencyreflect.R;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
-import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 
 import fragments.CheckListFragment;
 
@@ -50,9 +41,7 @@ public class QuizActivity extends BaseActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
 		switch (item.getItemId()) {
-
 		case android.R.id.home:
 			finish();
 			return true;

@@ -9,7 +9,6 @@ import java.util.Map;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import android.util.Log;
 
 import de.imc.mirror.sdk.android.CDMData;
 import de.imc.mirror.sdk.android.CDMDataBuilder;
@@ -43,7 +42,7 @@ public class Parser {
 		GenericSensorData genericSensorData = new GenericSensorData(new Location(latitude, longitude), 
 				new Value("note", "", watchitData));
 		
-		Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
+		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		
 		return genericSensorData;
 	}
@@ -78,12 +77,12 @@ public class Parser {
 	   	 
 	   	 attributes.put("type", genericSensorData.getValue().getType());
 	   	 attributes.put("unit", genericSensorData.getValue().getUnit());
-	   	 Log.d("building object", "text?:" +genericSensorData.getValue().getText());
+	   	 //Log.d("building object", "text?:" +genericSensorData.getValue().getText());
 	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 
 	   	 DataObject dataObject = dataObjectBuilder.build();
-	   	 Log.d("Parser", dataObject.toString());
+	   	 //Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
 		
 	}

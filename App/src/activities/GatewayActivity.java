@@ -45,19 +45,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.ConnectToBluetoothTask;
 import asynctasks.GetDataFromSpaceTask;
@@ -82,7 +76,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	private GatewayActivity mActivity;
 	private Handler handler;
 	private GenericSensorData gsdata;
-	
+
 	private de.imc.mirror.sdk.DataObject lastDataObject;
 
 	@Override
@@ -90,7 +84,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		super.onCreate(savedInstanceState);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		mActivity = this;
 		devices = new ArrayList<BluetoothDevice>();
 		statusFragment = new StatusFragment();
@@ -98,7 +92,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		profileFragment = new ProfileFragment();
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		arrayAdapter = new ArrayList<String>();
-	
+
 		ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -110,15 +104,15 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		tab2.setTabListener(new MyTabListener());
 		bar.addTab(tab1);
 		bar.addTab(tab2);
-		
+
 		if (sApp.needsRecreation()) {
 			//sApp.reênitializeHandlers();
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 			finish();
 		}
-			
-		
+
+
 		handler = new Handler(Looper.getMainLooper());
 		sApp.dataHandler.addDataObjectListener(this);
 		wcListener = new WATCHiTConnectionChangeListener() {
@@ -129,7 +123,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			}
 		};
 		sApp.addListener(wcListener);
-		
+
 		onlinemodeListener = new OnlineModeChangeListener() {	
 			@Override
 			public void onOnlineModeChanged(boolean on) {
@@ -199,7 +193,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		inflater.inflate(R.menu.activity_gateway, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -231,20 +225,19 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		super.onDestroy();
 		unregisterReceiver(mReceiver);
 		sApp.dataHandler.removeDataObjectListener(this);	
-		
+
 	}
 	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 			String spaceId) {
-		String objectId = dataObject.getId();
-		Log.d("dataObjectGateWay: ", "Received object " + objectId + " from space " + spaceId);
-		//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
-				//also need a hack because the datahandler is running wild.
-						if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
-						if (lastDataObject!= null) {
-							if (lastDataObject.getId().equals(dataObject.getId()) ) return;
-						}
+		//String objectId = dataObject.getId();
+		//hack because sdk is f***. We don't want a notification from a space we currently are not registered to. 
+		//also need a hack because the datahandler is running wild.
+		if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
+		if (lastDataObject!= null) {
+			if (lastDataObject.getId().equals(dataObject.getId()) ) return;
+		}
 		lastDataObject = dataObject;
-		
+
 		//Log.d("dataobject: ", dataObject.toString());
 		try {
 			//sApp.dataObjects.add(dataObject);
@@ -256,7 +249,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 					try {
 						sApp.latest = " " +gsdata.getCreationInfo().getPerson() + " :  " + gsdata.getValue().getText();
 						statusFragment.updateTextViewLatesInfo(sApp.latest);
-						statusFragment.updateTextViewEvent("Members:  " + sApp.currentActiveSpace.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size());
+						statusFragment.updateTextViewEvent(getString(R.string.members) + " :" + sApp.currentActiveSpace.getMembers().size() + "\n" + getString(R.string.data) + " :" + sApp.genericSensorDataObjects.size());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -272,9 +265,9 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		if (on) {
 			if ( UtilityClass.isConnectedToInternet(getBaseContext()) ) {
 				if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE)
-				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();	
+					new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();	
 			}
-			 else new OnlineModeDialog().show(getSupportFragmentManager(), "onlineModeDialog");	
+			else new OnlineModeDialog().show(getSupportFragmentManager(), "onlineModeDialog");	
 		} else {
 			sApp.setOnlineMode(Mode.OFFLINE);
 			sApp.connectionHandler.disconnect();
@@ -286,7 +279,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	public void WATCHiTSwitchClicked(boolean on) {
 		if (on) {
 			if (sApp.currentActiveSpace == null) {
-				showToast("Please register with an event first..");
+				showToast(getString(R.string.register_event_first));
 				configFragment.updateWATCHiTView(false);
 				return;
 			}
@@ -303,13 +296,13 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				devices = new ArrayList<BluetoothDevice>();
 				if (pairedDevices.size() > 0) {
 					for (BluetoothDevice device : pairedDevices) {
-						arrayAdapter.add("Name: " + device.getName() + "\n" + " Adress: " + device.getAddress());
+						arrayAdapter.add("Name: " + device.getName() + "\n" + getString(R.string.adress) + " :" + device.getAddress());
 						devices.add(device);
 						//sApp.arrayAdapter.add()
 					}
 					sApp.bluetoothDevices = devices;
 				}
-			    Bundle b = new Bundle();
+				Bundle b = new Bundle();
 				b.putStringArrayList("adapter", arrayAdapter);
 				ChooseBlueToothDeviceDialog dialog = new ChooseBlueToothDeviceDialog();
 				dialog.setArguments(b);
@@ -323,10 +316,9 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		}
 		configFragment.updateWATCHiTView(sApp.isWATChiTOn);
 	}
-	
+
 	@Override
 	public void locationMode(boolean on) { 
-		Log.d("locationMode", "boolean: " + on);
 		LocationManager locationManager =
 				(LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -334,21 +326,19 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		if (on) {
 			if (!gpsEnabled || !networkEnabled) {
 				new LocationDialog().show(getSupportFragmentManager(), "locationdialog");
-				Log.d("locationMode", "dialog: updating view: " + sApp.isLocationOn);
 				configFragment.updateLocationView(false);
 				sApp.isLocationOn = false;
 			} else {
 				if (!sApp.locationService.isRunning()) sApp.locationService.start();
 				sApp.isLocationOn = true;
-				showToast("Location enabled.");
+				showToast(getString(R.string.location_enabled));
 			}
 		} else {
 			if (sApp.locationService.isRunning()) sApp.locationService.stop();
 			showToast(getString(R.string.toast_stopped_location_service));
 			sApp.isLocationOn= false;
 		}
-		Log.d("locationMode", "updating view: " + sApp.isLocationOn);
-		  configFragment.updateLocationView(sApp.isLocationOn);
+		configFragment.updateLocationView(sApp.isLocationOn);
 	}
 
 	@Override
@@ -360,8 +350,6 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			e.printStackTrace();
 			showToast(getString(R.string.toast_enable_wireless));
 		}
-		
-		
 	}
 
 	@Override
@@ -381,7 +369,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		sApp.bluetoothDevices.clear();
 		btAdapter.startDiscovery();
 	}
-	
+
 	@Override
 	public void cancelBluetoothPairedDialog() {
 		sApp.isWATChiTOn = false;
@@ -390,7 +378,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		sApp.bluetoothDevices.clear();
 		arrayAdapter.clear();
 	}
-	
+
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -400,27 +388,24 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				// Add the name and address to an array adapter to show in a ListView
 				//mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-				Log.d("device found", "device name : " + device.getName());
 				if (!sApp.bluetoothDevices.contains(device)) sApp.bluetoothDevices.add(device);
 				if (!devices.contains(device)) devices.add(device);
-					
+
 			}
 			if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 				int i = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0 );
 				if (i == BluetoothAdapter.STATE_ON) {
-					Log.d("BLUETOOTH", "bluetooth on");	
 					showToast(getString(R.string.toast_bluetooth_enabled));
 				}
 			}
 			if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-				Log.d("discovery", "started searching");
 				showProgress(getString(R.string.progress_title_bluetooth) , getString(R.string.progress_message_bluetooth));
 			}
 			if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 				btAdapter.cancelDiscovery();
 				dismissProgress();
 				for (BluetoothDevice device : devices) {
-					arrayAdapter.add("Name: " +device.getName() + "\n" + " Adress: " + device.getAddress());
+					arrayAdapter.add(getString(R.string.name) + " :" +device.getName() + "\n" + getString(R.string.adress) +" :" + device.getAddress());
 				}
 
 				adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, arrayAdapter);
@@ -444,39 +429,27 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 	public void onSpaceChanged(int position) {
 		if (position == -1) return;
 		//if (sApp.dataHandler.getHandledSpaces().contains(sApp.currentActiveSpace)) {
-			//sApp.dataHandler.removeSpace(sApp.currentActiveSpace.getId());
+		//sApp.dataHandler.removeSpace(sApp.currentActiveSpace.getId());
 		//}
-		
 		Space space = sApp.spacesInHandler.get(position);
 		sApp.currentActiveSpace = space;
-	
 		statusFragment.updateTextViewEventLed(space.getName());
 		statusFragment.updateEventLED(true);
-			
 		new GetDataFromSpaceTask(this, space.getId()).execute(); 
 	}
 
 	@Override
 	public void onDataFetchedFromSpace() {
 		Space space = sApp.currentActiveSpace;
-		//TODO: Too heavy, Put in statistics page in profile:
-		String toDisplay = UtilityClass.getStringDataFromDataObjects(sApp.genericSensorDataObjects);
-		statusFragment.updateTextViewEvent("Members:  " + space.getMembers().size() + "\n" + "Data:  " + sApp.genericSensorDataObjects.size() + 
+		//String toDisplay = UtilityClass.getStringDataFromDataObjects(sApp.genericSensorDataObjects);
+		statusFragment.updateTextViewEvent(getString(R.string.members) + space.getMembers().size() + "\n" + getString(R.string.data) + sApp.genericSensorDataObjects.size() + 
 				"\n " );
-		
 	}
 
 	@Override
 	public void onCancelLocationDialogClick() {
 		configFragment.updateLocationView(false);
 		sApp.isLocationOn = false;
-		
 	}
-	
 
-
-	
-
-
-	
 }

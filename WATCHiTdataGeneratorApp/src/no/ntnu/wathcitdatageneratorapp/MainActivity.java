@@ -7,7 +7,6 @@ import java.util.List;
 import parsing.GenericSensorData;
 import parsing.Parser;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -22,8 +21,6 @@ import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import de.imc.mirror.sdk.exceptions.ConnectionStatusException;
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
 import dialogs.ChooseEventDialog;
 import dialogs.NoteDialog;
 import dialogs.SettingsDialog;
@@ -40,22 +37,15 @@ import android.location.LocationProvider;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 
 
 public class MainActivity extends SherlockFragmentActivity implements OnClickListener, ShareDialogListener, NoteDialogListener, SettingsDialogListener, ChooseEventDialogListener {
@@ -168,7 +158,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			
 			
 			if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				Log.d("network", "network enabled");
+				//Log.d("network", "network enabled");
 				mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, listener);
 			}
 			
@@ -275,7 +265,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
     	    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()
     	                    || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {	
     	    	if (connectionHandler.getStatus() != ConnectionStatus.ONLINE) {
-    	    		Log.d("status", "status: " + connectionHandler.getStatus());
+    	    		//Log.d("status", "status: " + connectionHandler.getStatus());
     	    		 new UserLoginTask().execute();
     	    	} else {
     	    		new GetSpacesTask().execute();
@@ -434,7 +424,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 	    		protected void onPostExecute(final Boolean success) {
 	    			dismissProgress();
 	    			if (success) {
-	    				Log.d("GETSPACESTASK", "successfully fetched spaces");
+	    				//Log.d("GETSPACESTASK", "successfully fetched spaces");
 	    				adapter = new ArrayList<String>();
 	    				for (Space space : spaces) {		
 	    					adapter.add(space.getName());
@@ -442,14 +432,14 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 
 	    			} else {
 	    				Toast.makeText(getBaseContext(), "Failed trying to sync events. Try refresh", Toast.LENGTH_SHORT).show();
-	    				Log.d("GETSPACESTASK", "Something wentwrong when syncing events. Try Refresh." );
+	    				//Log.d("GETSPACESTASK", "Something wentwrong when syncing events. Try Refresh." );
 	    			}
 	    		}
 	    }
 
 		@Override
 		public void eventChosen(int which) {
-				Log.d("which", "integer: " + which);
+				//Log.d("which", "integer: " + which);
 				if (which == -1) return;
 				currentActiveSpace = spaces.get(which);
 				checkedEvent = which;
@@ -478,12 +468,12 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 		    	 try {
 		    		 dataHandler.registerSpace(mSpaceId);
 					  dataHandler.publishDataObject(mDataObject, mSpaceId);
-					  Log.d("publishWDGA", "dataobject: " + mDataObject.toString());
-					  Log.d("publishWDGA", "just published dataobject with id: " + mDataObject.getId());
+					  //Log.d("publishWDGA", "dataobject: " + mDataObject.toString());
+					  //Log.d("publishWDGA", "just published dataobject with id: " + mDataObject.getId());
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					Log.d("ERROR:", "failed to publish dataobject with id: " + mDataObject.getId() );
+					//Log.d("ERROR:", "failed to publish dataobject with id: " + mDataObject.getId() );
 					return false;
 				}
 		    	 return true;
@@ -492,9 +482,9 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			protected void onPostExecute(final Boolean success) {
 			dismissProgress();
 				if (success) {
-				Log.d("publish", "success");
+				//Log.d("publish", "success");
 				} else {
-				Log.d("ERROR:", "Something went wrong");
+				//Log.d("ERROR:", "Something went wrong");
 				Toast.makeText(getBaseContext(), "Failed to send data. Try again..", Toast.LENGTH_SHORT).show();
 				//mActivity.showToast("Failed to publish dataobject.....");
 				//new PublishDataTask(mDataObject, mSpaceId).execute();
@@ -516,7 +506,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 		    		//location = currentBestLocation;
 		    	}
 		    	
-		    	Log.d("LocationService", "Location: " + " latitude: " + currentBestLocation.getLatitude() + " longitude: " + currentBestLocation.getLongitude());
+		    	//Log.d("LocationService", "Location: " + " latitude: " + currentBestLocation.getLatitude() + " longitude: " + currentBestLocation.getLongitude());
 		    	longitude = currentBestLocation.getLongitude();
 		    	latitude = currentBestLocation.getLatitude();
 		        }

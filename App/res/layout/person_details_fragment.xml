@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Person rescued"
+            android:text="@string/person_rescued"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="User:"
+            android:text="@string/user"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         
                
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Time:"
+            android:text="@string/time"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Do Checklist" />
+            android:text="@string/checklist" />
     </LinearLayout>
 
 </LinearLayout>

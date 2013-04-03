@@ -1,14 +1,10 @@
 package asynctasks;
 
 import activities.BaseActivity;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.watchit_connect.MainApplication;
 
-import de.imc.mirror.sdk.exceptions.UnknownEntityException;
-import enums.SharedPreferencesNames;
 
 public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 	
@@ -43,12 +39,10 @@ public class GetSpacesTask extends AsyncTask<Void, Void, Boolean> {
 			
 	
 			if (success) {
-				Log.d("GETSPACESTASK", "successfully fetched spaces");
-				
-				
-				
+				//Log.d("GETSPACESTASK", "successfully fetched spaces");
+
 			} else {
-				Log.d("GETSPACESTASK", "Something went terribly wrong when trying to get spaces." );
+				//Log.d("GETSPACESTASK", "Something went terribly wrong when trying to get spaces." );
 			}
 		}
     

@@ -15,19 +15,11 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-
 import de.imc.mirror.sdk.ConnectionStatus;
 import de.imc.mirror.sdk.DataObjectListener;
 import de.imc.mirror.sdk.OfflineModeHandler.Mode;
-import de.imc.mirror.sdk.Space;
 import de.imc.mirror.sdk.android.DataObject;
 import dialogs.ChooseAvatarDialog.ChooseAvatarListener;
-import enums.SharedPreferencesNames;
-import enums.ValueType;
-
-
 import Utilities.UtilityClass;
 import android.content.Context;
 import android.content.Intent;
@@ -41,10 +33,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
-import asynctasks.GetDataFromSpaceTask;
 import asynctasks.GetSpacesTask;
 import asynctasks.PublishDataTask;
 import fragments.DashboardFragment;
@@ -83,19 +73,15 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		
 		handler = new Handler(Looper.getMainLooper());
 		
-		
-		//TODO: May not need this as it could have been a bug with same user logged in at once
 		if (sApp.needsRecreation()) {
 			//sApp.reênitializeHandlers();
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 			finish();
 		}
-		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
 				sApp.OnlineMode = false;
-				Log.d("Main",  " username: " + sApp.getUserName() + "  password: " + sApp.getPassword());
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
 			} else {
 				new GetSpacesTask(this).execute();
@@ -103,11 +89,9 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		} else {
 			new GetSpacesTask(this).execute();
 		}
-		
 		sApp.dataHandler.addDataObjectListener(this);
 		createAndHandleWATCHiTService();
 		createAndHandleLocationService();
-		
 	}
 	
 	@Override
@@ -188,8 +172,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		}
 	}
 	
-	
-	
 	/**
 	 * Set up the WATCHiT Service for communicating with WATCHiT
 	 */
@@ -219,15 +201,15 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					break;
 					*/
 				case WATCHiTService.MSG_CONNECTION_LOST:
-					Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
-					showToast("Warning: Lost connection with WATCHiT!");
+					//Log.d("MainDashBoardActivity", "Lost connection with WATChiT...");
+					showToast(getString(R.string.toast_watchit_connection_lost));
 					sApp.isWATChiTOn = false;
 					sApp.broadcastWATCHiTConnectionChange(false);
 					break;
 				case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
 					String data = msg.getData().getString("watchitdata");
 					//textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
-					Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
+					//Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
 					String lat = String.valueOf(sApp.getLatitude());
 					String lot = String.valueOf(sApp.getLongitude());
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
@@ -236,7 +218,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					//new CreateSpaceTask().execute();
 					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
 					Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
-					Log.d("watchitdata:  ", data);
+					//Log.d("watchitdata:  ", data);
 					break;
 				default:
 					super.handleMessage(msg);
@@ -255,16 +237,14 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 				// Receive message from service
 				switch (msg.what) {
 				case LocationService.MSG_UPDATE_LOCATION:
-					Log.d("MainDashBoardActivity", "receieved location update..");
+					//Log.d("MainDashBoardActivity", "receieved location update..");
 					double longitude = msg.getData().getDouble("longitude");
 					double latitude = msg.getData().getDouble("latitude");
 					sApp.setLongitude(longitude);
 					sApp.setLatitude(latitude);
 					
 					//locationListener.onLocationChanged(latitude, longitude);
-					
 					break;
-
 				} 
 			}
 		});
@@ -277,18 +257,16 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 	@Override
 	public void handleDataObject(de.imc.mirror.sdk.DataObject dataObject,
 			String spaceId) {
-		String objectId = dataObject.getId();
-		Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
-		Log.d("dataobject: ", dataObject.toString());
-		if (lastDataObject != null) Log.d("dataObject ", " equal?:  " + lastDataObject.equals(dataObject));
+		//String objectId = dataObject.getId();
+		//Log.d("dataObject: ", "Received object " + objectId + " from space " + spaceId);
+		//Log.d("dataobject: ", dataObject.toString());
 		//hack because of sdk bug. We don't want a notification from a space we currently are not registered to. 
 				if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
 				//hack because dataobjectlistener in sdk is not working as expected.
 				if (lastDataObject!= null) {
 					if (lastDataObject.getId().equals(dataObject.getId()) ) return;
 				}
-				lastDataObject = dataObject;
-				
+				lastDataObject = dataObject;	
 		try {
 			data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 			sApp.genericSensorDataObjects.add(data);
@@ -299,7 +277,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 						//TODO: Notification..
 						 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
 						  v.vibrate(300); 
-						  
 						    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 					        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 					        r.play();
@@ -312,26 +289,5 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		} catch (Exception e) {
 			e.printStackTrace();	
 		}
-		
-		/*
-		SharedPreferences profilePrefs = getSharedPreferences(SharedPreferencesNames.PROFILE_PREFERENCES, 0);
-		SharedPreferences.Editor ed = profilePrefs.edit();
-	
-		GenericSensorData gsdata = Parser.buildSimpleXMLObject((DataObject) dataObject);
-		
-		if (gsdata.getCreationInfo().getPerson().equals(sApp.connectionHandler.getCurrentUser().getUsername())) {
-			String value = gsdata.getValue().getText();
-			if (ValueType.getValue(value) == ValueType.PERSON) {
-				ed.putBoolean("medalBagde", true);
-				
-			} else if (ValueType.getValue(value) == ValueType.MOOD_HAPPY) {
-				ed.putBoolean("moodBagde", true);
-			}
-		}
-		ed.commit();
-		*/
 	}
-	
-
-	
 }
