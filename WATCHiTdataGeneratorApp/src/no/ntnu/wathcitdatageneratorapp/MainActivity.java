@@ -609,7 +609,17 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			}
        
 		}
-		
+	
+		@Override
+		public void onDestroy () {
+			super.onDestroy();
+			try {
+				connectionHandler.disconnect();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
 		
 		
 }

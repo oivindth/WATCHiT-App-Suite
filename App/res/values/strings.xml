@@ -17,7 +17,7 @@
     
     <!-- TABS -->
     <string name ="gateway_tab_status">Status</string>
-    <string name ="gateqay_tab_config">Set Up</string>
+    <string name ="gateway_tab_config">Set Up</string>
     <string name="main_activity_tab_dasboard">Dashboard</string>
     <string name="main_ativity_tab_profile">Profile</string>
     <!-- Progress dialogs -->

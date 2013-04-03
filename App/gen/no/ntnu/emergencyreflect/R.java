@@ -1521,8 +1521,8 @@ containing a value of this type.
         public static final int error_invalid_email=0x7f050052;
         public static final int error_invalid_password=0x7f05004e;
         public static final int event_not_registered=0x7f050038;
-        public static final int gateqay_tab_config=0x7f050027;
         public static final int gateway_name=0x7f05001e;
+        public static final int gateway_tab_config=0x7f050027;
         /**  TABS 
          */
         public static final int gateway_tab_status=0x7f050026;

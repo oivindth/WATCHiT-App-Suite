@@ -84,15 +84,13 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		handler = new Handler(Looper.getMainLooper());
 		
 		
-		
+		//TODO: May not need this as it could have been a bug with same user logged in at once
 		if (sApp.needsRecreation()) {
 			//sApp.reênitializeHandlers();
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 			finish();
 		}
-		
-		
 		
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
@@ -140,10 +138,12 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		// If phone doesen't have google play services installed user is prompted to install it.
 		// Or else he/she can't use the Google Maps.
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+		Log.d("resultCode", "resultcode: " + resultCode);
 		if (resultCode == ConnectionResult.SUCCESS) {
+			
 			//proceed as normal
 		} else {
-			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0).show();
 		}
 	}
 	@Override
@@ -152,6 +152,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		try {
 			sApp.service.unbind();
 			sApp.locationService.unbind();
+			sApp.connectionHandler.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

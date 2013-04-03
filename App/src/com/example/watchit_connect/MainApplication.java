@@ -117,7 +117,7 @@ public class MainApplication extends Application {
 	
 	public boolean needsRecreation() {
 		
-		if (connectionHandler == null) {
+		if (connectionHandler == null || userName == null || password == null || spaceHandler == null) {
 			return true;
 		}
 		return false;
@@ -141,6 +141,7 @@ public class MainApplication extends Application {
         connectionConfigurationBuilder.setPort(port);
         connectionConfig = connectionConfigurationBuilder.build();
         connectionHandler = new ConnectionHandler(userName, password, connectionConfig);
+        
         
         spaceHandler = new SpaceHandler(getApplicationContext(), connectionHandler, "databasett");
 	    dataHandler = new DataHandler(connectionHandler, spaceHandler);

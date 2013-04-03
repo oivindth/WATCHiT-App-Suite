@@ -651,8 +651,8 @@ int string error_incorrect_user 0x7f05004d
 int string error_invalid_email 0x7f050052
 int string error_invalid_password 0x7f05004e
 int string event_not_registered 0x7f050038
-int string gateqay_tab_config 0x7f050027
 int string gateway_name 0x7f05001e
+int string gateway_tab_config 0x7f050027
 int string gateway_tab_status 0x7f050026
 int string host 0x7f050043
 int string login_progress_signing_in 0x7f05004c

@@ -105,7 +105,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 		ActionBar.Tab tab1 = bar.newTab();
 		ActionBar.Tab tab2 = bar.newTab();
 		tab1.setText(getString(R.string.gateway_tab_status));
-		tab2.setText(getString(R.string.gateway_name));
+		tab2.setText(getString(R.string.gateway_tab_config));
 		tab1.setTabListener(new MyTabListener());
 		tab2.setTabListener(new MyTabListener());
 		bar.addTab(tab1);

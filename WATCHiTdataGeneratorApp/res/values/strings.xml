@@ -7,7 +7,7 @@
     
     <string name="application_id">WDGApp</string>
     <string name="domain">sandbox</string>
-    <string name="host">sandbox.ntnu.no</string>
+    <string name="host">sandbox.idi.ntnu.no</string>
     <string name="cancel">Cancel</string>
  
 

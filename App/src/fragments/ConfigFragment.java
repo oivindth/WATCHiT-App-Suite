@@ -119,7 +119,12 @@ public class ConfigFragment extends SherlockFragment implements OnCheckedChangeL
 
 	}
 	public void updateOnlineView(boolean on) {
-		switchOnline.setChecked(on);
+		try {
+			switchOnline.setChecked(on);
+		} catch (Exception e) {
+			
+		}
+		
 	}
 	
 
