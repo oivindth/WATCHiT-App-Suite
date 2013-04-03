@@ -138,7 +138,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		// If phone doesen't have google play services installed user is prompted to install it.
 		// Or else he/she can't use the Google Maps.
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-		Log.d("resultCode", "resultcode: " + resultCode);
 		if (resultCode == ConnectionResult.SUCCESS) {
 			
 			//proceed as normal

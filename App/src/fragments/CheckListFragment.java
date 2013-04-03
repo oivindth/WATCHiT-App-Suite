@@ -13,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -38,17 +41,32 @@ public class CheckListFragment extends SherlockFragment {
 
 		View myFragmentView = inflater.inflate(R.layout.fragment_checklist, container, false);
 		
-		String[] values = new String[] { "Safe the area", "Get help from others", "Check pulse and awarness", "Put in recovery position"};
+		String[] values = new String[] { getString(R.string.checklist_step_1), getString(R.string.checklist_step_2), getString(R.string.checklist_step_3), getString(R.string.checklist_step_4)};
 		
-		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, values);
+		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
 		
 		
 		//TODO: oivind, test with htc device onchecklist button click now and see if it crashes..
 		checkList = (ListView) myFragmentView.findViewById(R.id.listViewCheckList);
-		checkList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		//checkList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	
+		
+		
 		//checkList.setItemChecked(0, true);
 		checkList.setAdapter(adapter);
+		
+		checkList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				if (position == 0) Toast.makeText(getActivity(), getString(R.string.checklist_step_1_elaborated), Toast.LENGTH_LONG).show();
+				if (position == 1) Toast.makeText(getActivity(), getString(R.string.checklist_step_2_elaborated), Toast.LENGTH_LONG).show();
+				if (position == 2) Toast.makeText(getActivity(), getString(R.string.checklist_step_3_elaborated), Toast.LENGTH_LONG).show();
+				if (position == 3) Toast.makeText(getActivity(), getString(R.string.checklist_step_4_elaborated), Toast.LENGTH_LONG).show();
+				
+			}
+		});
 		
 		return myFragmentView;
 	}

@@ -38,6 +38,8 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 		checkedItem = spacePreferences.getInt("checked", -1);
 		if (mApp.currentActiveSpace == null) checkedItem = -1;
 		
+		
+		
 		List<Space> spaces = mApp.spacesInHandler;
 		
 		//Bundle b = getArguments();
@@ -45,7 +47,12 @@ public class ChooseEventDialog extends SherlockDialogFragment {
 		//adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),android.R.layout.simple_list_item_1, events);
 		List<String> events = new ArrayList<String>();
 		for (Space space : spaces) {
-			
+			if (mApp.currentActiveSpace != null) {
+				if (space.getId().equals(mApp.currentActiveSpace.getId())) {
+					checkedItem = spaces.indexOf(space);
+				}
+			}
+		
 			events.add(space.getName());
 		}
 		

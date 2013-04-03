@@ -12,7 +12,22 @@
     <string name ="title_activity_map">Map app</string>
     <string name= "title_activity_event">Events</string>
     <string name = "title_activity_config">Configure</string>
+    <string name ="title_checklist">Checklist</string>
     
+    
+    <string name ="checklist_info">Review the steps to take when injured person is located</string>
+    
+    
+    <!-- Checklist -->
+    <string name ="checklist_step_1">Scene Survey</string>
+    <string name ="checklist_step_2">Primary survey</string>
+    <string name ="checklist_step_3">Secondary survey</string>
+    <string name ="checklist_step_4">Ongoing Casualty Care</string>
+    
+    <string name="checklist_step_1_elaborated">Take control of the scene and find out what happened before helping any casualties. </string>
+    <string name ="checklist_step_2_elaborated">Assess each casualty for life-threatening injuries or illnesses and give life-saving first aid.</string>
+    <string name ="checklist_step_3_elaborated">During this step the first aider performs a more thorough check for injuries and illnesses that were not revealed in the primary survey.</string>
+    <string name="checklist_step_4_elaborated">Stay with the casualty until medical help arrives and takes over.</string>
     
     
     <!-- TABS -->

@@ -10,7 +10,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckList"
+        android:text= "@string/title_checklist"
         style="@style/textHoloBlueLight"
         android:layout_marginTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -25,7 +25,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Review the steps to take when locating an injured person"
+        android:text="@string/checklist_info"
         android:layout_marginTop="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
