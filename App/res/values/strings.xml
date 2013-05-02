@@ -2,7 +2,7 @@
 
     <!-- Main Strings -->
     
-    <string name="app_name">Emergency Reflect</string>
+    <string name="app_name">Reflection App</string>
     <string name ="gateway_name">Gateway</string> 
     <string name = "dashboard_name">Dashboard</string>
     <string name ="map_name">iMap</string>

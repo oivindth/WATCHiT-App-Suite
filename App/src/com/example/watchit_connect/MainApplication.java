@@ -1,7 +1,6 @@
 package com.example.watchit_connect;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import listeners.OnlineModeChangeListener;
 import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
+import parsing.Step;
 
 import service.ServiceManager;
 
@@ -46,6 +46,15 @@ public class MainApplication extends Application {
     public ServiceManager service, locationService;
     public BluetoothSocket btSocket;
 
+    
+    public List<Step> steps;
+    public int numberOfSteps;
+    
+    
+    /**
+     * Singleton.
+     * @return
+     */
     public static MainApplication getInstance() {
       return sInstance;
     }
@@ -54,6 +63,8 @@ public class MainApplication extends Application {
       super.onCreate();  
       sInstance = this;
     }
+    
+    
     
     /**
      * Set handlers and application to online or offline mode.

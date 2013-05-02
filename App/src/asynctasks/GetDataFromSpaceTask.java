@@ -6,9 +6,13 @@ import no.ntnu.emergencyreflect.R;
 
 import listeners.SpaceChangeListener;
 
+import parsing.GenericSensorData;
+import parsing.GenericSensorDataTP;
 import parsing.Parser;
 
 import com.example.watchit_connect.MainApplication;
+
+import de.imc.mirror.sdk.android.DataObject;
 
 import activities.BaseActivity;
 import android.os.AsyncTask;
@@ -50,7 +54,24 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		protected void onPostExecute(final Boolean success) {
 			mActivity.dismissProgress();
 			if (success) {
-				app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
+				app.genericSensorDataObjects = new ArrayList<GenericSensorData>();
+				app.TPObjects = new ArrayList<GenericSensorDataTP>();
+				
+				for (de.imc.mirror.sdk.DataObject dobj : app.dataObjects) {
+					GenericSensorData temp = Parser.buildSimpleXMLObject((DataObject) dobj);
+					if (temp.getValue().getType().equals("note")) {
+						app.genericSensorDataObjects.add(temp);
+					} else if (temp.getValue().equals("steps")) {
+						GenericSensorDataTP temptp = Parser.buildSimpleXMLTPObject((DataObject) dobj);
+						app.TPObjects.add (temptp);
+					}
+					
+				}
+				
+				//app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
+				
+				
+				
 				//Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
 				//Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
 				//Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);

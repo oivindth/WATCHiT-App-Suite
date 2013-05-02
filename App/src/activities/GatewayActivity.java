@@ -59,7 +59,6 @@ import asynctasks.GetSpacesTask;
 
 /**
  * Gateway application.
- * @author oivindth
  *
  */
 public class GatewayActivity extends BaseActivity implements DataObjectListener, StatusChangeListener, OnlineModeDialogListener, LocationDialogListener, BlueToothSelectListener, SpaceChangeListener  {
@@ -231,7 +230,7 @@ public class GatewayActivity extends BaseActivity implements DataObjectListener,
 			String spaceId) {
 		//String objectId = dataObject.getId();
 		//hack because sdk is f***. We don't want a notification from a space we currently are not registered to. 
-		//also need a hack because the datahandler is running wild.
+		//also need a hack for the datahandler listener who randomly sends to many objects.
 		if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
 		if (lastDataObject!= null) {
 			if (lastDataObject.getId().equals(dataObject.getId()) ) return;

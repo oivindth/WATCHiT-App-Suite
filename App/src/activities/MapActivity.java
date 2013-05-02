@@ -147,8 +147,8 @@ public class MapActivity extends BaseActivity implements LayersChangeListener, S
 		dataObjectListener = new DataObjectListener() {
 			@Override
 			public void handleDataObject(DataObject dataObject, String spaceId) {
-				//hack because sdk is fucked. We don't want a notification from a space we currently are not registered to. 
-				//also need a hack because thr sdk published to many copies even though only one is publoshed on a space.
+				//hack because sdk is bugged. We don't want a notification from a space we currently are not registered to. 
+				//also need a hack because the sdks listener publishes to many notifications
 				if (!sApp.currentActiveSpace.getId().equals(spaceId)) return;
 				if (lastDataObject!= null) {
 					if (lastDataObject.getId().equals(dataObject.getId()) ) return;

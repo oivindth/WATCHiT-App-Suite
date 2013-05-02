@@ -11,13 +11,13 @@
         android:id="@+id/btn_map"
         style="@style/DashboardButton"
         android:drawableTop="@drawable/location_map_dark"
-        android:text="Map App" />
+        android:text="		 Map app" />
     
- <!--  <Button
-        android:id="@+id/btn_app2"
+   <Button
+        android:id="@+id/btn_TP"
         style="@style/DashboardButton"
         android:drawableTop="@drawable/hardware_gamepad_dark"
-        android:text="   TP app" /> -->
+        android:text="Training" /> 
    
     
   
@@ -25,13 +25,13 @@
         android:id="@+id/btn_gateway"
         style="@style/DashboardButton"
         android:drawableTop="@drawable/collections_view_as_grid_dark"
-        android:text="Gateway" />
+        android:text="		 Gateway" />
  
-    <!--     <Button
-        android:id="@+id/btn_profile"
+         <Button
+        android:id="@+id/btn_vwatchit"
         style="@style/DashboardButton"
         android:drawableTop="@drawable/social_person_dark"
-        android:text="  Profile" /> -->
+        android:text="  vWATCHiT" />
 
  
     

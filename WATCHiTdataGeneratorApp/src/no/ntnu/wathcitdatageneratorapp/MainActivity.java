@@ -21,12 +21,12 @@ import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
 import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
-import dialogs.ChooseEventDialog;
+import dialogs.ChooseEventDialog2;
 import dialogs.NoteDialog;
 import dialogs.SettingsDialog;
 import dialogs.SettingsDialog.SettingsDialogListener;
 import dialogs.ShareDialog;
-import dialogs.ChooseEventDialog.ChooseEventDialogListener;
+import dialogs.ChooseEventDialog2.ChooseEventDialogListener;
 import dialogs.NoteDialog.NoteDialogListener;
 import dialogs.ShareDialog.ShareDialogListener;
 
@@ -224,7 +224,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+		inflater.inflate(R.menu.vwatchitmenu, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
 	
@@ -251,7 +251,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			b.putStringArrayList("events", adapter);
 			b.putInt("checkedEvent", checkedEvent);
 			
-			ChooseEventDialog dialog = new ChooseEventDialog();
+			ChooseEventDialog2 dialog = new ChooseEventDialog2();
 			dialog.setArguments(b);
 			dialog.show(getSupportFragmentManager(), "event");
 			
@@ -378,7 +378,6 @@ public class MainActivity extends SherlockFragmentActivity implements OnClickLis
 			}
 		}
 		
-
 			@Override
 			protected void onCancelled() {
 				mAuthTask = null;

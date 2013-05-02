@@ -1,0 +1,66 @@
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+     
+              <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp" >
+	
+                          <ImageView
+                       android:id="@+id/imageViewRescue"
+                       android:layout_width="100dp"
+                       android:layout_height="100dp"
+                       android:src="@drawable/rescue_tag"
+                        />
+                          
+                                  <ImageView
+                  android:id="@+id/imageViewNote"
+                  android:layout_width="100dp"
+                       android:layout_height="100dp"
+                  android:src="@drawable/note"
+                  android:layout_marginLeft="20dp" />
+        
+                  </LinearLayout>
+
+      
+   
+            <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp" > 
+
+                   <ImageView
+                       android:id="@+id/imageViewHappy"
+                       android:layout_width="100dp"
+                       android:layout_height="100dp"
+                       android:src="@drawable/happy_tag" />
+
+                
+
+            <ImageView
+                android:id="@+id/imageViewNeutral"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/neutral_tag" />
+            
+               <ImageView
+                   android:id="@+id/imageViewSad"
+                   android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:src="@drawable/sad_tag" />
+                
+    </LinearLayout>
+
+         
+        
+    </LinearLayout>
+
+

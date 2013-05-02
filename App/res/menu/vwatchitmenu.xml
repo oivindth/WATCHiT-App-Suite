@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    
+         <item android:id="@+id/menu_changeSpace"
+        android:title="Change Event"
+        android:icon="@drawable/collections_go_to_today"
+        android:showAsAction="always" />
+
+         
+    <item android:id="@+id/menu_location"
+        android:title="Location settings"
+        android:showAsAction="always"
+        android:icon="@drawable/device_access_location_found_light" />
+    
+    
+    <item android:id="@+id/menu_refresh"
+        android:title="Refresh"
+        android:showAsAction="always"
+        android:icon="@drawable/navigation_refresh" />
+</menu>

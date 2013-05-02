@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/imageViewNoteDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/note"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/editTextNote"
+        android:layout_width="182dp"
+        android:layout_height="match_parent"
+        android:hint="Notes"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+</LinearLayout>

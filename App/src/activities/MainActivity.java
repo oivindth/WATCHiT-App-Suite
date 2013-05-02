@@ -3,7 +3,9 @@ package activities;
 
 import no.ntnu.emergencyreflect.R;
 import parsing.GenericSensorData;
+import parsing.GenericSensorDataTP;
 import parsing.Parser;
+import parsing.Step;
 import service.LocationService;
 import service.ServiceManager;
 import service.WATCHiTService;
@@ -210,15 +212,32 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					String data = msg.getData().getString("watchitdata");
 					//textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
 					//Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
+					
 					String lat = String.valueOf(sApp.getLatitude());
 					String lot = String.valueOf(sApp.getLongitude());
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
+					
 					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
-					DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-					//new CreateSpaceTask().execute();
-					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
-					Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
-					//Log.d("watchitdata:  ", data);
+					if (gsd.getValue().getType().equals("note")) {
+						
+						DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
+						new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
+						Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
+					
+						
+						//Hvordan det kan gjørws med den nye tp opplastning aait. 
+					} else if (gsd.getValue().getType().equals("step")) {
+						Step step = new Step(gsd.getValue().getText());
+						sApp.steps.add(step); //kan lage en listener til denne som oppdaterer view hver gang det kommer inn et nytt step.
+						if (sApp.steps.size() == sApp.numberOfSteps) { //eller start stopp knapp i appen...? review hvordan det gikk så uploade? tror det er bedre.
+							//GenericSensorDataTP gsdtp = Parser.buildSimpleXMLObject(sApp.steps);
+							String dataToServer = Parser.buildCustomStringXmlFromSteps(sApp.steps);
+							GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer);
+							DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
+							new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
+							
+						}
+					}
 					break;
 				default:
 					super.handleMessage(msg);
@@ -268,18 +287,15 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 				}
 				lastDataObject = dataObject;	
 		try {
+			//TODO: TP object sjekk....
+			// må endre hver eneste handler for å sjekke om det er tp eller vanlig object? Bør lagres et felles sted.
 			data = Parser.buildSimpleXMLObject((DataObject) dataObject);
 			sApp.genericSensorDataObjects.add(data);
 			handler.post(new Runnable(){
 				@Override
 				public void run() {
 					try {
-						//TODO: Notification..
-						 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-						  v.vibrate(300); 
-						    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-					        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-					        r.play();
+						vibrateAndSoundNotification();
 						Toast.makeText(getApplicationContext(), getString(R.string.toast_new_data_published) + ": \n " + sApp.currentActiveSpace.getName() + " \n " + data.getCreationInfo().getPerson() , Toast.LENGTH_LONG).show();
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -290,4 +306,14 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			e.printStackTrace();	
 		}
 	}
+	
+	private void vibrateAndSoundNotification () {
+		//TODO: Notification..
+		 Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+		  v.vibrate(300); 
+		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+	        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+	        r.play();
+	}
+	
 }

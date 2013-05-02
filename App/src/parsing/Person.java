@@ -1,5 +1,8 @@
 package parsing;
 
+/**
+ * author: ¯ivind Thorvaldsen
+ */
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Text;
 

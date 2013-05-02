@@ -146,6 +146,10 @@ public class WATCHiTService extends AbstractService {
 						Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
 						messageToActivity.setData(b);
 						send(messageToActivity);
+						
+						
+						//Send TP data?
+						//bundle..
 
 					}
 
