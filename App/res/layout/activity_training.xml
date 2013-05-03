@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="227dp"
+        android:layout_weight="0.41" >
+
+        <Button
+            android:id="@+id/button_stop"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/button_start"
+            android:layout_marginBottom="120dp"
+            android:text="Stop" />
+
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Start" />
+
+        <TextView
+            android:id="@+id/textViewStepsCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/button_start"
+            android:layout_marginTop="42dp"
+            android:text="Steps: 5/20"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Chronometer
+            android:id="@+id/chronometer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewStepsCompleted"
+            android:layout_centerHorizontal="true"
+            android:textColor="#FF0606"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Chronometer" />
+
+    </RelativeLayout>
+
+</LinearLayout>

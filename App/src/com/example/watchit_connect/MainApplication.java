@@ -10,6 +10,7 @@ import listeners.OnlineModeChangeListener;
 import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
+import parsing.GenericSensorDataTP;
 import parsing.Step;
 
 import service.ServiceManager;
@@ -45,7 +46,7 @@ public class MainApplication extends Application {
 	public String latest;
     public ServiceManager service, locationService;
     public BluetoothSocket btSocket;
-
+    public ArrayList<GenericSensorDataTP> TPObjects;
     
     public List<Step> steps;
     public int numberOfSteps;
@@ -82,8 +83,6 @@ public class MainApplication extends Application {
     			spaceHandler.setMode(Mode.ONLINE);
     		}
     }
-    
-    
     /**
      * Listeners:
      */

@@ -218,14 +218,13 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
 					
 					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
+					// If watchit data is note
 					if (gsd.getValue().getType().equals("note")) {
-						
 						DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
 						new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
 						Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
 					
-						
-						//Hvordan det kan gj¿rws med den nye tp opplastning aait. 
+						// If WATCHiT data is Steps.
 					} else if (gsd.getValue().getType().equals("step")) {
 						Step step = new Step(gsd.getValue().getText());
 						sApp.steps.add(step); //kan lage en listener til denne som oppdaterer view hver gang det kommer inn et nytt step.
@@ -234,8 +233,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 							String dataToServer = Parser.buildCustomStringXmlFromSteps(sApp.steps);
 							GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer);
 							DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-							new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
-							
+							new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute(); //oppdatere senere manuelt?
 						}
 					}
 					break;

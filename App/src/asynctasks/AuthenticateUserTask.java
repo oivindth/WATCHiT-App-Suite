@@ -8,6 +8,13 @@ import de.imc.mirror.sdk.OfflineModeHandler.Mode;
 import activities.BaseActivity;
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author ¯ivind Thorvaldsen
+ * @date 2013
+ * AsyncTask used for authenticating a user with the server.
+ *
+ */
 public class AuthenticateUserTask extends AsyncTask<Void, Void, Boolean> {
 
 	private BaseActivity mActivity;

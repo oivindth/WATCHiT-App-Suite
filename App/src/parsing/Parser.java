@@ -18,7 +18,8 @@ import de.imc.mirror.sdk.cdm.CDMVersion;
 
 /**
  * 
- * @author oivindth
+ * @author ¯ivind Thorvaldsen
+ * @date 2013
  * Class for parsing dataobjects from reflection spaces.
  */
 public class Parser {

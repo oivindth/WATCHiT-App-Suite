@@ -17,6 +17,12 @@ import de.imc.mirror.sdk.android.DataObject;
 import activities.BaseActivity;
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author ¯ivind Thorvaldsen
+ *AsyncTask that fetches data from the XMPP Spaces Server
+ *
+ */
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 
 	
