@@ -4,11 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/buttonTrain"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Train" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/buttonResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonTrain"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="68dp"
+            android:text="Results" />
+
+        <Button
+            android:id="@+id/buttonTrain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/buttonResults"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/buttonResults"
+            android:layout_marginTop="78dp"
+            android:text="Train" />
+
+    </RelativeLayout>
 
 </LinearLayout>

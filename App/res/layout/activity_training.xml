@@ -9,41 +9,73 @@
         android:layout_height="227dp"
         android:layout_weight="0.41" >
 
-        <Button
-            android:id="@+id/button_stop"
-            android:layout_width="276dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/button_start"
-            android:layout_marginBottom="120dp"
-            android:text="Stop" />
-
-        <Button
-            android:id="@+id/button_start"
-            android:layout_width="277dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Start" />
-
-        <TextView
-            android:id="@+id/textViewStepsCompleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/button_start"
-            android:layout_marginTop="42dp"
-            android:text="Steps: 5/20"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <Chronometer
             android:id="@+id/chronometer1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewStepsCompleted"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:textColor="#FF0606"
+            android:layout_marginTop="80dp"
+            android:text="Chronometer"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Chronometer" />
+            android:textColor="#FF0606" />
+
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewSteps"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="67dp"
+            android:text="Start" />
+
+        <TextView
+            android:id="@+id/textViewTotalSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button_start"
+            android:layout_toRightOf="@+id/chronometer1"
+            android:text="20"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chronometer1"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="36dp"
+            android:layout_toLeftOf="@+id/button_start"
+            android:text="Steps:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewCurrentStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button_start"
+            android:layout_toLeftOf="@+id/button_start"
+            android:text="00"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewStepDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button_start"
+            android:layout_alignLeft="@+id/chronometer1"
+            android:text="/"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/buttonShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_start"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:enabled="false"
+            android:text="Share" />
 
     </RelativeLayout>
 

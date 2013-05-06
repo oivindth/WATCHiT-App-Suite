@@ -7,6 +7,7 @@ import java.util.List;
 import no.ntnu.emergencyreflect.R;
 
 import listeners.OnlineModeChangeListener;
+import listeners.StepListener;
 import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
@@ -49,7 +50,7 @@ public class MainApplication extends Application {
     public ArrayList<GenericSensorDataTP> TPObjects;
     
     public List<Step> steps;
-    public int numberOfSteps;
+    public int numberOfSteps = 0;
     
     
     /**
@@ -106,6 +107,18 @@ public class MainApplication extends Application {
     	for (OnlineModeChangeListener listener : onlineModeListeners) {
 			listener.onOnlineModeChanged(on);
 		}
+    }
+    
+    private List<StepListener> stepListeners = new ArrayList<StepListener>();
+    public void addStepListener(StepListener stepListener) {
+    	if (!stepListeners.contains(stepListener)) {
+    		stepListeners.add(stepListener);
+    	}
+    }
+    public void broadCastStepsChanged(int position) {
+    	for (StepListener listener : stepListeners) {
+    		listener.stepAdded(position);
+    	}
     }
     
     public DataObjectListener myListener;

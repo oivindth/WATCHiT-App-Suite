@@ -3,7 +3,6 @@ package activities;
 
 import no.ntnu.emergencyreflect.R;
 import parsing.GenericSensorData;
-import parsing.GenericSensorDataTP;
 import parsing.Parser;
 import parsing.Step;
 import service.LocationService;
@@ -227,13 +226,11 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 						// If WATCHiT data is Steps.
 					} else if (gsd.getValue().getType().equals("step")) {
 						Step step = new Step(gsd.getValue().getText());
-						sApp.steps.add(step); //kan lage en listener til denne som oppdaterer view hver gang det kommer inn et nytt step.
+						sApp.steps.add(step); 
+						sApp.broadCastStepsChanged(sApp.steps.size()-1);
 						if (sApp.steps.size() == sApp.numberOfSteps) { //eller start stopp knapp i appen...? review hvordan det gikk så uploade? tror det er bedre.
 							//GenericSensorDataTP gsdtp = Parser.buildSimpleXMLObject(sApp.steps);
-							String dataToServer = Parser.buildCustomStringXmlFromSteps(sApp.steps);
-							GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer);
-							DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-							new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute(); //oppdatere senere manuelt?
+							
 						}
 					}
 					break;

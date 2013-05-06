@@ -8,7 +8,7 @@ package org.jraf.android.backport.switchwidget;
 
 public final class R {
 	public static final class id {
-		public static final int switchWidget = 0x7f070070;
+		public static final int switchWidget = 0x7f070074;
 	}
 	public static final class style {
 		public static final int Widget_Holo_CompoundButton_Switch = 0x7f060000;
@@ -20,8 +20,8 @@ public final class R {
 		public static final int switch_on = 0x7f050000;
 	}
 	public static final class layout {
-		public static final int preference = 0x7f030028;
-		public static final int preference_widget_switch = 0x7f030029;
+		public static final int preference = 0x7f030029;
+		public static final int preference_widget_switch = 0x7f03002a;
 	}
 	public static final class styleable {
 		public static final int Theme_switchStyle = 0;
