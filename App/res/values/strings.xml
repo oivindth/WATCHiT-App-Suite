@@ -146,5 +146,8 @@
     <string name ="persons_i_rescued">Persons I rescued</string>
     
     
+    <string name="text_trainingappstartscreen">Welcome to the Training procedure app. To begin please choose a pre defined procedure or create a new.</string>
+    
+    
 
 </resources>

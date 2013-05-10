@@ -1,0 +1,128 @@
+# view AndroidManifest.xml #generated:36
+-keep class activities.GatewayActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:62
+-keep class activities.LoginActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class activities.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:55
+-keep class activities.MapActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:69
+-keep class activities.MapMarkerDetailsActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:119
+-keep class activities.ProcedureActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:108
+-keep class activities.ProceduresActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:43
+-keep class activities.QuizActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:90
+-keep class activities.TrainingActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:97
+-keep class activities.TrainingAppStartScreen { <init>(...); }
+
+# view AndroidManifest.xml #generated:76
+-keep class activities.TrainingProcedureActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:83
+-keep class activities.VirtualWATCHiTActivity { <init>(...); }
+
+# view res/layout/abs__screen_action_bar.xml #generated:43
+# view res/layout/abs__screen_action_bar_overlay.xml #generated:26
+# view res/layout/abs__screen_simple.xml #generated:32
+# view res/layout/abs__screen_simple_overlay_action_mode.xml #generated:27
+# view xlarge/res/layout-xlarge/abs__screen_action_bar.xml #generated:43
+# view xlarge/res/layout-xlarge/abs__screen_action_bar_overlay.xml #generated:24
+-keep class com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout { <init>(...); }
+
+# view large/res/layout-large/abs__action_mode_close_item.xml #generated:17
+# view res/layout/abs__action_mode_close_item.xml #generated:17
+-keep class com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout { <init>(...); }
+
+# view res/layout/abs__action_menu_item_layout.xml #generated:17
+-keep class com.actionbarsherlock.internal.view.menu.ActionMenuItemView { <init>(...); }
+
+# view res/layout/abs__action_menu_layout.xml #generated:17
+-keep class com.actionbarsherlock.internal.view.menu.ActionMenuView { <init>(...); }
+
+# view res/layout/abs__list_menu_item_layout.xml #generated:17
+# view res/layout/abs__popup_menu_item_layout.xml #generated:17
+-keep class com.actionbarsherlock.internal.view.menu.ListMenuItemView { <init>(...); }
+
+# view res/layout/abs__screen_action_bar.xml #generated:26
+# view res/layout/abs__screen_action_bar.xml #generated:50
+# view res/layout/abs__screen_action_bar_overlay.xml #generated:29
+# view res/layout/abs__screen_action_bar_overlay.xml #generated:52
+# view xlarge/res/layout-xlarge/abs__screen_action_bar.xml #generated:26
+# view xlarge/res/layout-xlarge/abs__screen_action_bar_overlay.xml #generated:27
+-keep class com.actionbarsherlock.internal.widget.ActionBarContainer { <init>(...); }
+
+# view res/layout/abs__action_mode_bar.xml #generated:19
+# view res/layout/abs__screen_action_bar.xml #generated:36
+# view res/layout/abs__screen_action_bar_overlay.xml #generated:40
+# view xlarge/res/layout-xlarge/abs__screen_action_bar.xml #generated:36
+# view xlarge/res/layout-xlarge/abs__screen_action_bar_overlay.xml #generated:37
+-keep class com.actionbarsherlock.internal.widget.ActionBarContextView { <init>(...); }
+
+# view res/layout/abs__screen_action_bar.xml #generated:31
+# view res/layout/abs__screen_action_bar_overlay.xml #generated:35
+# view xlarge/res/layout-xlarge/abs__screen_action_bar.xml #generated:31
+# view xlarge/res/layout-xlarge/abs__screen_action_bar_overlay.xml #generated:32
+-keep class com.actionbarsherlock.internal.widget.ActionBarView { <init>(...); }
+
+# view res/layout/abs__action_bar_home.xml #generated:17
+-keep class com.actionbarsherlock.internal.widget.ActionBarView$HomeView { <init>(...); }
+
+# view res/layout/abs__action_menu_item_layout.xml #generated:40
+-keep class com.actionbarsherlock.internal.widget.CapitalizingButton { <init>(...); }
+
+# view res/layout/abs__dialog_title_holo.xml #generated:23
+-keep class com.actionbarsherlock.internal.widget.FakeDialogPhoneWindow { <init>(...); }
+
+# view res/layout/abs__action_bar_tab_bar_view.xml #generated:3
+# view res/layout/abs__activity_chooser_view.xml #generated:19
+-keep class com.actionbarsherlock.internal.widget.IcsLinearLayout { <init>(...); }
+
+# view res/layout/abs__action_bar_tab.xml #generated:3
+-keep class com.actionbarsherlock.internal.widget.ScrollingTabContainerView$TabView { <init>(...); }
+
+# view res/layout/fragment_layout.xml #generated:2
+-keep class com.example.watchit_connect.DashboardLayout { <init>(...); }
+
+# view AndroidManifest.xml #generated:27
+-keep class com.example.watchit_connect.MainApplication { <init>(...); }
+
+# view AndroidManifest.xml #generated:134
+-keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
+
+# view res/layout/map_activity.xml #generated:1
+-keep class com.google.android.gms.maps.SupportMapFragment { <init>(...); }
+
+# view AndroidManifest.xml #generated:133
+-keep class no.ntnu.emergencyreflect.GCMIntentService { <init>(...); }
+
+# view AndroidManifest.xml #generated:145
+-keep class no.ntnu.emergencyreflect.RegisterActivity { <init>(...); }
+
+# view res/layout/fragment_config.xml #generated:40
+# view res/layout/fragment_config.xml #generated:67
+# view res/layout/fragment_config.xml #generated:96
+# view res/layout/preference_widget_switch.xml #generated:22
+-keep class org.jraf.android.backport.switchwidget.Switch { <init>(...); }
+
+# view AndroidManifest.xml #generated:53
+-keep class service.LocationService { <init>(...); }
+
+# view AndroidManifest.xml #generated:52
+-keep class service.WATCHiTService { <init>(...); }
+
+# onClick res/layout/activity_register.xml #generated:22
+-keepclassmembers class * { *** onSave(...); }
+

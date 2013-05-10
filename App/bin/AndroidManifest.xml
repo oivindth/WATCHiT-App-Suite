@@ -1,150 +1,148 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="no.ntnu.emergencyreflect"
-    android:versionCode="1"
-    android:versionName="1.0" >
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="no.ntnu.emergencyreflect">
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true"/>
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="15" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15"/>
     
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
      
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     
-    <permission
-        android:name="com.example.watchit_connect.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
+    <permission android:name="com.example.watchit_connect.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
 <uses-permission android:name="com.example.watchit_connect.permission.MAPS_RECEIVE"/>
 
-    <application
-        android:icon="@drawable/ic_collaboration"
-        android:label="@string/app_name"
-        android:name="com.example.watchit_connect.MainApplication"
-        android:uiOptions="none"
-		 android:theme="@style/Theme.Custom3" >
+    <permission android:name="no.ntnu.emergencyreflect.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
 
-        <activity
-            android:name="activities.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard" >
+   <uses-permission android:name="no.ntnu.emergencyreflect.permission.C2D_MESSAGE"/>
+   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+   <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+   <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+   <application android:icon="@drawable/ic_collaboration" android:label="@string/app_name" android:name="com.example.watchit_connect.MainApplication" android:theme="@style/Theme.Custom3" android:uiOptions="none">
+
+        <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-        <activity
-            android:name="activities.GatewayActivity"
-            android:label="@string/gateway_name"
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard" >
+        <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/gateway_name" android:name="activities.GatewayActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-         <activity
-            android:name="activities.QuizActivity"
-            android:label="@string/gateway_name"
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard" >
+         <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/gateway_name" android:name="activities.QuizActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
         
         
-        <service android:name="service.WATCHiTService"></service>
-        <service android:name="service.LocationService"></service>
+        <service android:name="service.WATCHiTService"/>
+        <service android:name="service.LocationService"/>
         
-        <activity
-            android:name="activities.MapActivity"
-            android:label="@string/map_name"
-            android:uiOptions="splitActionBarWhenNarrow" >
+        <activity android:label="@string/map_name" android:name="activities.MapActivity" android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-         <activity
-            android:name="activities.LoginActivity"
-            android:label="@string/app_name"
-             android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard" >
+         <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.LoginActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         
-          <activity
-            android:name="activities.MapMarkerDetailsActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard">
+          <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.MapMarkerDetailsActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-          <activity
-            android:name="activities.TrainingProcedureActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard">
+          <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.TrainingProcedureActivity" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-          <activity
-            android:name="activities.VirtualWATCHiTActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard"
-            android:uiOptions="splitActionBarWhenNarrow" >
+          <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.VirtualWATCHiTActivity" android:screenOrientation="portrait" android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-            <activity
-            android:name="activities.TrainingActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait" 
-            android:configChanges="orientation|keyboardHidden|keyboard"
-            android:uiOptions="splitActionBarWhenNarrow" >
+            <activity android:configChanges="orientation|keyboardHidden|keyboard" android:label="@string/app_name" android:name="activities.TrainingActivity" android:screenOrientation="portrait" android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
+          <activity android:configChanges="orientation|keyboardHidden|keyboard" 
+              android:label="@string/app_name" 
+              android:name="activities.TrainingAppStartScreen" 
+              android:screenOrientation="portrait" 
+              android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         
+            <activity android:configChanges="orientation|keyboardHidden|keyboard" 
+              android:label="@string/app_name" 
+              android:name="activities.ProceduresActivity" 
+              android:screenOrientation="portrait" 
+              android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        
+          <activity android:configChanges="orientation|keyboardHidden|keyboard" 
+              android:label="@string/app_name" 
+              android:name="activities.ProcedureActivity" 
+              android:screenOrientation="portrait" 
+              android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         
           
           
-         <meta-data
-    android:name="com.google.android.maps.v2.API_KEY"
-    android:value="AIzaSyCpPCpjFFNQIHHtCDRpHqib2r5oyQ2GxqE"/>
-    </application>
+         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCpPCpjFFNQIHHtCDRpHqib2r5oyQ2GxqE"/>
+        <service android:name=".GCMIntentService"/>
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="no.ntnu.emergencyreflect"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="no.ntnu.emergencyreflect"/>
+            </intent-filter>
+        </receiver>
+    
+        <activity android:launchMode="singleTop" android:name=".RegisterActivity"/>
+</application>
 
 </manifest>

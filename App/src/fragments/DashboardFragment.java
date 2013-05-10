@@ -3,6 +3,7 @@ package fragments;
 import no.ntnu.emergencyreflect.R;
 import activities.GatewayActivity;
 import activities.MapActivity;
+import activities.TrainingAppStartScreen;
 import activities.TrainingProcedureActivity;
 import activities.VirtualWATCHiTActivity;
 import android.content.Intent;
@@ -50,7 +51,7 @@ public class DashboardFragment extends SherlockFragment {
 			buttonTP.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					Intent i = new Intent(getActivity().getApplicationContext(), TrainingProcedureActivity.class);
+					Intent i = new Intent(getActivity().getApplicationContext(), TrainingAppStartScreen.class);
 					startActivity(i);
 				}
 			});

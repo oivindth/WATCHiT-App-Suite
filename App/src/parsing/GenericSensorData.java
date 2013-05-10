@@ -8,7 +8,6 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 
-
 	@Root(name = "genericsensordata")
 	@Namespace(reference="mirror:application:watchit:genericsensordata")
 	public class GenericSensorData {
@@ -66,8 +65,6 @@ import org.simpleframework.xml.Root;
 		}
 		
 	
-		
-
 		public Location getLocation() {
 			return location;
 		}
@@ -131,12 +128,5 @@ import org.simpleframework.xml.Root;
 		public void setSchemaLocation(String schemaLocation) {
 			this.schemaLocation = schemaLocation;
 		}
-		
-		
-		
-		
+			
 	}
-	
-	
-	
-
