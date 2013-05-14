@@ -14,7 +14,7 @@ import de.imc.mirror.sdk.exceptions.SpaceManagementException;
 
 
 /**
- * @deprecated Not been tested and not in use. Use at own risk.
+ * @deprecated Not been tested, use at own risk!
  * @author oivindth
  *
  */

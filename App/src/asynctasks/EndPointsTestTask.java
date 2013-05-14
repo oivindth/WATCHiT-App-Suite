@@ -11,16 +11,15 @@ import com.google.api.services.no.ntnu.emergencyreflect.procedureendpoint.Proced
 
 import com.google.api.services.no.ntnu.emergencyreflect.procedureendpoint.model.Procedure;
 
-import com.google.api.services.no.ntnu.emergencyreflect.resultendpoint.model.Result;
 import com.google.api.services.no.ntnu.emergencyreflect.stependpoint.Stependpoint;
-import com.google.api.services.no.ntnu.emergencyreflect.stependpoint.model.Step;
 import com.google.api.services.no.ntnu.emergencyreflect.userendpoint.model.User;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 /**
- * Asynctask used for communicating with Google App Engine backend.
+ * Asynctask that shows a way for communicating with Google App Engine backend.
+ * @deprecated Do not use this class. App engine backend not implemented.
  * @author oivindth
  *
  */
@@ -48,33 +47,12 @@ public class EndPointsTestTask extends AsyncTask<Context, Integer, Long>  {
       	procedure.setName("Test");
       	procedure.setDescription("train for test");
       	Procedure presult = pendPoint.insertProcedure(procedure).execute();
-      	
-      	
-      	
-        Step step = new Step().setName("Step 1");
-        Step result = endpoint.insertStep(step).execute();
-        step.setProcedure(procedure);
-        step.setProcedure(procedure);
-        
-        
-        
-        Step step2 = new Step().setName("Step 2");
-        step.setTime("");
-        step2.setProcedure(procedure);
-        Step result2 = endpoint.insertStep(step2).execute();
-        
-        
+
         User user = new User();
         user.setName("James");
         user.setJid("1223");
         
-        
-        Result result11 = new Result();
-        result11.setTime("02:20");
-        result11.setStep(step);
-        result11.sets
-        
-  
+
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -12,6 +12,8 @@ import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
 import parsing.GenericSensorDataTP;
+import parsing.Parser;
+import parsing.Procedure;
 import parsing.Step;
 
 import service.ServiceManager;
@@ -52,6 +54,9 @@ public class MainApplication extends Application {
     public List<Step> steps;
     public int numberOfSteps = 0;
     
+    public List<Procedure> procedures = new ArrayList<Procedure>();
+    
+    
     
     /**
      * Singleton.
@@ -66,6 +71,42 @@ public class MainApplication extends Application {
       sInstance = this;
     }
     
+    public void setUpProceduresAndSteps () {
+    	Procedure p = new Procedure();
+    	p.setName("Test");
+    	
+    	Procedure italy = new Procedure();
+    	italy.setName("Corcueno Safety 2013");
+    	
+    	List<Step> pSteps = new ArrayList<Step>();
+    	pSteps.add(new Step("Step 1"));
+    	pSteps.add(new Step("Step 2"));
+    	pSteps.add(new Step("Step 3"));
+
+    	List<Step> iSteps = new ArrayList<Step>();
+    	iSteps.add(new Step("Sicurezza"));
+    	iSteps.add(new Step("Coscienza"));
+    	iSteps.add(new Step("Inizio del Log. Roll."));
+    	iSteps.add(new Step("Log. Roll."));
+    	iSteps.add(new Step("Inizio collare"));
+    	iSteps.add(new Step("Posizionamento cucchiaio"));
+    	iSteps.add(new Step("Fine collare"));
+    	iSteps.add(new Step("Fine cucchiaio"));
+    	iSteps.add(new Step("Passaggio su spinale"));
+    	iSteps.add(new Step("Cuscini"));
+    	iSteps.add(new Step("Fine cuscini"));
+    	iSteps.add(new Step("Ragno"));
+    	iSteps.add(new Step("Condizioni paziente"));
+    	iSteps.add(new Step("Fine ragno"));
+    	iSteps.add(new Step("Fine con partenza"));
+    	
+    	p.setSteps(pSteps);
+    	italy.setSteps(iSteps);
+    	
+    	procedures.add(p);
+    	procedures.add(italy);
+    	//Parser parse = new Parser();
+    }
     
     
     /**
@@ -119,7 +160,14 @@ public class MainApplication extends Application {
     	for (StepListener listener : stepListeners) {
     		listener.stepAdded(position);
     	}
+    	
     }
+    public void broadCastAllStepsFinished() {
+    	for (StepListener listener : stepListeners) {
+    		listener.allStepsCompleted();
+    	}
+    }
+    
     
     public DataObjectListener myListener;
     
@@ -188,7 +236,9 @@ public class MainApplication extends Application {
 	private String password;
 
 	private double longitude;;
-	private double latitude; 
+	private double latitude;
+
+	public Procedure currentProcedure; 
 
 	public String getUserName() {
 		return userName;

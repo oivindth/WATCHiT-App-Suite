@@ -40,11 +40,11 @@ import org.simpleframework.xml.Root;
 		public CreationInfo getCreationInfo() {
 			return creationInfo;
 		}
-		
-		
+	
 		public GenericSensorDataTP() {
 			
 		}
+	
 		
 		public GenericSensorDataTP(String publisher, String modelVersion,
 				String cdmVersion, String id, String timestamp,

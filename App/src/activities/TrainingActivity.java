@@ -59,10 +59,10 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 		startButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (sApp.currentActiveSpace == null) {
-					showToast("You must choose an event first.");
-					return;
-				}
+				//if (sApp.currentActiveSpace == null) {
+					//showToast("You must choose an event first.");
+					//return;
+				//}
 				chronometer.setBase(SystemClock.elapsedRealtime());
 				chronometer.start();
 				startButton.setClickable(false);
@@ -77,7 +77,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 			public void onClick(View v) {
 				//Create TP object for sharing to space!
 				String dataToServer = Parser.buildCustomStringXmlFromSteps(sApp.steps);
-				GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer);
+				GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer, sApp.currentProcedure.getName());
 				String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain();
 				DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
 				new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
@@ -103,7 +103,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 	
 	@Override
 	public void allStepsCompleted() {
-		showToast("all steps completed!"); //notification with vibration maybe?
+		showToast("all steps completed! Share your time?"); //notification with vibration maybe?
 		CharSequence totalTime = chronometer.getText();
 		shareButton.setEnabled(true);
 		chronometer.stop();

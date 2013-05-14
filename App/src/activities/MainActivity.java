@@ -125,7 +125,6 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 		if (resultCode == ConnectionResult.SUCCESS) {
 			
-			//proceed as normal
 		} else {
 			GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0).show();
 		}
@@ -228,9 +227,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 						Step step = new Step(gsd.getValue().getText());
 						sApp.steps.add(step); 
 						sApp.broadCastStepsChanged(sApp.steps.size()-1);
-						if (sApp.steps.size() == sApp.numberOfSteps) { //eller start stopp knapp i appen...? review hvordan det gikk så uploade? tror det er bedre.
-							//GenericSensorDataTP gsdtp = Parser.buildSimpleXMLObject(sApp.steps);
-							
+						if (sApp.steps.size() == sApp.numberOfSteps) { 
+							sApp.broadCastAllStepsFinished();
 						}
 					}
 					break;

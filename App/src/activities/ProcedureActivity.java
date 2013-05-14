@@ -1,19 +1,36 @@
 package activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import parsing.Procedure;
+import parsing.Step;
 import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.example.watchit_connect.MainApplication;
 
 public class ProcedureActivity extends BaseActivity {
+	
+	private TextView procedureNameTextView;
+	
+	private Button buttonSelect;
+	private MainApplication mApp;
+	private int pos;
+	private ArrayAdapter<String> adapter;
+	private ListView listOfSteps;
+	List<Step> steps;
+	private Procedure p;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -22,11 +39,41 @@ public class ProcedureActivity extends BaseActivity {
 		setContentView(R.layout.activity_procedure);
 		//listOfProecdures = (ListView) findViewById(R.id.listViewProcedures);	
 		
+		mApp = MainApplication.getInstance();
 		
-		//adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, procedures);
-		//listOfProecdures.setAdapter(adapter);
+		listOfSteps = (ListView) findViewById(R.id.listViewSteps);
 		
+		procedureNameTextView = (TextView) findViewById(R.id.textViewProcedureName);
+		Bundle b = getIntent().getExtras();
+		pos = b.getInt("procedure_pos");
 
+		p = mApp.procedures.get(pos);
+		String name = p.getName();
+		
+		steps = p.getSteps();
+		List<String> stepNames = new ArrayList<String> ();
+		for (Step st : steps) {
+			stepNames.add(st.getName());
+		}
+		
+		
+		buttonSelect = (Button) findViewById(R.id.button_select);
+		buttonSelect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mApp.numberOfSteps = steps.size();
+				mApp.currentProcedure = p;
+				Intent intent = new Intent(getBaseContext(), TrainingMainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
+		
+		
+		procedureNameTextView.setText(name);
+		
+		adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, stepNames);
+		listOfSteps.setAdapter(adapter);
 	}
 	
 	@Override

@@ -24,8 +24,6 @@ import de.imc.mirror.sdk.cdm.CDMVersion;
  */
 public class Parser {
 	
-	
-
 	/**
 	 * Convert a MIRROR dataobject receieved from a space to a simplexml object.
 	 * @param dataObject
@@ -56,10 +54,10 @@ public class Parser {
 		return genericSensorData;
 	}
 	
-public static GenericSensorData buildSimpleXMLObject(String watchitData ) {
+public static GenericSensorData buildSimpleXMLObject(String stepData, String procedureName ) {
 		
 		GenericSensorData genericSensorData = new GenericSensorData(new Location(), 
-				new Value("steps", "", watchitData));
+				new Value("steps", procedureName, stepData));
 		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		return genericSensorData;
 	}
@@ -72,7 +70,6 @@ public static GenericSensorData buildSimpleXMLObject(String watchitData ) {
 	 * @return
 	 */
 	public static GenericSensorDataTP buildSimpleXMLObject(List<Step> steps) {
-		
 		GenericSensorDataTP gstp = new GenericSensorDataTP(new Location(), new ValueTP("steps", "", steps));
 		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		return gstp;
@@ -117,6 +114,19 @@ public static GenericSensorData buildSimpleXMLObject(String watchitData ) {
 	   	 //Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
 		
+	}
+	
+	
+	
+	public static Procedure DeSerializeProcedure(String xml) {
+		Serializer serializer = new Persister();
+		Procedure data = null;
+		try {
+			data = serializer.read(Procedure.class, xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 	
 	/**

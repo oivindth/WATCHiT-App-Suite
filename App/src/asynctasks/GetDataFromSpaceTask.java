@@ -44,6 +44,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		protected void onPreExecute() {
 			mActivity.showProgress(mActivity.getString(R.string.sync), mActivity.getString(R.string.syncing));
 		}
+		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
@@ -67,16 +68,15 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 					GenericSensorData temp = Parser.buildSimpleXMLObject((DataObject) dobj);
 					if (temp.getValue().getType().equals("note")) {
 						app.genericSensorDataObjects.add(temp);
-					} else if (temp.getValue().equals("steps")) {
-						GenericSensorDataTP temptp = Parser.buildSimpleXMLTPObject((DataObject) dobj);
-						app.TPObjects.add (temptp);
-					}
-					
+					} else if (temp.getValue().getType().equals("steps")) {
+						if (temp.getValue().getUnit().equals(app.currentProcedure.getName())) {
+							//hvis stepsa som sendes ned er lik den nåværende proceduren...
+							GenericSensorDataTP temptp = Parser.buildSimpleXMLTPObject((DataObject) dobj);
+							app.TPObjects.add (temptp);
+						}
+					} 
 				}
-				
 				//app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
-				
-				
 				
 				//Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
 				//Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
