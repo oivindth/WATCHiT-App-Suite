@@ -77,6 +77,16 @@
             android:enabled="false"
             android:text="Share" />
 
+        <Chronometer
+            android:id="@+id/chronometerStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewStepDivider"
+            android:layout_marginTop="28dp"
+            android:layout_toRightOf="@+id/textViewStepDivider"
+            android:text="Chronometer"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </LinearLayout>

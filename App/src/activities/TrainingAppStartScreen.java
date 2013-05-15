@@ -21,7 +21,6 @@ public class TrainingAppStartScreen extends BaseActivity {
 		setContentView(R.layout.activity_trainingappstartscreen);
 		
 		nextButton = (Button) findViewById(R.id.button_next);
-		
 		nextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -38,19 +37,16 @@ public class TrainingAppStartScreen extends BaseActivity {
 		inflater.inflate(R.menu.menu_training_procedure, menu);
 		return super.onCreateOptionsMenu(menu); 
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch (item.getItemId()) {
-
 		case android.R.id.home:
 			finish();
 			return true;
-	
-
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
 }

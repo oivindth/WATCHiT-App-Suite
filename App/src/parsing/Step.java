@@ -14,6 +14,9 @@ public class Step {
 	@Element
 	private String name;
 	
+	@Element
+	private String time;
+	
 	@Attribute
 	private int id;
 	
@@ -37,6 +40,14 @@ public class Step {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 	
 

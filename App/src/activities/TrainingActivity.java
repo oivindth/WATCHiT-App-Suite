@@ -31,6 +31,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 	private Button startButton, shareButton;
 	CharSequence inFormat;
 	private Chronometer chronometer;
+	private Chronometer stepChronometer;
 	private MainApplication mApp;
 	private TextView currentStep, maxSteps;
 	
@@ -48,6 +49,9 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 		currentStep.setText("0");
 		maxSteps.setText("" + sApp.numberOfSteps);
 		
+		stepChronometer = (Chronometer) findViewById(R.id.chronometerStep);
+
+		
 		chronometer = (Chronometer) findViewById(R.id.chronometer1);
 		chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
 			@Override
@@ -63,11 +67,13 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 					//showToast("You must choose an event first.");
 					//return;
 				//}
+				stepChronometer.setBase(SystemClock.elapsedRealtime());
+				stepChronometer.start();
+				
 				chronometer.setBase(SystemClock.elapsedRealtime());
 				chronometer.start();
 				startButton.setClickable(false);
 				startButton.setVisibility(View.INVISIBLE);
-				
 			}
 		});
 		
@@ -80,9 +86,15 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 				GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer, sApp.currentProcedure.getName());
 				String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain();
 				DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
-				new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
+				if (sApp.currentActiveSpace!= null) {
+					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
+				} else {
+					showToast("Choose an event first!");
+					//choose event dialog......?
+				}
 				
-				//reset.
+				
+				//Reset.
 				sApp.steps = new ArrayList<Step>();
 				chronometer.setText("00");
 				shareButton.setEnabled(false);
@@ -94,9 +106,14 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 	
 	@Override
 	public void stepAdded(int pos) {
-		//textview currentstep increment
-		// hvis jeg skal lagre tiden så må jeg hente ut tiden.........
-		//sApp.steps.get(pos).setTime((String) chronometer.getText());
+		stepChronometer.stop();
+		
+		// set the time of the step to the stepchronometer time.
+		sApp.steps.get(pos).setTime((String) stepChronometer.getText());
+		//reset the stepchronometer to make it count from zero on the next step.
+		stepChronometer.setBase(SystemClock.elapsedRealtime());
+		stepChronometer.start();
+		
 		currentStep.setText(Integer.toString(pos));
 		showToast("step finished");
 	}
@@ -107,7 +124,6 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 		CharSequence totalTime = chronometer.getText();
 		shareButton.setEnabled(true);
 		chronometer.stop();
-		
 	}
 	
 	@Override
@@ -125,10 +141,8 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 			finish();
 			return true;
 	
-
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
 }

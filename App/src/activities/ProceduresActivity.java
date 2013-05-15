@@ -36,6 +36,7 @@ public class ProceduresActivity extends BaseActivity {
 		setContentView(R.layout.activity_procedures);
 		listOfProecdures = (ListView) findViewById(R.id.listViewProcedures);	
 		
+		
 		mApp = MainApplication.getInstance();
 		mApp.setUpProceduresAndSteps();
 		

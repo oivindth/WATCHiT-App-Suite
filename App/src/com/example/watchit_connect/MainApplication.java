@@ -12,7 +12,6 @@ import listeners.WATCHiTConnectionChangeListener;
 
 import parsing.GenericSensorData;
 import parsing.GenericSensorDataTP;
-import parsing.Parser;
 import parsing.Procedure;
 import parsing.Step;
 
@@ -25,7 +24,6 @@ import de.imc.mirror.sdk.android.ConnectionConfiguration;
 import de.imc.mirror.sdk.android.ConnectionConfigurationBuilder;
 import de.imc.mirror.sdk.android.ConnectionHandler;
 import de.imc.mirror.sdk.android.DataHandler;
-import de.imc.mirror.sdk.android.DataObject;
 import de.imc.mirror.sdk.android.SpaceHandler;
 import activities.LoginActivity;
 import android.app.Application;
@@ -72,6 +70,7 @@ public class MainApplication extends Application {
     }
     
     public void setUpProceduresAndSteps () {
+    	procedures = new ArrayList<Procedure>();
     	Procedure p = new Procedure();
     	p.setName("Test");
     	
@@ -82,7 +81,7 @@ public class MainApplication extends Application {
     	pSteps.add(new Step("Step 1"));
     	pSteps.add(new Step("Step 2"));
     	pSteps.add(new Step("Step 3"));
-
+    	
     	List<Step> iSteps = new ArrayList<Step>();
     	iSteps.add(new Step("Sicurezza"));
     	iSteps.add(new Step("Coscienza"));
@@ -188,7 +187,7 @@ public class MainApplication extends Application {
 	
 	public boolean needsRecreation() {
 		
-		if (connectionHandler == null || userName == null || password == null || spaceHandler == null) {
+		if (connectionHandler == null || userName == null || password == null || spaceHandler == null || dataHandler == null) {
 			return true;
 		}
 		return false;
@@ -213,17 +212,12 @@ public class MainApplication extends Application {
         connectionConfig = connectionConfigurationBuilder.build();
         connectionHandler = new ConnectionHandler(userName, password, connectionConfig);
         
-        
         spaceHandler = new SpaceHandler(getApplicationContext(), connectionHandler, "databasett");
 	    dataHandler = new DataHandler(connectionHandler, spaceHandler);
 	    
 	    spaceHandler.setMode(Mode.ONLINE);
-	    dataHandler.setMode(Mode.ONLINE);
-        
-        
-        
+	    dataHandler.setMode(Mode.ONLINE); 
 	}
-	
 	
 	public List<Space> spacesInHandler = new ArrayList<Space>();
 	public List<de.imc.mirror.sdk.DataObject> dataObjects = new ArrayList<de.imc.mirror.sdk.DataObject>();

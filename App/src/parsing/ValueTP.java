@@ -14,8 +14,11 @@ public class ValueTP {
 	private String type;
 	@Attribute(name = "unit", required = false)
 	private String unit;
+	
+	
 	@ElementList
 	private List<Step> steps;
+	
 	
 	
 	public ValueTP() {
