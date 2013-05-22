@@ -3,6 +3,7 @@ package activities;
 import java.util.ArrayList;
 
 import parsing.GenericSensorData;
+import parsing.GenericSensorDataTP;
 import parsing.Parser;
 import parsing.Step;
 import listeners.StepListener;
@@ -11,6 +12,7 @@ import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,6 +36,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 	private Chronometer stepChronometer;
 	private MainApplication mApp;
 	private TextView currentStep, maxSteps;
+	private boolean debug = true; //set to false for release
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,6 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 		
 		stepChronometer = (Chronometer) findViewById(R.id.chronometerStep);
 
-		
 		chronometer = (Chronometer) findViewById(R.id.chronometer1);
 		chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
 			@Override
@@ -82,39 +84,56 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 			@Override
 			public void onClick(View v) {
 				//Create TP object for sharing to space!
-				String dataToServer = Parser.buildCustomStringXmlFromSteps(sApp.steps);
+				String dataToServer = Parser.buildCustomStringFromSteps(sApp.steps);
+				Log.d("toshare", "step data: " + dataToServer);
 				GenericSensorData gsdtp = Parser.buildSimpleXMLObject(dataToServer, sApp.currentProcedure.getName());
+				//GenericSensorDataTP gsdtp = Parser.buildSimpleXMLTPObject(sApp.currentProcedure.getName(), sApp.steps);
 				String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain();
 				DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsdtp, jid, sApp.connectionHandler.getCurrentUser().getUsername());
+				Log.d("toshare", dataObject.toString());
+				
 				if (sApp.currentActiveSpace!= null) {
 					new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
 				} else {
 					showToast("Choose an event first!");
 					//choose event dialog......?
 				}
-				
-				
 				//Reset.
 				sApp.steps = new ArrayList<Step>();
 				chronometer.setText("00");
 				shareButton.setEnabled(false);
 				startButton.setVisibility(View.VISIBLE);
-				
+				currentStep.setText("0");
+				maxSteps.setText("0");
 			}
 		});
+		
+		if (debug = true) {
+			startButton.setClickable(false);
+			shareButton.setClickable(true);
+			shareButton.setEnabled(true);
+			sApp.steps = new ArrayList<Step>();
+			Step s1 = new Step();
+			Step s2 = new Step();
+			s1.setTime("00:20");
+			s2.setTime("00:40");
+			sApp.steps.add(s1);
+			sApp.steps.add(s2);
+			sApp.numberOfSteps = 2;
+		}
 	}
 	
 	@Override
 	public void stepAdded(int pos) {
 		stepChronometer.stop();
-		
+		int step = pos+1;
 		// set the time of the step to the stepchronometer time.
 		sApp.steps.get(pos).setTime((String) stepChronometer.getText());
 		//reset the stepchronometer to make it count from zero on the next step.
 		stepChronometer.setBase(SystemClock.elapsedRealtime());
 		stepChronometer.start();
 		
-		currentStep.setText(Integer.toString(pos));
+		currentStep.setText(Integer.toString(step));
 		showToast("step finished");
 	}
 	

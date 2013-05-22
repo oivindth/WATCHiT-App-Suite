@@ -47,9 +47,9 @@ public class MainApplication extends Application {
 	public String latest;
     public ServiceManager service, locationService;
     public BluetoothSocket btSocket;
-    public ArrayList<GenericSensorDataTP> TPObjects;
+    public ArrayList<GenericSensorData> TPObjects;
     
-    public List<Step> steps;
+    public List<Step> steps = new ArrayList<Step>();
     public int numberOfSteps = 0;
     
     public List<Procedure> procedures = new ArrayList<Procedure>();
@@ -104,6 +104,7 @@ public class MainApplication extends Application {
     	
     	procedures.add(p);
     	procedures.add(italy);
+    	currentProcedure = p;
     	//Parser parse = new Parser();
     }
     

@@ -39,6 +39,13 @@ public class Parser {
 		return DeSerializeTPData(xml);
 	}
 	
+	public static GenericSensorDataTP buildSimpleXMLTPObject(String procedureName, List<Step> steps) {
+		GenericSensorDataTP genericSensorData = new GenericSensorDataTP(new Location("0", "0"), 
+				new ValueTP("steps", procedureName, steps));
+		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
+		return genericSensorData;
+	}
+	
 	/**
 	 * Build a simplexml object with data receieved from watchit and location from phone
 	 * @param watchitData
@@ -56,7 +63,7 @@ public class Parser {
 	
 public static GenericSensorData buildSimpleXMLObject(String stepData, String procedureName ) {
 		
-		GenericSensorData genericSensorData = new GenericSensorData(new Location(), 
+		GenericSensorData genericSensorData = new GenericSensorData(new Location("0", "0"), 
 				new Value("steps", procedureName, stepData));
 		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		return genericSensorData;
@@ -75,6 +82,40 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 		return gstp;
 	}
 
+	
+	public static DataObject buildTPDataObjectFromSimpleXML (GenericSensorDataTP gsdtp, String userJID, String userName) {
+		DataObjectBuilder dataObjectBuilder =
+		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
+		Date date = new Date();
+		
+		dataObjectBuilder.addCDTCreationInfo(date, userName, null);
+		CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_1_0);
+		cdmDataBuilder.setPublisher(userJID);
+		cdmDataBuilder.setModelVersion("0.2");
+		//cdmDataBuilder.setTimestamp(date.toGMTString());
+		CDMData cdmData = cdmDataBuilder.build();
+		dataObjectBuilder.setCDMData(cdmData);
+		
+		 Map <String, String> attributes = new HashMap<String, String>();
+  	 
+	   	 
+	   	 attributes.put("type", gsdtp.getValue().getType());
+	   	 attributes.put("unit", gsdtp.getValue().getUnit());
+	   	// Log.d("building object", "text?:" +genericSensorData.getValue().getText());
+	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
+	   	 
+	   	 //dataObjectBuilder.add
+	   	 
+	   	 //for (Step step : gsdtp.getValue().getSteps()) {
+			//dataObjectBuilder.addElement(name, content, parseContent)
+		//}
+	   	 
+	   	// dataObjectBuilder.addElement("value", attributes , gsdtp.getValue().getText(), false);
+	   	 
+	   	 DataObject dataObject = dataObjectBuilder.build();
+	   	 //Log.d("Parser", dataObject.toString());
+	   	 return dataObject;
+	}
 	
 	
 	/**
@@ -108,15 +149,13 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 	   	 attributes.put("unit", genericSensorData.getValue().getUnit());
 	   	// Log.d("building object", "text?:" +genericSensorData.getValue().getText());
 	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
-	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
+	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), true);
 	   	 
 	   	 DataObject dataObject = dataObjectBuilder.build();
 	   	 //Log.d("Parser", dataObject.toString());
 	   	 return dataObject;
 		
 	}
-	
-	
 	
 	public static Procedure DeSerializeProcedure(String xml) {
 		Serializer serializer = new Persister();
@@ -167,18 +206,35 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 		return genericSensorDataObjects;
 	}
 
-	public static String buildCustomStringXmlFromSteps(List<Step> steps) {
+
+	public static String buildCustomStringFromSteps(List<Step> steps) {
 		StringBuilder customStepsXML = new StringBuilder();
-		customStepsXML.append("<steps" + "\n");
-		
 		for (Step step : steps) {
-			customStepsXML.append("<step>" + step + "</step>");
-			customStepsXML.append("/n");
+			customStepsXML.append("sx" + step.getTime());
 		}
-		customStepsXML.append("</steps>");
-		
 		return customStepsXML.toString();
 	}
+	
+	
+	
+	public static List<Step> buildStepList(String steps) {
+		List<Step> temp = new ArrayList<Step>();
+		int max = steps.length();
+		for (int i = 0; i < max; i++) {
+			if (steps.charAt(i) == 'x') {
+				int start = i+1;
+				int end = start+6;
+				String s = steps.substring(start, end);		
+				Step step = new Step();
+				step.setTime(s);
+				temp.add(step);
+			}
+		}
+		return temp;
+	}
+	
+	
+	
 	
 	
 }

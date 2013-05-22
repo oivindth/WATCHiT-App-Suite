@@ -34,6 +34,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 import asynctasks.AuthenticateUserTask;
 import asynctasks.GetSpacesTask;
@@ -61,6 +62,8 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 		dashBoardFragment = new DashboardFragment();
 		profileFragment = new ProfileFragment();
 		
+		sApp.setUpProceduresAndSteps();
+		
 		ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		ActionBar.Tab tab1 = bar.newTab();
@@ -81,6 +84,9 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 			finish();
 		}
 		if (UtilityClass.isConnectedToInternet(getBaseContext())) {
+			if (sApp == null) {
+				Log.d("NULL", "NULL");
+			}
 			if (sApp.connectionHandler.getStatus() == ConnectionStatus.OFFLINE) {
 				sApp.OnlineMode = false;
 				new AuthenticateUserTask(this, sApp.getUserName(), sApp.getPassword()).execute();
@@ -209,28 +215,33 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 				case WATCHiTService.MSG_SET_STRING_VALUE_TO_ACTIVITY: 
 					String data = msg.getData().getString("watchitdata");
 					//textViewUserName.setText("data: " + msg.getData().getString("watchitdata") );     
-					//Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
+					Log.d("Main", "Receieved from service: " + msg.getData().getString("watchitdata"));
 					
 					String lat = String.valueOf(sApp.getLatitude());
 					String lot = String.valueOf(sApp.getLongitude());
 					GenericSensorData gsd = Parser.buildSimpleXMLObject(data, lat , lot);
+
+					Log.d("GSD", "value " + gsd.getValue().getText());
 					
-					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain(); 
+					String jid = sApp.getUserName() + "@" + sApp.connectionHandler.getConfiguration().getDomain();
+					
+					// If WATCHiT data is Steps.
+				  if (gsd.getValue().getText().equals("step")) {
+					Step step = new Step(gsd.getValue().getText());
+					sApp.steps.add(step); 
+					sApp.broadCastStepsChanged(sApp.steps.size()-1);
+					if (sApp.steps.size() == sApp.numberOfSteps) { 
+						sApp.broadCastAllStepsFinished();
+					}
+				}
+					
 					// If watchit data is note
-					if (gsd.getValue().getType().equals("note")) {
+				  else	if (gsd.getValue().getType().equals("note")) {
 						DataObject dataObject = Parser.buildDataObjectFromSimpleXMl(gsd, jid, sApp.connectionHandler.getCurrentUser().getUsername());
 						new PublishDataTask(dataObject, sApp.currentActiveSpace.getId()).execute();
 						Toast.makeText(getBaseContext(), "WATCHiT Data: " + data, Toast.LENGTH_SHORT).show();
 					
-						// If WATCHiT data is Steps.
-					} else if (gsd.getValue().getType().equals("step")) {
-						Step step = new Step(gsd.getValue().getText());
-						sApp.steps.add(step); 
-						sApp.broadCastStepsChanged(sApp.steps.size()-1);
-						if (sApp.steps.size() == sApp.numberOfSteps) { 
-							sApp.broadCastAllStepsFinished();
-						}
-					}
+				  }
 					break;
 				default:
 					super.handleMessage(msg);

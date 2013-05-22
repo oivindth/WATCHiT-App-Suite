@@ -16,6 +16,7 @@ import de.imc.mirror.sdk.android.DataObject;
 
 import activities.BaseActivity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * 
@@ -24,8 +25,6 @@ import android.os.AsyncTask;
  *
  */
 public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
-
-	
 	private String mSpaceId;
 	private BaseActivity mActivity;
 	private SpaceChangeListener spacChangeListener;
@@ -37,14 +36,11 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		mActivity = activity;
 		app = MainApplication.getInstance();
 		spacChangeListener = (SpaceChangeListener) activity;
-		//Log.d("spaceid: ", mSpaceId);
-		//Log.d("mactivity", " " + mActivity);
 	}
 		@Override
 		protected void onPreExecute() {
 			mActivity.showProgress(mActivity.getString(R.string.sync), mActivity.getString(R.string.syncing));
 		}
-		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
@@ -62,17 +58,25 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 			mActivity.dismissProgress();
 			if (success) {
 				app.genericSensorDataObjects = new ArrayList<GenericSensorData>();
-				app.TPObjects = new ArrayList<GenericSensorDataTP>();
+				app.TPObjects = new ArrayList<GenericSensorData>();
 				
 				for (de.imc.mirror.sdk.DataObject dobj : app.dataObjects) {
 					GenericSensorData temp = Parser.buildSimpleXMLObject((DataObject) dobj);
+					Log.d("dobj", dobj.toString());
 					if (temp.getValue().getType().equals("note")) {
 						app.genericSensorDataObjects.add(temp);
 					} else if (temp.getValue().getType().equals("steps")) {
-						if (temp.getValue().getUnit().equals(app.currentProcedure.getName())) {
-							//hvis stepsa som sendes ned er lik den nåværende proceduren...
-							GenericSensorDataTP temptp = Parser.buildSimpleXMLTPObject((DataObject) dobj);
-							app.TPObjects.add (temptp);
+						Log.d("nullhm", "unit:" + temp.getValue().getUnit());
+						Log.d("nullhm", "proc " + app.currentProcedure.getName() );
+						
+						try {
+							if (temp.getValue().getUnit().equals(app.currentProcedure.getName())) {
+								//hvis stepsa som sendes ned er lik den nåværende proceduren...
+								Log.d("dobj", dobj.toString());
+								app.TPObjects.add (temp);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					} 
 				}

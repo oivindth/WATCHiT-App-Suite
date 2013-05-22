@@ -10,6 +10,7 @@ import android.widget.Button;
 public class TrainingMainActivity extends BaseActivity {
 	
 	private Button buttonTrain;
+	private Button buttonResults;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -22,9 +23,19 @@ public class TrainingMainActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getBaseContext(), TrainingActivity.class);
 				startActivity(intent);
-				
-				
 			}
 		});
+		buttonResults = (Button) findViewById(R.id.buttonResults);
+		buttonResults.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		
+		
+		
 	}
 }

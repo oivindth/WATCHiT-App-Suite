@@ -31,9 +31,6 @@ import org.simpleframework.xml.Root;
 		private CreationInfo creationInfo;
 		
 		@Element
-		private Location location;
-		
-		@Element
 		private ValueTP value;
 
 		
@@ -56,25 +53,14 @@ import org.simpleframework.xml.Root;
 			this.id = id;
 			this.timestamp = timestamp;
 			this.schemaLocation = schemaLocation;
-			this.location = location;
 			this.value = value;
 		}
 
 		public GenericSensorDataTP(Location location, ValueTP value) {
-			this.location = location;
 			this.value = value;
 		}
 		
-	
-		
 
-		public Location getLocation() {
-			return location;
-		}
-
-		public void setLocation(Location location) {
-			this.location = location;
-		}
 
 		public ValueTP getValue() {
 			return value;

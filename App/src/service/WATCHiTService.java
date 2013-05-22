@@ -1,5 +1,19 @@
 package service;
 
+/*
+ * 
+ * Thanks to Matt Bell and A.V. Koltykov for inspiration and code examples when 
+ * creating the android to arduino bluetooth communication moduels.
+ * 
+ * Matt Bell
+ * ANDROID AND ARDUINO BLUETOOTH COMMUNICATION
+ * url:  http://bellcode.wordpress.com/2012/01/02/android-and-arduino-bluetooth-communication/
+
+ * Koltykov A.V.
+ * Data transfer between Android and Arduino via Bluetooth 
+ * url http://english.cxem.net/arduino/arduino5.php"
+ */
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -119,38 +133,25 @@ public class WATCHiTService extends AbstractService {
 
 			byte[] buffer = new byte[1024];  // buffer store for the stream
 			int bytes; // bytes returned from read()
-
 			// Keep listening to the InputStream until an exception occurs
 			while (true) {
-
 				//Log.d("in loop", "waiting for data");
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-					//Log.d("Service.Thread.Run(): ", " bytes:  " + bytes);
 					
 					String strIncom = new String(buffer, 0, bytes);                 // create string from bytes array
 					sb.append(strIncom); 
-					//textView.setText(sb.toString());
-					//sb.delete(0, sb.length());
-					//Log.d("watchit thread: ", "data: " + strIncom);
 					int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
 					if (endOfLineIndex > 0) {                                            // if end-of-line,
 						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
 						sb.delete(0, sb.length());  //clear
-						//Log.d("low level:  ", sbprint);
-						
 						//Send data to Activity
 						Bundle b = new Bundle();
 						b.putString("watchitdata", sbprint);
 						Message messageToActivity = Message.obtain(null, MSG_SET_STRING_VALUE_TO_ACTIVITY);
 						messageToActivity.setData(b);
 						send(messageToActivity);
-						
-						
-						//Send TP data?
-						//bundle..
-
 					}
 
 				} catch (Exception e) {

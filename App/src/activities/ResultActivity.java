@@ -3,7 +3,11 @@ package activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import listeners.SpaceChangeListener;
+
+import parsing.GenericSensorData;
 import parsing.GenericSensorDataTP;
+import parsing.Parser;
 import parsing.Step;
 
 import no.ntnu.emergencyreflect.R;
@@ -22,7 +26,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.watchit_connect.MainApplication;
 
-public class ResultActivity extends BaseActivity {
+public class ResultActivity extends BaseActivity implements SpaceChangeListener {
 	
 	private ListView listViewResults;
 	
@@ -45,10 +49,11 @@ public class ResultActivity extends BaseActivity {
 		String user;
 		String totalTime;
 
-		for ( GenericSensorDataTP  tp : mainApp.TPObjects) {
+		for ( GenericSensorData  tp : mainApp.TPObjects) {
 			int tempTotal = 0;
 			user = tp.getCreationInfo().getPerson();
-			for (Step step : tp.getValue().getSteps()) {
+			List<Step> steps = Parser.buildStepList(tp.getValue().getText());
+			for (Step step : steps) {
 				String time =  step.getTime();
 				int integer = Integer.getInteger(time);
 				tempTotal += integer;
@@ -67,11 +72,11 @@ public class ResultActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View viw, int pos,
 					long id) {
-				Intent intent = new Intent(getBaseContext(), ResultDetailsActivity.class);
+				//Intent intent = new Intent(getBaseContext(), ResultDetailsActivity.class);
 				Bundle b = new Bundle();
 				b.putInt("pos", pos);
-				intent.putExtras(b);
-				startActivity(intent);			
+				//intent.putExtras(b);
+				//startActivity(intent);			
 			}
 		});
 	}
@@ -92,5 +97,15 @@ public class ResultActivity extends BaseActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	@Override
+	public void onSpaceChanged(int position) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onDataFetchedFromSpace() {
+		// TODO Auto-generated method stub
+		
 	}
 }

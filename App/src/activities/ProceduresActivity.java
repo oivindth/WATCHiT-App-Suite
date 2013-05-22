@@ -38,7 +38,7 @@ public class ProceduresActivity extends BaseActivity {
 		
 		
 		mApp = MainApplication.getInstance();
-		mApp.setUpProceduresAndSteps();
+		
 		
 		procedures = new ArrayList<String>();
 		

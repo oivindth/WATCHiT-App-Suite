@@ -1,5 +1,19 @@
 package asynctasks;
 
+/*
+ * 
+ * Thanks to Matt Bell and A.V. Koltykov for inspiration and code examples when 
+ * creating the android to arduino bluetooth communication moduels.
+ * 
+ * Matt Bell
+ * ANDROID AND ARDUINO BLUETOOTH COMMUNICATION
+ * url:  http://bellcode.wordpress.com/2012/01/02/android-and-arduino-bluetooth-communication/
+
+ * Koltykov A.V.
+ * Data transfer between Android and Arduino via Bluetooth 
+ * url http://english.cxem.net/arduino/arduino5.php"
+ */
+
 import java.io.IOException;
 import java.util.UUID;
 
