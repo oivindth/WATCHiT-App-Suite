@@ -13,6 +13,7 @@ import listeners.WATCHiTConnectionChangeListener;
 import parsing.GenericSensorData;
 import parsing.GenericSensorDataTP;
 import parsing.Procedure;
+import parsing.Result;
 import parsing.Step;
 
 import service.ServiceManager;
@@ -54,6 +55,8 @@ public class MainApplication extends Application {
     
     public List<Procedure> procedures = new ArrayList<Procedure>();
     
+    
+    public List<Result> results;
     
     
     /**

@@ -43,6 +43,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
+			Log.d("running", "getdata task running");
 			try {
 				//app.dataHandler.setMode(Mode.ONLINE);
 				app.dataHandler.registerSpace(mSpaceId);
@@ -85,6 +86,10 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 				//Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
 				//Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
 				//Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
+				
+				//sort
+				
+				
 				spacChangeListener.onDataFetchedFromSpace();
 			} else {
 				mActivity.showToast(mActivity.getString(R.string.data_sync_failed));

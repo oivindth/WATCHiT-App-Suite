@@ -25,6 +25,9 @@
 # view AndroidManifest.xml #generated:141
 -keep class activities.ResultActivity { <init>(...); }
 
+# view AndroidManifest.xml #generated:152
+-keep class activities.ResultDetailActivity { <init>(...); }
+
 # view AndroidManifest.xml #generated:90
 -keep class activities.TrainingActivity { <init>(...); }
 
@@ -105,16 +108,16 @@
 # view AndroidManifest.xml #generated:27
 -keep class com.example.watchit_connect.MainApplication { <init>(...); }
 
-# view AndroidManifest.xml #generated:156
+# view AndroidManifest.xml #generated:167
 -keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
 
 # view res/layout/map_activity.xml #generated:1
 -keep class com.google.android.gms.maps.SupportMapFragment { <init>(...); }
 
-# view AndroidManifest.xml #generated:155
+# view AndroidManifest.xml #generated:166
 -keep class no.ntnu.emergencyreflect.GCMIntentService { <init>(...); }
 
-# view AndroidManifest.xml #generated:167
+# view AndroidManifest.xml #generated:178
 -keep class no.ntnu.emergencyreflect.RegisterActivity { <init>(...); }
 
 # view res/layout/fragment_config.xml #generated:40

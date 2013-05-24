@@ -36,7 +36,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 	private Chronometer stepChronometer;
 	private MainApplication mApp;
 	private TextView currentStep, maxSteps;
-	private boolean debug = true; //set to false for release
+	private boolean debug = false; //set to false for release
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 				maxSteps.setText("0");
 			}
 		});
-		
+		/*
 		if (debug = true) {
 			startButton.setClickable(false);
 			shareButton.setClickable(true);
@@ -121,6 +121,7 @@ public class TrainingActivity extends BaseActivity implements StepListener {
 			sApp.steps.add(s2);
 			sApp.numberOfSteps = 2;
 		}
+		*/
 	}
 	
 	@Override

@@ -6,6 +6,11 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+/**
+ * @deprecated
+ * @author oivindth
+ *
+ */
 @Root
 public class ValueTP {
 	

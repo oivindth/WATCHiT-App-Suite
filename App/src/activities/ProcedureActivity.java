@@ -8,6 +8,7 @@ import parsing.Step;
 import no.ntnu.emergencyreflect.R;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -63,6 +64,8 @@ public class ProcedureActivity extends BaseActivity {
 			public void onClick(View v) {
 				mApp.numberOfSteps = steps.size();
 				mApp.currentProcedure = p;
+				Log.d("CHOSEN", "mapp: " + mApp.currentProcedure + " p : " + p);
+				mApp.TPObjects.clear();
 				Intent intent = new Intent(getBaseContext(), TrainingMainActivity.class);
 				startActivity(intent);
 				finish();

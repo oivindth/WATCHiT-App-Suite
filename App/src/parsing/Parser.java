@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+
+import android.util.Log;
 
 
 import de.imc.mirror.sdk.android.CDMData;
@@ -30,6 +33,7 @@ public class Parser {
 	 * @return
 	 */
 	public static GenericSensorData buildSimpleXMLObject(DataObject dataObject) {
+		Log.d("ddd", dataObject.toString());
 		String xml = dataObject.toString();
 		return DeSerialize(xml);
 	}
@@ -65,57 +69,12 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 		
 		GenericSensorData genericSensorData = new GenericSensorData(new Location("0", "0"), 
 				new Value("steps", procedureName, stepData));
-		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
+		Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
 		return genericSensorData;
 	}
 	
-	/**
-	 * Build a simplexml object with training procedure data.
-	 * @param watchitData
-	 * @param latitude
-	 * @param longitude
-	 * @return
-	 */
-	public static GenericSensorDataTP buildSimpleXMLObject(List<Step> steps) {
-		GenericSensorDataTP gstp = new GenericSensorDataTP(new Location(), new ValueTP("steps", "", steps));
-		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
-		return gstp;
-	}
 
 	
-	public static DataObject buildTPDataObjectFromSimpleXML (GenericSensorDataTP gsdtp, String userJID, String userName) {
-		DataObjectBuilder dataObjectBuilder =
-		    	 new DataObjectBuilder("genericsensordata", "mirror:application:watchit:genericsensordata");
-		Date date = new Date();
-		
-		dataObjectBuilder.addCDTCreationInfo(date, userName, null);
-		CDMDataBuilder cdmDataBuilder = new CDMDataBuilder(CDMVersion.CDM_1_0);
-		cdmDataBuilder.setPublisher(userJID);
-		cdmDataBuilder.setModelVersion("0.2");
-		//cdmDataBuilder.setTimestamp(date.toGMTString());
-		CDMData cdmData = cdmDataBuilder.build();
-		dataObjectBuilder.setCDMData(cdmData);
-		
-		 Map <String, String> attributes = new HashMap<String, String>();
-  	 
-	   	 
-	   	 attributes.put("type", gsdtp.getValue().getType());
-	   	 attributes.put("unit", gsdtp.getValue().getUnit());
-	   	// Log.d("building object", "text?:" +genericSensorData.getValue().getText());
-	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
-	   	 
-	   	 //dataObjectBuilder.add
-	   	 
-	   	 //for (Step step : gsdtp.getValue().getSteps()) {
-			//dataObjectBuilder.addElement(name, content, parseContent)
-		//}
-	   	 
-	   	// dataObjectBuilder.addElement("value", attributes , gsdtp.getValue().getText(), false);
-	   	 
-	   	 DataObject dataObject = dataObjectBuilder.build();
-	   	 //Log.d("Parser", dataObject.toString());
-	   	 return dataObject;
-	}
 	
 	
 	/**
@@ -149,7 +108,7 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 	   	 attributes.put("unit", genericSensorData.getValue().getUnit());
 	   	// Log.d("building object", "text?:" +genericSensorData.getValue().getText());
 	   	 //dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
-	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), true);
+	   	 dataObjectBuilder.addElement("value", attributes , genericSensorData.getValue().getText(), false);
 	   	 
 	   	 DataObject dataObject = dataObjectBuilder.build();
 	   	 //Log.d("Parser", dataObject.toString());
@@ -223,9 +182,10 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 		for (int i = 0; i < max; i++) {
 			if (steps.charAt(i) == 'x') {
 				int start = i+1;
-				int end = start+6;
+				int end = start+5;
 				String s = steps.substring(start, end);		
 				Step step = new Step();
+				Log.d("timetag", s);
 				step.setTime(s);
 				temp.add(step);
 			}
@@ -233,8 +193,56 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 		return temp;
 	}
 	
+	/**
+	 * Builds integer from a string of the format xx:xx
+	 * EX: 01:25(1 minute 25 seconds is converted to 85 seconds.
+	 * @param time
+	 * @return
+	 */
+	public static int convertStringTimeToSeconds(String time) {
+		Log.d("kalk", "string tid: " + time);
+		Log.d("kalk", "orvtorv: " + time.substring(0, 1));
+		int hour = Integer.parseInt(time.substring(0, 1));
+		int minutes = Integer.parseInt(time.substring(1, 2));
+		int seconds = Integer.parseInt(time.substring(3, 4));
+		int second = Integer.parseInt(time.substring(4,5));
+		int counter = 0;
+				if (hour != '0') {
+					counter+= hour*60*60; //convert hour to seconds.
+					Log.d("kalk", "etter hours: " + seconds);
+				}
+				if (minutes != '0') {
+					counter += minutes*60; // convert minutes to seconds.
+					Log.d("kalk", "etter hour2: " + seconds);
+				}
+				if (seconds != '0') {
+					counter += seconds*10 ; // convert ten seconds to seconds.......
+					Log.d("kalk", "etter 10sekunds: " + seconds);
+				}
+				counter += second; //add the last seconds.
+				Log.d("kalk", "etter siste: " + seconds );
+				return counter;	
+		}
 	
+		public static String convertSecondsToString(int secondsIN) {
+			
+			int milliseconds = secondsIN*1000;
+			
+			int seconds = (int) (milliseconds / 1000) % 60 ;
+			int minutes = (int) ((milliseconds / (1000*60)) % 60);
+			int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
+			
+			String sseconds = "" + seconds;
+			
+			if (seconds == 0) {
+				sseconds ="00";
+			}
+			
+			String s ="" + hours + minutes + ":" + sseconds;
+			Log.d("troll", "formatert: " + s );
+			return s;
+			
+		}
 	
-	
-	
+
 }
