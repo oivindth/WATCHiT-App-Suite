@@ -62,13 +62,18 @@ public class ProcedureActivity extends BaseActivity {
 		buttonSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mApp.numberOfSteps = steps.size();
-				mApp.currentProcedure = p;
-				Log.d("CHOSEN", "mapp: " + mApp.currentProcedure + " p : " + p);
-				mApp.TPObjects.clear();
-				Intent intent = new Intent(getBaseContext(), TrainingMainActivity.class);
-				startActivity(intent);
-				finish();
+				if (sApp.currentActiveSpace == null) {
+					showToast("Sdlect an event first.");
+				} else {
+					mApp.numberOfSteps = steps.size();
+					mApp.currentProcedure = p;
+					Log.d("CHOSEN", "mapp: " + mApp.currentProcedure + " p : " + p);
+					mApp.TPObjects.clear();
+					Intent intent = new Intent(getBaseContext(), TrainingMainActivity.class);
+					startActivity(intent);
+					finish();
+				}
+				
 			}
 		});
 		

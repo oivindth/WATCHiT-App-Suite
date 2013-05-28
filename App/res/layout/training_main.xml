@@ -19,21 +19,11 @@
             android:text="Train" />
 
         <Button
-            android:id="@+id/buttonProcedure"
+            android:id="@+id/buttonResults"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/buttonTrain"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="140dp"
-            android:text="Procedure" />
-
-        <Button
-            android:id="@+id/buttonResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/buttonProcedure"
-            android:layout_alignRight="@+id/buttonProcedure"
-            android:layout_below="@+id/buttonTrain"
             android:layout_marginTop="50dp"
             android:text="Results" />
 

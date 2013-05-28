@@ -50,13 +50,7 @@ public class ProceduresActivity extends BaseActivity {
 		//GenericSensorDataTP tp = new GenericSensorDataTP();
 		//ValueTP steps = new ValueTP();
 	
-		newButton = (Button) findViewById(R.id.buttonNew);
-		newButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//new EndPointsTestTask().execute(getBaseContext());
-			}
-		});
+
 		adapter = new ArrayAdapter<String>(getBaseContext(),android.R.layout.simple_list_item_1, procedures);
 		listOfProecdures.setAdapter(adapter);
 		listOfProecdures.setOnItemClickListener(new OnItemClickListener() {
