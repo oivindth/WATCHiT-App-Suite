@@ -1,6 +1,6 @@
-WATCHiT-Reflection-App
+Reflection-App
 ======================
 
-Application tht collects data from the WATCHiT application and vizualises it for the user to help promote reflection. 
+Application that collects data from the WATCHiT and visualizes the data in the application to support reflection on work.
 
-Currently we rely on google-services-lib, sherlock ationbar lib and a switch plugin lib. 
+Released under the GNU General public license
