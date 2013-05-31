@@ -7,7 +7,6 @@
     <string name="action_sign_in_register"><b>Accedi</b></string>
     <string name="action_sign_in_short">Accedi</string>
     <string name="login_progress_signing_in">l\'accesso&#8230;</string>
-    <string name="error_invalid_email">mail non valido</string>
     <string name="error_incorrect_user">nome utente corretto?</string>
     <string name="error_invalid_password">questa password è troppo breve</string>
     <string name="error_incorrect_password">è questa la password corretta</string>

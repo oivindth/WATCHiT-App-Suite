@@ -108,17 +108,8 @@
 # view AndroidManifest.xml #generated:27
 -keep class com.example.watchit_connect.MainApplication { <init>(...); }
 
-# view AndroidManifest.xml #generated:167
--keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
-
 # view res/layout/map_activity.xml #generated:1
 -keep class com.google.android.gms.maps.SupportMapFragment { <init>(...); }
-
-# view AndroidManifest.xml #generated:166
--keep class no.ntnu.emergencyreflect.GCMIntentService { <init>(...); }
-
-# view AndroidManifest.xml #generated:178
--keep class no.ntnu.emergencyreflect.RegisterActivity { <init>(...); }
 
 # view res/layout/fragment_config.xml #generated:40
 # view res/layout/fragment_config.xml #generated:67
@@ -131,7 +122,4 @@
 
 # view AndroidManifest.xml #generated:52
 -keep class service.WATCHiTService { <init>(...); }
-
-# onClick res/layout/activity_register.xml #generated:22
--keepclassmembers class * { *** onSave(...); }
 

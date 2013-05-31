@@ -54,17 +54,17 @@ public class Parser {
 		return DeSerialize(xml);
 	}
 	
-	public static GenericSensorDataTP buildSimpleXMLTPObject(DataObject dataObject) {
-		String xml = dataObject.toString();
-		return DeSerializeTPData(xml);
-	}
+//	public static GenericSensorDataTP buildSimpleXMLTPObject(DataObject dataObject) {
+//		String xml = dataObject.toString();
+//		return DeSerializeTPData(xml);
+//	}
 	
-	public static GenericSensorDataTP buildSimpleXMLTPObject(String procedureName, List<Step> steps) {
-		GenericSensorDataTP genericSensorData = new GenericSensorDataTP(new Location("0", "0"), 
-				new ValueTP("steps", procedureName, steps));
-		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
-		return genericSensorData;
-	}
+//	public static GenericSensorDataTP buildSimpleXMLTPObject(String procedureName, List<Step> steps) {
+//		GenericSensorDataTP genericSensorData = new GenericSensorDataTP(new Location("0", "0"), 
+//				new ValueTP("steps", procedureName, steps));
+//		//Log.d("Bulding simplexml:", ": " + genericSensorData.toString());
+//		return genericSensorData;
+//	}
 	
 	/**
 	 * Build a simplexml object with data receieved from watchit and location from phone
@@ -158,19 +158,19 @@ public static GenericSensorData buildSimpleXMLObject(String stepData, String pro
 	}
 	
 	
-	/**
-	 * DeSerialize training procedure xml
-	 */
-	public static GenericSensorDataTP DeSerializeTPData (String xml) {
-		Serializer serializer = new Persister();
-		GenericSensorDataTP data = null;
-		try {
-			data = serializer.read(GenericSensorDataTP.class, xml);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return data;
-	}
+//	/**
+//	 * DeSerialize training procedure xml
+//	 */
+//	public static GenericSensorDataTP DeSerializeTPData (String xml) {
+//		Serializer serializer = new Persister();
+//		GenericSensorDataTP data = null;
+//		try {
+//			data = serializer.read(GenericSensorDataTP.class, xml);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return data;
+//	}
 	
 	
 	public static List<GenericSensorData> convertDataObjectsToGenericSensordataObjects (List<de.imc.mirror.sdk.DataObject> dataObjects) {

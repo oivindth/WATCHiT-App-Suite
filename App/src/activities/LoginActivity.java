@@ -236,7 +236,7 @@ public class LoginActivity extends SherlockFragmentActivity implements ServerSet
 				focusView = mUserNameView;
 				cancel = true;
 			} else if (mUserName.contains("@")) {
-				mUserNameView.setError(getString(R.string.error_invalid_email));
+				mUserNameView.setError("invalid email");
 				focusView = mUserNameView;
 				cancel = true;
 			}

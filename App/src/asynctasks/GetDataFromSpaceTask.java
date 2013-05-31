@@ -83,13 +83,8 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 					if (temp.getValue().getType().equals("note")) {
 						app.genericSensorDataObjects.add(temp);
 					} else if (temp.getValue().getType().equals("steps")) {
-						Log.d("nullhm", "unit:" + temp.getValue().getUnit());
-						Log.d("nullhm", "proc " + app.currentProcedure.getName() );
-						
 						try {
 							if (temp.getValue().getUnit().equals(app.currentProcedure.getName())) {
-								//hvis stepsa som sendes ned er lik den nåværende proceduren...
-								Log.d("dobj", dobj.toString());
 								app.TPObjects.add (temp);
 							}
 						} catch (Exception e) {
@@ -97,13 +92,7 @@ public class GetDataFromSpaceTask extends AsyncTask<Void, Void, Boolean> {
 						}
 					} 
 				}
-				//app.genericSensorDataObjects = Parser.convertDataObjectsToGenericSensordataObjects(app.dataObjects);
-				
-				//Log.d("getDataFromSpaceTask", "gdo size: " + app.genericSensorDataObjects.size());
-				//Log.d("GETDATATASK :", "size of data: " + app.dataObjects.size());
-				//Log.d("getdatafromspacetask :", "spaceid of fetched data: " + mSpaceId);
-				
-				//sort
+
 				
 				
 				spacChangeListener.onDataFetchedFromSpace();
